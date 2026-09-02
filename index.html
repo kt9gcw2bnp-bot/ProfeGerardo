@@ -221,10 +221,11 @@ async function renderPortal(){
 }
 
 function renderCard(r){
-  const pending = !r.URL || String(r.URL).toUpperCase().includes('PENDIENTE');
+  const cleanUrl = String(r.URL||'').trim();
+  const pending = !cleanUrl || cleanUrl.toUpperCase().includes('PENDIENTE');
   const nombreParam = encodeURIComponent(session.nombre);
-  const sep = String(r.URL||'').includes('?') ? '&' : '?';
-  const href = pending ? '#' : (r.URL + sep + 'nombre=' + nombreParam);
+  const sep = cleanUrl.includes('?') ? '&' : '?';
+  const href = pending ? '#' : (cleanUrl + sep + 'nombre=' + nombreParam);
   const catLabel = {'Tema':'Tema del programa','Curso interactivo':'Curso interactivo','Antologia':'Antología','Antología':'Antología','Trabajo en clase':'Trabajo en clase'}[r.Categoria] || r.Categoria || '';
   return `<a class="course-card" href="${pending?'#':href}" target="${pending?'_self':'_blank'}" onclick="${pending?'return false;':''}">
     <div class="ctag">${escapeHtml(catLabel)}</div>
