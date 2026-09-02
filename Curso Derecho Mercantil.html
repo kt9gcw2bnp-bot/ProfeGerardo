@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso · Derecho Mercantil</title>
+<style>
+:root{
+  --navy:#0E1B3D; --navy-deep:#0A1230;
+  --gold:#B8863C; --gold-light:#F4DD7A;
+  --teal:#2FC2AD; --coral:#EF6A5B;
+  --ink:#20242B; --paper:#F3F5F4; --muted:#5B6470; --line:#D8DCDD;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);padding-bottom:60px;}
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;padding:12px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.topbar h1{font-size:15.5px;margin:0 0 2px;}
+.topbar p{margin:0;font-size:10px;color:rgba(255,255,255,.65);font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;}
+.teacherBtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:10.5px;padding:5px 10px;border-radius:14px;cursor:pointer;}
+
+.namebar{background:#fff;border-bottom:1px solid var(--line);padding:9px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.namebar input{padding:7px 9px;border:1px solid var(--line);border-radius:6px;font-size:13px;flex:1;min-width:160px;}
+.namebar label{font-size:11px;color:var(--muted);font-family:var(--mono);}
+
+.tabs{display:flex;gap:4px;overflow-x:auto;background:#fff;border-bottom:1px solid var(--line);padding:8px 10px;}
+.tab{flex:0 0 auto;padding:7px 12px;border-radius:16px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid var(--line);color:var(--muted);white-space:nowrap;background:#f7f8f6;}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab.done::after{content:" ✓";color:var(--teal);}
+.tab.cert{border-color:var(--gold);}
+.tab.cert.active{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);}
+.tab.tab-locked{opacity:.45;}
+.tab.tab-locked::before{content:"🔒 ";}
+
+/* ---- ANTOLOGIA / INFOGRAFIA ---- */
+.info-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;border-radius:12px;padding:22px 20px;margin-bottom:16px;text-align:center;}
+.info-hero .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:2px;color:var(--gold-light);text-transform:uppercase;}
+.info-hero h2{margin:8px 0 4px;font-size:19px;}
+.info-hero p{margin:0;font-size:12px;color:rgba(255,255,255,.75);}
+.info-block{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden;}
+.info-block::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--block-color,var(--gold));}
+.info-block .ib-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.info-block .ib-icon{font-size:22px;flex-shrink:0;}
+.info-block h3{margin:0;font-size:14.5px;color:var(--navy);}
+.info-block p{font-size:12.5px;line-height:1.6;margin:0 0 8px;color:var(--ink);}
+.info-block ul{margin:6px 0 0;padding-left:18px;font-size:12px;line-height:1.7;color:var(--ink);}
+.info-block .ib-tag{display:inline-block;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.5px;background:#f7f8f6;color:var(--muted);padding:2px 8px;border-radius:10px;margin-top:6px;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;}
+@media (max-width:480px){.info-grid{grid-template-columns:1fr;}}
+.info-mini{background:#f7f8f6;border:1px solid var(--line);border-radius:8px;padding:10px 12px;}
+.info-mini b{display:block;font-size:12px;color:var(--navy);margin-bottom:3px;}
+.info-mini span{font-size:11px;color:var(--muted);line-height:1.4;}
+.read-confirm{text-align:center;margin:20px 0 6px;}
+.read-confirm .btn{padding:12px 26px;font-size:13.5px;}
+.read-confirm p{font-size:11.5px;color:var(--muted);margin-top:8px;}
+
+.page{max-width:760px;margin:0 auto;padding:16px;}
+.content-card{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:13.5px;line-height:1.55;color:var(--ink);}
+.content-card h2{font-size:16px;margin:0 0 8px;color:var(--navy);}
+
+.actcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;}
+.actcard h3{font-size:13.5px;margin:0 0 10px;color:var(--navy);}
+.btn{display:inline-block;padding:8px 16px;background:var(--navy);color:#fff;border:none;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.btn:hover{background:var(--navy-deep);}
+.btn:disabled{opacity:.45;cursor:default;}
+.scorepill{display:inline-block;font-family:var(--mono);font-size:11px;background:var(--teal);color:#fff;padding:3px 10px;border-radius:12px;margin-left:8px;}
+
+/* ---- QUIZ ---- */
+.qcard{border:1px solid var(--line);border-radius:8px;padding:12px 13px;margin-bottom:10px;}
+.qcard.correct{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset;}
+.qcard.incorrect{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral) inset;}
+.qtext{font-size:13px;font-weight:600;margin-bottom:8px;}
+.opt{display:flex;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;margin-top:6px;cursor:pointer;font-size:12.5px;}
+.opt:hover{background:#f7f8f6;}
+.opt .letter{font-family:var(--mono);font-weight:700;color:var(--navy);}
+.opt.locked{cursor:default;}
+.opt.chosen-correct{background:#e7f1ec;border-color:var(--teal);}
+.opt.chosen-incorrect{background:#f7e9e8;border-color:var(--coral);}
+.opt.reveal-correct{background:#e7f1ec;border-color:var(--teal);}
+.justif{margin-top:8px;padding:8px 10px;border-radius:6px;font-size:11.5px;display:none;}
+.justif.show{display:block;}
+.justif.ok{background:#e7f1ec;color:#1e4a37;}
+.justif.bad{background:#f7e9e8;color:#6f2626;}
+
+/* ---- MATCHING ---- */
+.match-table{width:100%;border-collapse:collapse;margin-top:6px;}
+.match-table td{padding:6px 4px;font-size:12.5px;vertical-align:middle;}
+.match-table select{width:100%;font-size:12.5px;padding:6px;border-radius:5px;border:1px solid var(--line);}
+.match-row.ok select{border-color:var(--teal);background:#e7f1ec;}
+.match-row.bad select{border-color:var(--coral);background:#f7e9e8;}
+.bank{font-size:11px;color:var(--muted);background:#f7f8f6;border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-top:8px;}
+
+/* ---- WORD SEARCH ---- */
+.ws-wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center;}
+.ws-grid{display:grid;gap:1px;background:#dfe3e6;border:2px solid var(--navy);border-radius:6px;padding:3px;touch-action:none;}
+.ws-cell{width:19px;height:19px;display:flex;align-items:center;justify-content:center;background:#fff;font-family:var(--mono);font-weight:700;font-size:9.5px;border-radius:2px;cursor:pointer;-webkit-user-select:none;user-select:none;}
+.ws-cell.selected{background:var(--gold-light);}
+.ws-cell.found{background:var(--teal);color:#fff;}
+.ws-list{flex:0 0 170px;}
+.ws-list ul{list-style:none;margin:0;padding:0;}
+.ws-list li{font-family:var(--mono);font-size:11px;padding:4px 7px;border-radius:5px;margin-bottom:3px;background:#f7f8f6;border:1px solid var(--line);}
+.ws-list li.found{background:var(--teal);color:#fff;border-color:var(--teal);text-decoration:line-through;}
+
+/* ---- CROSSWORD ---- */
+.cw-wrap{display:flex;gap:18px;flex-wrap:wrap;}
+.cw-grid{display:grid;gap:1px;background:#1c1f24;border:2px solid var(--navy);border-radius:4px;padding:2px;}
+.cw-cell{width:22px;height:22px;position:relative;background:#fff;}
+.cw-cell.blocked{background:#1c1f24;}
+.cw-cell input{width:100%;height:100%;border:none;text-align:center;font-family:var(--mono);font-weight:700;font-size:11.5px;text-transform:uppercase;background:transparent;padding:0;}
+.cw-cell input.ok{background:#e7f1ec;color:#1e4a37;}
+.cw-cell input.bad{background:#f7e9e8;color:#6f2626;}
+.cw-num{position:absolute;top:0px;left:1px;font-size:6.5px;color:var(--gold);font-family:var(--mono);}
+.cw-clues{flex:1;min-width:200px;font-size:11.5px;}
+.cw-clues b{color:var(--navy);display:block;margin:8px 0 3px;font-size:11px;}
+.cw-clues li{margin-bottom:4px;}
+
+/* ---- CASOS ---- */
+.caso-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:16px;}
+.caso-card .caso-tag{font-family:var(--mono);font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;}
+.caso-card p.enunciado{font-size:13px;margin:6px 0 10px;color:var(--ink);}
+.caso-msgs{margin-top:10px;}
+.caso-msg{background:#f7f8f6;border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:12.5px;}
+.caso-msg .mhead{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-bottom:3px;}
+.caso-msg .mname{font-weight:700;color:var(--navy);}
+textarea.caso-input{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-family:var(--sans);font-size:12.5px;min-height:50px;margin-top:6px;}
+
+/* ---- CERTIFICADO ---- */
+.progress-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+.progress-table th,.progress-table td{border:1px solid var(--line);padding:7px 9px;font-size:12px;text-align:left;}
+.progress-table th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;}
+.progress-table td.center{text-align:center;}
+.status-ok{color:var(--teal);font-weight:700;}
+.status-mid{color:#c98a2c;font-weight:700;}
+.status-bad{color:var(--coral);font-weight:700;}
+.status-pending{color:var(--muted);}
+.competency-desc{font-size:10.5px;color:var(--muted);display:block;margin-top:2px;}
+.ra-tag{font-family:var(--mono);font-size:9.5px;color:var(--gold);font-weight:700;}
+
+.certificate{display:none;border:8px double var(--gold);border-radius:10px;padding:34px 24px;text-align:center;background:#fffdf7;margin-top:10px;}
+.certificate.show{display:block;}
+.certificate .kicker{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;}
+.certificate h2{font-size:22px;color:var(--navy);margin:10px 0 4px;font-family:Georgia,serif;}
+.certificate .name{font-size:26px;font-weight:700;color:var(--navy-deep);margin:14px 0;font-family:Georgia,serif;border-bottom:2px solid var(--gold);display:inline-block;padding-bottom:6px;}
+.certificate p{font-size:12.5px;color:var(--muted);max-width:440px;margin:6px auto;}
+.certificate .seal{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d488,#a97c29);margin:14px auto 0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#3a2a06;font-weight:700;}
+
+.locked-msg{text-align:center;color:var(--muted);font-size:12.5px;padding:30px 20px;background:#fff;border:1px dashed var(--line);border-radius:8px;}
+
+/* PIN modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,18,48,.6);z-index:50;align-items:flex-start;justify-content:center;padding:30px 14px;overflow-y:auto;}
+.modal-bg.show{display:flex;}
+.modal{background:#fff;border-radius:10px;max-width:700px;width:100%;padding:20px;}
+.modal h3{margin:0 0 12px;color:var(--navy);}
+.modal .close{float:right;cursor:pointer;font-size:18px;color:var(--muted);}
+.pin-row{display:flex;gap:8px;margin-top:10px;}
+.pin-row input{flex:1;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-size:14px;font-family:var(--mono);letter-spacing:3px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div>
+      <h1>⚖️ Curso: Derecho Mercantil</h1>
+      <p>Contabilidad · Décimo año · Gestión comercial y de ventas</p>
+    </div>
+    <button class="teacherBtn" id="teacherBtnOpen">👩‍🏫 Panel docente</button>
+    <button class="teacherBtn" id="focusModeBtn" style="margin-left:6px;">🔒 Modo enfoque</button>
+  </div>
+</div>
+
+<div class="namebar">
+  <label>Tu nombre:</label>
+  <input type="text" id="studentName" placeholder="Nombre completo" maxlength="45">
+  <span id="nameStatus" style="font-size:11px;color:var(--muted);font-family:var(--mono);"></span>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="page" id="page"></div>
+
+<div class="modal-bg" id="pinModalBg">
+  <div class="modal">
+    <span class="close" id="pinModalClose">✕</span>
+    <h3>Panel docente</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin:0;">Ingrese el PIN para ver el progreso del grupo.</p>
+    <div class="pin-row">
+      <input type="password" id="pinInput" maxlength="6" placeholder="PIN">
+      <button class="btn" id="pinSubmit">Entrar</button>
+    </div>
+    <div id="pinError" style="color:var(--coral);font-size:11.5px;margin-top:6px;display:none;">PIN incorrecto.</div>
+  </div>
+</div>
+
+<div class="modal-bg" id="teacherModalBg">
+  <div class="modal">
+    <span class="close" id="teacherModalClose">✕</span>
+    <h3>Panel docente — progreso del curso</h3>
+    <div id="teacherContent">Cargando...</div>
+  </div>
+</div>
+
+<script>
+const TEACHER_PIN = "9986";
+
+/* ============================================================
+   CONFIGURACIÓN DE MÓDULOS
+   ============================================================ */
+const MODULES = [
+  { id:"antologia", label:"📘 Antología", title:"Antología — Derecho Mercantil", activityType:"antologia", locked:false },
+  { id:"concepto", label:"🔤 Sopa de letras", title:"Concepto y Fuentes del Derecho Mercantil",
+    content:"El Derecho Mercantil es el conjunto de normas jurídicas que regulan los actos de comercio y la actividad de quienes se dedican profesionalmente a ellos: los comerciantes. Sus fuentes principales son la ley (el Código de Comercio), la costumbre mercantil y los principios generales del derecho.",
+    activityType:"wordsearch", locked:true },
+  { id:"entes", label:"🏢 Entes Mercantiles", title:"Entes y Sociedades Mercantiles",
+    content:"Un ente mercantil es cualquier persona física o jurídica que realiza actos de comercio de forma organizada. La empresa individual de responsabilidad limitada permite a una sola persona ejercer el comercio separando su patrimonio personal del empresarial. Las sociedades mercantiles, como la sociedad anónima, reúnen a varios socios bajo una organización con estatutos, órganos de administración y un capital dividido en acciones o cuotas.",
+    activityType:"crossword", locked:true },
+  { id:"auxiliares", label:"🤝 Cuestionario", title:"Auxiliares del Comercio",
+    content:"El Código de Comercio reconoce distintos auxiliares que colaboran con los comerciantes en su actividad: comisionistas, corredores jurados, factores, porteadores, agentes viajeros, representantes de casas extranjeras y dependientes.",
+    activityType:"quiz", locked:true },
+  { id:"asocie1", label:"🔗 Asocie: Auxiliares", title:"Asocie — Auxiliares del Comercio", activityType:"matching1", locked:true },
+  { id:"asocie2", label:"🔗 Asocie: Entes y Ciclo", title:"Asocie — Entes, Documentos y Ciclo Societario", activityType:"matching2", locked:true },
+  { id:"casos", label:"⚖️ Casos y Debate", title:"Casos y Debate (módulo compartido)",
+    activityType:"casos", locked:true },
+  { id:"miro", label:"🧠 Lluvia de Ideas", title:"Lluvia de Ideas — Tablero Colaborativo",
+    activityType:"miro", locked:true },
+  { id:"certificado", label:"🏆 Certificado", title:"Certificado", activityType:"certificado", locked:false },
+];
+
+let activeModule = MODULES[0].id;
+let studentName = "";
+let antologiaLeida = false;
+
+/* ============================================================
+   CONEXIÓN A GOOGLE SHEETS (vía Apps Script Web App)
+   ============================================================ */
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxnUHWOQ6o8QhWCuFlREmrIYD53twJAAr2daANHmvp7g-Q9882vuogDsL3JySgo6Xfq/exec";
+
+function sheetsReady(){ return SHEET_API_URL && !SHEET_API_URL.startsWith('REEMPLAZAR'); }
+
+let jsonpCounter = 0;
+function jsonpRequest(url){
+  return new Promise((resolve, reject)=>{
+    const cbName = 'jsonp_cb_' + (jsonpCounter++) + '_' + Date.now();
+    const script = document.createElement('script');
+    let settled = false;
+    const cleanup = ()=>{ delete window[cbName]; if(script.parentNode) script.parentNode.removeChild(script); };
+    window[cbName] = (data)=>{ settled = true; cleanup(); resolve(data); };
+    script.onerror = ()=>{ if(!settled){ cleanup(); reject(new Error('Error de red (JSONP)')); } };
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    document.body.appendChild(script);
+    setTimeout(()=>{ if(!settled){ cleanup(); reject(new Error('Tiempo de espera agotado')); } }, 10000);
+  });
+}
+
+async function sheetGet(sheetName){
+  const data = await jsonpRequest(SHEET_API_URL + '?sheet=' + encodeURIComponent(sheetName));
+  return data.rows || [];
+}
+
+async function sheetPost(sheetName, row){
+  await fetch(SHEET_API_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({ sheet: sheetName, row })
+  });
+  return { ok:true };
+}
+
+/* ============================================================
+   PROGRESO (en memoria + Google Sheets compartido)
+   ============================================================ */
+const localProgress = {};
+
+function pct(score,total){ return total>0 ? Math.round((score/total)*100) : 0; }
+
+async function saveProgress(moduleId, score, total){
+  localProgress[moduleId] = {score, total, ts:Date.now()};
+  renderTabs();
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const nowIso = new Date().toISOString();
+    await sheetPost('Progreso', [nowIso, studentName, moduleId, score, total]);
+  }catch(e){ /* falla silenciosa: el progreso local sigue funcionando */ }
+}
+
+async function saveCasoParticipation(done){
+  localProgress['casos'] = {score: done?1:0, total:1, ts:Date.now()};
+  renderTabs();
+}
+
+/* ============================================================
+   ANTI-REINTENTO: bloquear actividades ya completadas
+   ============================================================ */
+function isLocked(moduleId){
+  return !!(localProgress[moduleId] && localProgress[moduleId].total > 0);
+}
+
+function renderLockedNotice(moduleId, activityLabel){
+  const p = localProgress[moduleId];
+  const pctVal = p.total>0 ? Math.round((p.score/p.total)*100) : 0;
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>✅ Actividad completada</h3>
+    <p style="font-size:13px;">Ya completaste <strong>${activityLabel}</strong>. Tu resultado fue <strong>${p.score} / ${p.total}</strong> (${pctVal}%).</p>
+    <p style="font-size:11px;color:var(--muted);">Esta actividad ya quedó registrada y no se puede repetir. Si crees que hay un error, consultá con tu docente.</p>`;
+  pageEl.appendChild(card);
+}
+
+async function loadExistingProgress(){
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const rows = await sheetGet('Progreso');
+    rows.filter(r => r.Estudiante === studentName).forEach(r=>{
+      const mod = r.Modulo;
+      if(!mod) return;
+      localProgress[mod] = { score:Number(r.Score), total:Number(r.Total), ts:new Date(r.Timestamp).getTime() };
+    });
+    if (typeof antologiaLeida !== 'undefined' && localProgress['antologia']) antologiaLeida = true;
+    renderTabs();
+    renderPage();
+  }catch(e){ /* si falla, las actividades siguen interactivas por seguridad */ }
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+const tabsEl = document.getElementById('tabs');
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  MODULES.forEach(m=>{
+    const t = document.createElement('div');
+    const done = localProgress[m.id] && (m.id==='casos' ? localProgress[m.id].score>0 : localProgress[m.id].total>0);
+    const isLocked = m.locked && !antologiaLeida;
+    t.className = 'tab' + (m.id===activeModule?' active':'') + (done?' done':'') + (m.id==='certificado'?' cert':'') + (isLocked?' tab-locked':'');
+    t.textContent = m.label;
+    t.addEventListener('click', ()=>{
+      if(isLocked){
+        alert('Primero debés leer la Antología del tema (pestaña 📘 Antología) antes de continuar.');
+        activeModule = 'antologia';
+      } else {
+        activeModule = m.id;
+      }
+      renderTabs(); renderPage();
+    });
+    tabsEl.appendChild(t);
+  });
+}
+
+/* ============================================================
+   RENDER PAGE ROUTER
+   ============================================================ */
+const pageEl = document.getElementById('page');
+function renderPage(){
+  const m = MODULES.find(x=>x.id===activeModule);
+  pageEl.innerHTML = '';
+  if(m.content){
+    const c = document.createElement('div');
+    c.className = 'content-card';
+    c.innerHTML = `<h2>${m.title}</h2><p>${m.content}</p>`;
+    pageEl.appendChild(c);
+  }
+  if(m.activityType==='antologia') renderAntologia();
+  else if(m.activityType==='wordsearch') renderWordSearch();
+  else if(m.activityType==='crossword') renderCrossword();
+  else if(m.activityType==='quiz') renderQuiz(AUXILIARES_QUIZ, 'auxiliares');
+  else if(m.activityType==='matching1') renderMatching(MATCH_AUXILIARES, 'asocie1', 'Asocie — Auxiliares del Comercio');
+  else if(m.activityType==='matching2') renderMatching(MATCH_ENTES_CICLO, 'asocie2', 'Asocie — Entes, Documentos y Ciclo Societario');
+  else if(m.activityType==='casos') renderCasos();
+  else if(m.activityType==='miro') renderMiro();
+  else if(m.activityType==='certificado') renderCertificado();
+}
+
+function escapeHtml(s){ return (s+"").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ============================================================
+   MÓDULO 0: ANTOLOGÍA (infografía de lectura obligatoria)
+   ============================================================ */
+function renderAntologia(){
+  const card = document.createElement('div');
+  card.innerHTML = `
+    <div class="info-hero">
+      <div class="kicker">Antología · Décimo Año · Gestión Comercial y de Ventas</div>
+      <h2>⚖️ Derecho Mercantil y Auxiliares del Comercio</h2>
+      <p>Leé con calma cada bloque antes de pasar a las actividades — todas las pestañas siguientes se desbloquean al terminar.</p>
+    </div>
+
+    <div class="info-block" style="--block-color:#B8863C;">
+      <div class="ib-head"><span class="ib-icon">📜</span><h3>1. Concepto y fuentes del Derecho Mercantil</h3></div>
+      <p>El <strong>Derecho Mercantil</strong> es el conjunto de normas jurídicas que regulan los <strong>actos de comercio</strong> y la actividad de quienes se dedican profesionalmente a ellos: los <strong>comerciantes</strong>.</p>
+      <p>Sus principales fuentes son:</p>
+      <ul>
+        <li><strong>La ley</strong> — principalmente el Código de Comercio vigente (Capítulo II al VII regula a los comerciantes y las sociedades mercantiles).</li>
+        <li><strong>La costumbre mercantil</strong> — prácticas reiteradas y aceptadas entre comerciantes.</li>
+        <li><strong>Los principios generales del derecho</strong> y el <strong>Derecho Mercantil internacional</strong>, cuando la ley y la costumbre no resuelven un caso.</li>
+      </ul>
+      <span class="ib-tag">RA1a</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#2FC2AD;">
+      <div class="ib-head"><span class="ib-icon">🏢</span><h3>2. Entes mercantiles</h3></div>
+      <p>Un <strong>ente mercantil</strong> es toda persona física o jurídica que realiza actos de comercio de forma organizada. El Código de Comercio reconoce dos figuras principales:</p>
+      <div class="info-grid">
+        <div class="info-mini"><b>Empresa Individual de Responsabilidad Limitada</b><span>Una sola persona ejerce el comercio, separando su patrimonio personal del empresarial.</span></div>
+        <div class="info-mini"><b>Sociedades mercantiles</b><span>Varios socios se organizan bajo estatutos, con órganos de administración (junta directiva, asamblea) y capital dividido en acciones o cuotas — por ejemplo, la sociedad anónima.</span></div>
+      </div>
+      <span class="ib-tag">RA1b</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#0E1B3D;">
+      <div class="ib-head"><span class="ib-icon">🤝</span><h3>3. Los auxiliares del comercio</h3></div>
+      <p>Son personas que colaboran con los comerciantes en su actividad, según el Código de Comercio:</p>
+      <ul>
+        <li><strong>Comisionista</strong> — realiza gestiones de comercio por cuenta ajena, a cambio de una comisión.</li>
+        <li><strong>Corredor jurado</strong> — facilita la formación de contratos mercantiles entre las partes.</li>
+        <li><strong>Factor</strong> — administra un establecimiento mercantil por cuenta y representación de su dueño.</li>
+        <li><strong>Porteador</strong> — transporta mercancías de un lugar a otro.</li>
+        <li><strong>Agente viajero</strong> — promueve ventas fuera del establecimiento del comerciante.</li>
+        <li><strong>Representante de casas extranjeras</strong> — actúa en el país en nombre de una empresa foránea.</li>
+        <li><strong>Dependiente</strong> — colabora directamente bajo las órdenes del comerciante, dentro del establecimiento.</li>
+      </ul>
+      <span class="ib-tag">RA1b</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#EF6A5B;">
+      <div class="ib-head"><span class="ib-icon">🔄</span><h3>4. El ciclo de vida de una sociedad mercantil</h3></div>
+      <p>Toda sociedad mercantil atraviesa etapas formales, respaldadas por documentos legales:</p>
+      <div class="info-grid">
+        <div class="info-mini"><b>Constitución</b><span>Se formaliza mediante una <strong>escritura pública</strong>, inscrita en el Registro Mercantil, y se rige por sus <strong>estatutos</strong>.</span></div>
+        <div class="info-mini"><b>Personalidad jurídica</b><span>Desde su inscripción, la sociedad es sujeto de derechos y obligaciones, distinta de sus socios.</span></div>
+        <div class="info-mini"><b>Fusión / Transformación</b><span>Dos sociedades se integran en una sola, o una sociedad cambia de tipo societario sin perder su personalidad jurídica.</span></div>
+        <div class="info-mini"><b>Disolución y liquidación</b><span>Se venden los activos, se pagan las deudas, y se reparte el remanente entre los socios.</span></div>
+      </div>
+      <span class="ib-tag">RA1c</span>
+    </div>
+
+    <div class="read-confirm">
+      <button class="btn" id="confirmReadBtn">✅ Ya leí la antología, continuar</button>
+      <p>Al confirmar, se desbloquean la sopa de letras, el crucigrama, el cuestionario, los dos asocies y los casos.</p>
+    </div>
+  `;
+  pageEl.appendChild(card);
+
+  document.getElementById('confirmReadBtn').addEventListener('click', ()=>{
+    antologiaLeida = true;
+    saveProgress('antologia', 1, 1);
+    alert('¡Listo! Ya podés continuar con las actividades.');
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 1: SOPA DE LETRAS (Concepto y Fuentes) — 25 términos
+   ============================================================ */
+const WS_DATA = {"size": 20, "grid": ["KRPWDULAEXFCDZAOFRXK", "MPEFVBPHCUYGGAVZVYYS", "XCDDRPRMSCGKERNNJLOQ", "MKPIMISIACORREDORCFW", "WPASPCOROTXMERCANTIL", "QHSOTNCDKRJTERDFVIIF", "CULLKDILYTJUERHDFQMC", "FOYUNGELFVBGRVCQUVHA", "CNMCOFDPXSIALIPIAQPM", "AUXILIARESVHHADCAFOR", "PCOOSZDNTNYXEACIPNRB", "IJBNAIIRVJDSCIBTCNTH", "TRANSFORMACIONFMOAEE", "ACKUAEENXRONEMPRESAX", "LPBCMIEUINEQXNPAGLDZ", "ELTTBYNTESTATUTOSPOS", "POJELRUCOSTUMBRESIRE", "RYXAERMVEWAAISKUHSNI", "VMYZAEEEDMDFAUOZECDU", "JEJRKMPHTFFFMGWXRYBT"], "words": {"TRANSFORMACION": [[12, 0], [12, 1], [12, 2], [12, 3], [12, 4], [12, 5], [12, 6], [12, 7], [12, 8], [12, 9], [12, 10], [12, 11], [12, 12], [12, 13]], "COMISIONISTA": [[6, 0], [7, 1], [8, 2], [9, 3], [10, 4], [11, 5], [12, 6], [13, 7], [14, 8], [15, 9], [16, 10], [17, 11]], "LIQUIDACION": [[4, 19], [5, 18], [6, 17], [7, 16], [8, 15], [9, 14], [10, 13], [11, 12], [12, 11], [13, 10], [14, 9]], "COMERCIANTE": [[2, 9], [3, 10], [4, 11], [5, 12], [6, 13], [7, 14], [8, 15], [9, 16], [10, 17], [11, 18], [12, 19]], "DEPENDIENTE": [[6, 5], [7, 6], [8, 7], [9, 8], [10, 9], [11, 10], [12, 11], [13, 12], [14, 13], [15, 14], [16, 15]], "AUXILIARES": [[9, 0], [9, 1], [9, 2], [9, 3], [9, 4], [9, 5], [9, 6], [9, 7], [9, 8], [9, 9]], "DISOLUCION": [[2, 3], [3, 3], [4, 3], [5, 3], [6, 3], [7, 3], [8, 3], [9, 3], [10, 3], [11, 3]], "MERCANTIL": [[4, 11], [4, 12], [4, 13], [4, 14], [4, 15], [4, 16], [4, 17], [4, 18], [4, 19]], "COSTUMBRE": [[16, 7], [16, 8], [16, 9], [16, 10], [16, 11], [16, 12], [16, 13], [16, 14], [16, 15]], "ESTATUTOS": [[15, 8], [15, 9], [15, 10], [15, 11], [15, 12], [15, 13], [15, 14], [15, 15], [15, 16]], "PORTEADOR": [[8, 18], [9, 18], [10, 18], [11, 18], [12, 18], [13, 18], [14, 18], [15, 18], [16, 18]], "ESCRITURA": [[10, 12], [11, 11], [12, 10], [13, 9], [14, 8], [15, 7], [16, 6], [17, 5], [18, 4]], "SOCIEDAD": [[3, 6], [4, 6], [5, 6], [6, 6], [7, 6], [8, 6], [9, 6], [10, 6]], "REGISTRO": [[5, 13], [6, 12], [7, 11], [8, 10], [9, 9], [10, 8], [11, 7], [12, 6]], "JURIDICA": [[5, 10], [6, 11], [7, 12], [8, 13], [9, 14], [10, 15], [11, 16], [12, 17]], "ACCIONES": [[8, 16], [9, 15], [10, 14], [11, 13], [12, 12], [13, 11], [14, 10], [15, 9]], "ASAMBLEA": [[11, 4], [12, 4], [13, 4], [14, 4], [15, 4], [16, 4], [17, 4], [18, 4]], "CORREDOR": [[3, 9], [3, 10], [3, 11], [3, 12], [3, 13], [3, 14], [3, 15], [3, 16]], "EMPRESA": [[13, 12], [13, 13], [13, 14], [13, 15], [13, 16], [13, 17], [13, 18]], "ANONIMA": [[1, 13], [2, 14], [3, 15], [4, 16], [5, 17], [6, 18], [7, 19]], "CAPITAL": [[8, 0], [9, 0], [10, 0], [11, 0], [12, 0], [13, 0], [14, 0]], "FUSION": [[0, 10], [1, 9], [2, 8], [3, 7], [4, 6], [5, 5]], "CODIGO": [[3, 9], [4, 8], [5, 7], [6, 6], [7, 5], [8, 4]], "FACTOR": [[12, 5], [13, 4], [14, 3], [15, 2], [16, 1], [17, 0]], "ACTOS": [[9, 13], [10, 14], [11, 15], [12, 16], [13, 17]]}};
+
+function renderWordSearch(){
+  if(isLocked('concepto')){
+    renderLockedNotice('concepto', 'la sopa de letras');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const total = Object.keys(WS_DATA.words).length;
+  const cellPx = WS_DATA.size > 16 ? 15 : 19;
+  card.innerHTML = `<h3>Sopa de letras — encontrá los ${total} términos <span class="scorepill" id="wsScorePill">0 / ${total}</span></h3>
+    <div class="ws-wrap">
+      <div class="ws-grid" id="wsGrid" style="grid-template-columns:repeat(${WS_DATA.size},${cellPx}px);"></div>
+      <div class="ws-list"><ul id="wsList"></ul></div>
+    </div>`;
+  pageEl.appendChild(card);
+
+  const gridEl = document.getElementById('wsGrid');
+  const cells = [];
+  for(let r=0;r<WS_DATA.size;r++){
+    const row=[];
+    for(let c=0;c<WS_DATA.size;c++){
+      const div = document.createElement('div');
+      div.className='ws-cell';
+      div.style.width = cellPx+'px';
+      div.style.height = cellPx+'px';
+      div.style.fontSize = (WS_DATA.size>16 ? '7.5px' : '9.5px');
+      div.textContent = WS_DATA.grid[r][c];
+      div.dataset.r=r; div.dataset.c=c;
+      gridEl.appendChild(div);
+      row.push(div);
+    }
+    cells.push(row);
+  }
+  const wordKeys = Object.keys(WS_DATA.words);
+  const wordCellSet = {};
+  wordKeys.forEach(w=>{ wordCellSet[w] = new Set(WS_DATA.words[w].map(([r,c])=>r+','+c)); });
+  const listEl = document.getElementById('wsList');
+  const liByWord = {};
+  wordKeys.slice().sort().forEach(w=>{
+    const li = document.createElement('li');
+    li.textContent = w;
+    listEl.appendChild(li);
+    liByWord[w]=li;
+  });
+
+  let found=0;
+  let selecting=false, path=[];
+  function keyOf(r,c){return r+','+c;}
+  function clearSel(){ path.forEach(([r,c])=>{ if(!cells[r][c].classList.contains('found')) cells[r][c].classList.remove('selected'); }); }
+  function tryMatch(){
+    const selSet = new Set(path.map(([r,c])=>keyOf(r,c)));
+    for(const w of wordKeys){
+      if(liByWord[w].classList.contains('found')) continue;
+      const wSet = wordCellSet[w];
+      if(wSet.size!==selSet.size) continue;
+      let match=true;
+      for(const k of wSet){ if(!selSet.has(k)){match=false;break;} }
+      if(match){
+        WS_DATA.words[w].forEach(([r,c])=>{ cells[r][c].classList.add('found'); cells[r][c].classList.remove('selected'); });
+        liByWord[w].classList.add('found');
+        found++;
+        document.getElementById('wsScorePill').textContent = found+' / '+total;
+        if(found===total) saveProgress('concepto', found, total);
+        return true;
+      }
+    }
+    return false;
+  }
+  function startSel(r,c){ selecting=true; path=[[r,c]]; cells[r][c].classList.add('selected'); }
+  function moveSel(r,c){
+    if(!selecting) return;
+    const [r0,c0]=path[0];
+    const dr=r-r0, dc=c-c0;
+    if(dr!==0 && dc!==0 && Math.abs(dr)!==Math.abs(dc)) return;
+    const steps=Math.max(Math.abs(dr),Math.abs(dc));
+    const sdr=steps===0?0:Math.sign(dr), sdc=steps===0?0:Math.sign(dc);
+    clearSel(); path=[];
+    for(let i=0;i<=steps;i++){
+      const rr=r0+sdr*i, cc=c0+sdc*i;
+      if(rr<0||rr>=WS_DATA.size||cc<0||cc>=WS_DATA.size) break;
+      path.push([rr,cc]);
+      cells[rr][cc].classList.add('selected');
+    }
+  }
+  function endSel(){ if(!selecting) return; selecting=false; if(!tryMatch()) clearSel(); path=[]; }
+  gridEl.addEventListener('mousedown', e=>{ const t=e.target.closest('.ws-cell'); if(t) startSel(+t.dataset.r,+t.dataset.c); });
+  gridEl.addEventListener('mouseover', e=>{ const t=e.target.closest('.ws-cell'); if(t) moveSel(+t.dataset.r,+t.dataset.c); });
+  document.addEventListener('mouseup', endSel);
+  gridEl.addEventListener('touchstart', e=>{ const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); const c=t&&t.closest('.ws-cell'); if(c) startSel(+c.dataset.r,+c.dataset.c); }, {passive:true});
+  gridEl.addEventListener('touchmove', e=>{ const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); const c=t&&t.closest('.ws-cell'); if(c) moveSel(+c.dataset.r,+c.dataset.c); }, {passive:true});
+  document.addEventListener('touchend', endSel);
+}
+
+/* ============================================================
+   ACTIVIDAD 2: CRUCIGRAMA (Entes y Sociedades Mercantiles)
+   ============================================================ */
+const CW_DATA = {"size": {"rows": 15, "cols": 15}, "grid": ["...............", ".....F...F.....", ".....A...U.....", ".....C...S.....", ".....T...I.....", ".....O.D.O.....", ".COMERCIANTE...", ".O.E...S.......", ".D.R..SOCIEDAD.", ".I.C...L..M....", ".G.A...U..P....", ".O.N...C..R....", "...T...I..E....", "...I...O..S....", "...L...N..A...."], "words": [{"word": "COMERCIANTE", "clue": "Persona que ejerce de forma habitual actos de comercio", "row": 6, "col": 1, "dir": "H", "num": 4}, {"word": "DISOLUCION", "clue": "Etapa en la que una sociedad deja de operar y se liquidan sus bienes", "row": 5, "col": 7, "dir": "V", "num": 3}, {"word": "MERCANTIL", "clue": "Adjetivo que califica al derecho que regula los actos de comercio", "row": 6, "col": 3, "dir": "V", "num": 5}, {"word": "SOCIEDAD", "clue": "Ente mercantil con personalidad jurídica propia, cuyo capital se divide entre los socios", "row": 8, "col": 6, "dir": "H", "num": 6}, {"word": "EMPRESA", "clue": "Individual de responsabilidad limitada: entidad mercantil formada por una sola persona", "row": 8, "col": 10, "dir": "V", "num": 7}, {"word": "FUSION", "clue": "Proceso mediante el cual dos o más sociedades se integran en una sola", "row": 1, "col": 9, "dir": "V", "num": 2}, {"word": "CODIGO", "clue": "Cuerpo de leyes que regula los actos de comercio en Costa Rica", "row": 6, "col": 1, "dir": "V", "num": 4}, {"word": "FACTOR", "clue": "Auxiliar del comercio que administra un establecimiento mercantil por cuenta de su dueño", "row": 1, "col": 5, "dir": "V", "num": 1}]};
+
+function renderCrossword(){
+  if(isLocked('entes')){
+    renderLockedNotice('entes', 'el crucigrama');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const across = CW_DATA.words.filter(w=>w.dir==='H').sort((a,b)=>a.num-b.num);
+  const down = CW_DATA.words.filter(w=>w.dir==='V').sort((a,b)=>a.num-b.num);
+  card.innerHTML = `<h3>Crucigrama — completá según las pistas <span class="scorepill" id="cwScorePill">0%</span></h3>
+    <div class="cw-wrap">
+      <div class="cw-grid" id="cwGrid" style="grid-template-columns:repeat(${CW_DATA.size.cols},22px);"></div>
+      <div class="cw-clues">
+        <b>Horizontales</b><ul id="cwAcross"></ul>
+        <b>Verticales</b><ul id="cwDown"></ul>
+      </div>
+    </div>
+    <button class="btn" id="cwCheckBtn" style="margin-top:12px;">Comprobar crucigrama</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('cwAcross').innerHTML = across.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+  document.getElementById('cwDown').innerHTML = down.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+
+  const R = CW_DATA.size.rows, C = CW_DATA.size.cols;
+  const gridEl = document.getElementById('cwGrid');
+  const numAt = {};
+  CW_DATA.words.forEach(w=>{ numAt[w.row+','+w.col] = w.num; });
+  const inputs = {};
+  for(let r=0;r<R;r++){
+    for(let c=0;c<C;c++){
+      const ch = CW_DATA.grid[r][c];
+      const cell = document.createElement('div');
+      if(ch==='.'){
+        cell.className='cw-cell blocked';
+      } else {
+        cell.className='cw-cell';
+        const key = numAt[r+','+c];
+        if(key) cell.innerHTML = `<span class="cw-num">${key}</span>`;
+        const inp = document.createElement('input');
+        inp.maxLength=1;
+        inp.dataset.r=r; inp.dataset.c=c;
+        inp.addEventListener('input', function(){
+          this.value = this.value.toUpperCase().replace(/[^A-ZÑ]/g,'');
+          if(this.value){
+            const next = findNextInput(r,c);
+            if(next) next.focus();
+          }
+        });
+        cell.appendChild(inp);
+        inputs[r+','+c] = inp;
+      }
+      gridEl.appendChild(cell);
+    }
+  }
+  function findNextInput(r,c){
+    if(inputs[r+','+(c+1)]) return inputs[r+','+(c+1)];
+    if(inputs[(r+1)+','+c]) return inputs[(r+1)+','+c];
+    return null;
+  }
+
+  document.getElementById('cwCheckBtn').addEventListener('click', ()=>{
+    let correct=0, total=0;
+    for(const key in inputs){
+      const [r,c] = key.split(',').map(Number);
+      const expected = CW_DATA.grid[r][c];
+      const inp = inputs[key];
+      total++;
+      if(inp.value === expected){ inp.classList.add('ok'); inp.classList.remove('bad'); correct++; }
+      else{ inp.classList.add('bad'); inp.classList.remove('ok'); }
+    }
+    document.getElementById('cwScorePill').textContent = Math.round((correct/total)*100)+'%';
+    saveProgress('entes', correct, total);
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 3: CUESTIONARIO (Auxiliares del Comercio)
+   ============================================================ */
+const AUXILIARES_QUIZ = [
+  { q:"¿Cuál es el conjunto de normas que regula los actos de comercio y la actividad de los comerciantes?", opts:["Derecho Civil","Derecho Mercantil","Derecho Laboral"], correct:1,
+    just:"El Derecho Mercantil regula específicamente los actos de comercio y a quienes los ejercen profesionalmente." },
+  { q:"El auxiliar del comercio que administra un establecimiento mercantil por cuenta de su dueño se llama:", opts:["Comisionista","Factor","Porteador"], correct:1,
+    just:"El factor administra el negocio en representación del comerciante dueño." },
+  { q:"¿Qué auxiliar del comercio se encarga del transporte de mercancías?", opts:["Porteador","Corredor jurado","Dependiente"], correct:0,
+    just:"El porteador transporta las mercancías de un lugar a otro." },
+  { q:"Una empresa individual de responsabilidad limitada se caracteriza por:", opts:["Estar formada por varios socios con acciones","Ser formada por una sola persona que separa su patrimonio personal del empresarial","No tener personalidad jurídica"], correct:1,
+    just:"Es una figura mercantil unipersonal que protege el patrimonio personal del dueño." },
+  { q:"¿Qué ocurre cuando dos sociedades mercantiles se fusionan?", opts:["Se integran en una sola sociedad","Ambas desaparecen sin dejar rastro legal","Se convierten automáticamente en cooperativas"], correct:0,
+    just:"La fusión integra a las sociedades en una sola entidad mercantil." },
+  { q:"La etapa en la que se venden los activos de una sociedad, se pagan las deudas y se reparte el remanente entre los socios se llama:", opts:["Constitución","Disolución y liquidación","Fusión"], correct:1,
+    just:"La disolución y liquidación es el cierre ordenado de las operaciones de la sociedad." },
+];
+
+function renderQuiz(bank, moduleId){
+  if(isLocked(moduleId)){
+    renderLockedNotice(moduleId, 'el cuestionario');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Cuestionario <span class="scorepill" id="qzScorePill-${moduleId}">0 / ${bank.length}</span></h3><div id="qzWrap-${moduleId}"></div>`;
+  pageEl.appendChild(card);
+  const wrap = document.getElementById('qzWrap-'+moduleId);
+  let score=0, answered=0;
+  bank.forEach((item,qi)=>{
+    const qcard = document.createElement('div');
+    qcard.className='qcard';
+    qcard.innerHTML = `<div class="qtext">${qi+1}. ${item.q}</div><div class="opts"></div><div class="justif"></div>`;
+    const optsDiv = qcard.querySelector('.opts');
+    const letters=['A','B','C'];
+    item.opts.forEach((optText,oi)=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(qcard.classList.contains('answered')) return;
+        qcard.classList.add('answered');
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = oi===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect) optsDiv.querySelectorAll('.opt')[item.correct].classList.add('reveal-correct');
+        qcard.classList.add(isCorrect?'correct':'incorrect');
+        const j = qcard.querySelector('.justif');
+        j.classList.add('show', isCorrect?'ok':'bad');
+        j.textContent = (isCorrect?'✓ ':'✕ ') + item.just;
+        if(isCorrect) score++;
+        answered++;
+        document.getElementById('qzScorePill-'+moduleId).textContent = score+' / '+bank.length;
+        if(answered===bank.length) saveProgress(moduleId, score, bank.length);
+      });
+      optsDiv.appendChild(opt);
+    });
+    wrap.appendChild(qcard);
+  });
+}
+
+/* ============================================================
+   ACTIVIDADES 4 y 5: DOS ASOCIES
+   ============================================================ */
+const MATCH_AUXILIARES = {
+  terms:["Comisionista","Corredor jurado","Factor","Porteador","Dependiente"],
+  defs:[
+    "Colabora directamente con el comerciante, bajo sus órdenes, dentro del establecimiento",
+    "Administra un establecimiento mercantil por cuenta y en representación de su dueño",
+    "Se encarga del transporte de mercancías de un lugar a otro",
+    "Realiza gestiones de comercio por cuenta ajena, a cambio de una comisión",
+    "Interviene para facilitar la formación de contratos mercantiles entre las partes"
+  ],
+  correct:[3,4,1,2,0]
+};
+
+const MATCH_ENTES_CICLO = {
+  terms:["Escritura pública","Estatutos","Personalidad jurídica","Fusión","Disolución y liquidación"],
+  defs:[
+    "Conjunto de reglas internas que rigen el funcionamiento de una sociedad",
+    "Proceso mediante el cual dos sociedades se integran en una sola",
+    "Documento legal que da nacimiento a la sociedad, inscrito en el Registro Mercantil",
+    "Etapa final en la que se venden los activos, se pagan las deudas y se reparte el remanente",
+    "Capacidad de la sociedad de ser sujeto de derechos y obligaciones, distinta de sus socios"
+  ],
+  correct:[2,0,4,1,3]
+};
+
+function renderMatching(data, moduleId, title){
+  if(isLocked(moduleId)){
+    renderLockedNotice(moduleId, 'el asocie');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const letters=['A','B','C','D','E'];
+  let rows='';
+  data.terms.forEach((t,i)=>{
+    rows += `<tr class="match-row" data-i="${i}"><td>${i+1}. ${t}</td><td><select data-i="${i}"><option value="">— Seleccione —</option>${data.defs.map((d,j)=>`<option value="${j}">${letters[j]}</option>`).join('')}</select></td></tr>`;
+  });
+  card.innerHTML = `<h3>${title} <span class="scorepill" id="mtScorePill-${moduleId}">0 / ${data.terms.length}</span></h3>
+    <table class="match-table" id="mtTable-${moduleId}"><tbody>${rows}</tbody></table>
+    <div class="bank"><b>Columna B</b><br>${data.defs.map((d,j)=>`${letters[j]}. ${d}`).join('<br>')}</div>
+    <button class="btn" id="mtCheckBtn-${moduleId}" style="margin-top:10px;">Comprobar</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('mtCheckBtn-'+moduleId).addEventListener('click', function(){
+    if(this.disabled) return;
+    const selects = document.querySelectorAll('#mtTable-'+moduleId+' select');
+    let correct=0, allAnswered=true;
+    selects.forEach(sel=>{
+      const i = parseInt(sel.dataset.i,10);
+      if(sel.value===""){ allAnswered=false; return; }
+      const row = sel.closest('.match-row');
+      if(parseInt(sel.value,10)===data.correct[i]){ row.classList.add('ok'); correct++; }
+      else row.classList.add('bad');
+    });
+    if(!allAnswered){ alert('Completá las '+data.terms.length+' relaciones antes de comprobar.'); return; }
+    selects.forEach(s=>s.disabled=true);
+    this.disabled=true;
+    document.getElementById('mtScorePill-'+moduleId).textContent = correct+' / '+data.terms.length;
+    saveProgress(moduleId, correct, data.terms.length);
+  });
+}
+
+/* ============================================================
+   MÓDULO CASOS Y DEBATE (compartido)
+   ============================================================ */
+const CASOS = [
+  { id:"caso1", tag:"Empresa individual", text:"Un joven decide abrir su propio taller de reparación de bicicletas, sin asociarse con nadie más, pero quiere proteger su casa y ahorros personales por si el negocio tiene deudas. ¿Qué figura mercantil le convendría constituir y por qué?" },
+  { id:"caso2", tag:"Fusión de sociedades", text:"Dos empresas familiares de distribución de alimentos deciden unir operaciones para reducir costos y ampliar su mercado, integrándose en una sola entidad. ¿Qué proceso mercantil están realizando y qué pasos legales implicaría?" },
+  { id:"caso3", tag:"Auxiliares del comercio", text:"Un comerciante contrata a una persona para que administre completamente su tienda mientras él viaja, tomando decisiones y firmando documentos en su nombre. ¿Qué auxiliar del comercio corresponde a esta función?" },
+];
+
+function renderCasos(){
+  const info = document.createElement('div');
+  info.className = 'content-card';
+  info.innerHTML = `<h2>Casos y Debate</h2><p>Este módulo se comparte con toda la clase. Elegí al menos <strong>un caso</strong>, escribí tu respuesta, y luego respondé (con respeto) al aporte de <strong>al menos un compañero</strong>. Necesitás escribir tu nombre arriba para participar.</p>`;
+  if(!sheetsReady()){
+    info.innerHTML += `<p style="color:var(--coral);font-size:12px;">⚠️ Falta configurar la conexión a la hoja de datos (SHEET_API_URL). Avisale a tu docente.</p>`;
+  }
+  pageEl.appendChild(info);
+
+  CASOS.forEach(caso=>{
+    const card = document.createElement('div');
+    card.className = 'caso-card';
+    card.innerHTML = `
+      <div class="caso-tag">${caso.tag}</div>
+      <p class="enunciado">${caso.text}</p>
+      <div class="caso-msgs" id="msgs-${caso.id}"><div style="font-size:11px;color:var(--muted);">Cargando respuestas...</div></div>
+      <textarea class="caso-input" id="input-${caso.id}" placeholder="Escribí tu respuesta o tu comentario a un compañero..."></textarea>
+      <button class="btn" data-caso="${caso.id}">Publicar</button>
+    `;
+    pageEl.appendChild(card);
+  });
+
+  document.querySelectorAll('[data-caso]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const casoId = btn.dataset.caso;
+      if(!studentName){ alert('Escribí tu nombre arriba antes de participar.'); return; }
+      const text = document.getElementById('input-'+casoId).value.trim();
+      if(!text) return;
+      try{
+        const nowIso = new Date().toISOString();
+        await sheetPost('Casos', [nowIso, casoId, studentName, text]);
+        document.getElementById('input-'+casoId).value='';
+        await loadCasoMessages(casoId);
+        checkCasoParticipation();
+      }catch(e){
+        alert('No se pudo publicar. Revisá la conexión a la hoja de datos.');
+      }
+    });
+  });
+
+  CASOS.forEach(c=>loadCasoMessages(c.id));
+}
+
+async function loadCasoMessages(casoId){
+  const wrap = document.getElementById('msgs-'+casoId);
+  if(!wrap) return;
+  if(!sheetsReady()){
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--coral);">Hoja de datos no configurada todavía.</div>';
+    return;
+  }
+  try{
+    const rows = await sheetGet('Casos');
+    const items = rows
+      .filter(r => r.CasoId === casoId)
+      .map(r => ({ name: r.Nombre, text: r.Texto, ts: new Date(r.Timestamp).getTime() }));
+    if(items.length===0){ wrap.innerHTML = '<div style="font-size:11px;color:var(--muted);">Nadie ha respondido todavía.</div>'; return; }
+    items.sort((a,b)=>a.ts-b.ts);
+    wrap.innerHTML = items.map(m=>`<div class="caso-msg"><div class="mhead"><span class="mname">${escapeHtml(m.name)}</span><span>${new Date(m.ts).toLocaleTimeString('es-CR',{hour:'2-digit',minute:'2-digit'})}</span></div>${escapeHtml(m.text)}</div>`).join('');
+  }catch(e){
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--coral);">No se pudo cargar (revisá la conexión a la hoja de datos).</div>';
+  }
+}
+
+async function checkCasoParticipation(){
+  if(!studentName || !sheetsReady()) return;
+  let ownCount = 0;
+  try{
+    for(const caso of CASOS){
+      const rows = await sheetGet('Casos');
+      ownCount += rows.filter(r => r.CasoId === caso.id && r.Nombre === studentName).length;
+    }
+  }catch(e){}
+  saveCasoParticipation(ownCount >= 2);
+}
+
+/* ============================================================
+   MÓDULO: LLUVIA DE IDEAS (Miro, compartido con toda la clase)
+   ============================================================ */
+const MIRO_BOARD_URL = "https://miro.com/app/board/uXjVHtdmGSI=/";
+
+function renderMiro(){
+  const card = document.createElement('div');
+  card.className = 'content-card';
+  card.innerHTML = `
+    <h2>🧠 Lluvia de Ideas — Tablero Colaborativo</h2>
+    <p><strong>Pregunta:</strong> si fueras a abrir tu propio negocio, ¿qué figura mercantil elegirías — una Empresa Individual de Responsabilidad Limitada o una Sociedad Mercantil — y qué auxiliar del comercio contratarías primero? Justificá tu respuesta.</p>
+    <p>Toda la clase comparte el mismo tablero. Agregá tu nota adhesiva con tu nombre, y comentá al menos dos respuestas de tus compañeros.</p>
+  `;
+  pageEl.appendChild(card);
+
+  const btnCard = document.createElement('div');
+  btnCard.className = 'actcard';
+  btnCard.style.textAlign = 'center';
+  btnCard.innerHTML = `
+    <h3 style="text-align:left;">Abrir el tablero de Miro</h3>
+    <a class="btn" href="${MIRO_BOARD_URL}" target="_blank" style="text-decoration:none;display:inline-block;">🧠 Abrir tablero y agregar mi nota</a>
+    <p style="font-size:11px;color:var(--muted);margin-top:12px;">Se abre en una pestaña nueva. Si es tu primera vez en Miro, puede pedirte crear una cuenta gratuita o entrar como invitado.</p>
+  `;
+  pageEl.appendChild(btnCard);
+}
+
+/* ============================================================
+   CERTIFICADO
+   ============================================================ */
+/* Este curso cubre el Resultado de Aprendizaje 1 de la unidad "Gestión
+   comercial y de ventas": Explicar el papel que desempeñan el Derecho
+   Mercantil y los Auxiliares del Comercio en la economía del país. */
+const COMPETENCIAS = [
+  { ra:"RA1a", unidad:"Gestión comercial y de ventas", modules:["concepto"],
+    text:"Reconocer el papel que desempeñan el Derecho Mercantil y los Auxiliares del Comercio en la economía del país." },
+  { ra:"RA1b", unidad:"Gestión comercial y de ventas", modules:["entes","auxiliares","asocie1"],
+    text:"Clasificar los auxiliares del comercio y los entes mercantiles, según el Código de Comercio vigente." },
+  { ra:"RA1c", unidad:"Gestión comercial y de ventas", modules:["asocie2"],
+    text:"Explicar la constitución, fusión, transformación y disolución de las sociedades mercantiles." },
+];
+
+function competencyScore(comp){
+  let sum=0, total=0, anyData=false;
+  comp.modules.forEach(mid=>{
+    const p = localProgress[mid];
+    if(p){ sum+=p.score; total+=p.total; anyData=true; }
+  });
+  return { sum, total, pct: anyData && total>0 ? Math.round((sum/total)*100) : null };
+}
+
+function competencyLevel(pctVal){
+  if(pctVal===null) return { label:"Sin evidencia", cls:"status-pending" };
+  if(pctVal<=50) return { label:"No logrado", cls:"status-bad" };
+  if(pctVal<=80) return { label:"En proceso", cls:"status-mid" };
+  return { label:"Logrado", cls:"status-ok" };
+}
+
+function renderCertificado(){
+  const card = document.createElement('div');
+  card.className = 'actcard';
+
+  let rows = '';
+  let allLogrado = true;
+  COMPETENCIAS.forEach(comp=>{
+    const s = competencyScore(comp);
+    const lvl = competencyLevel(s.pct);
+    if(lvl.label !== "Logrado") allLogrado = false;
+    rows += `<tr>
+      <td><span class="ra-tag">${comp.ra}</span><span class="competency-desc">${comp.text}</span></td>
+      <td class="center">${s.total>0 ? s.sum+' / '+s.total : '—'}</td>
+      <td class="center">${s.pct!==null ? s.pct+'%' : '—'}</td>
+      <td class="center"><span class="${lvl.cls}">${lvl.label}</span></td>
+    </tr>`;
+  });
+  const antologiaOk = localProgress['antologia'] && localProgress['antologia'].score>0;
+  rows += `<tr><td><span class="ra-tag">Lectura</span><span class="competency-desc">Antología del tema (lectura previa obligatoria)</span></td><td class="center">—</td><td class="center">—</td><td class="center">${antologiaOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
+  const casoOk = localProgress['casos'] && localProgress['casos'].score>0;
+  rows += `<tr><td><span class="ra-tag">Participación</span><span class="competency-desc">Módulo compartido de Casos y Debate</span></td><td class="center">—</td><td class="center">—</td><td class="center">${casoOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
+  const finalOk = allLogrado && casoOk && antologiaOk;
+
+  card.innerHTML = `
+    <h3>Evaluación por competencias</h3>
+    <p style="font-size:11px;color:var(--muted);margin:-4px 0 10px;">Escala: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado. Basada en el Resultado de Aprendizaje 1 de la unidad "Gestión comercial y de ventas" (Programa de Estudio DETCE-MEP, Décimo año).</p>
+    <table class="progress-table">
+      <tr><th>Indicador</th><th>Puntaje</th><th>%</th><th>Nivel</th></tr>
+      ${rows}
+    </table>
+    ${finalOk ? `
+      <div class="certificate show" id="certBlock">
+        <div class="kicker">Contable CR · Décimo Año</div>
+        <h2>Certificado de Aprobación</h2>
+        <p>Se otorga el presente certificado a</p>
+        <div class="name">${escapeHtml(studentName || '____________________')}</div>
+        <p>por haber alcanzado el nivel <strong>Logrado</strong> en todos los indicadores evaluados sobre el <strong>Derecho Mercantil y los Auxiliares del Comercio</strong> (concepto y fuentes, entes y sociedades mercantiles, auxiliares del comercio, y el ciclo de constitución, fusión y disolución de sociedades), incluyendo la participación en el módulo de casos y debate.</p>
+        <div class="seal">MEP<br>10°</div>
+        <p style="margin-top:14px;font-size:10.5px;">Contabilidad · Gestión en Tecnologías Digitales Contables · Prof. Gerardo Gonzalez Gonzalez</p>
+      </div>
+      <button class="btn" style="margin-top:12px;" onclick="window.print()">Imprimir / Guardar como PDF</button>
+    ` : `<div class="locked-msg">🔒 El certificado se desbloquea cuando los tres indicadores alcanzan el nivel <strong>Logrado</strong> (81% o más) y hay participación registrada en Casos y Debate.</div>`}
+  `;
+  pageEl.appendChild(card);
+}
+
+/* ============================================================
+   PANEL DOCENTE (protegido con PIN)
+   ============================================================ */
+document.getElementById('teacherBtnOpen').addEventListener('click', ()=>{
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinError').style.display = 'none';
+  document.getElementById('pinModalBg').classList.add('show');
+  document.getElementById('pinInput').focus();
+});
+document.getElementById('pinModalClose').addEventListener('click', ()=>{
+  document.getElementById('pinModalBg').classList.remove('show');
+});
+document.getElementById('pinSubmit').addEventListener('click', checkPin);
+document.getElementById('pinInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkPin(); });
+
+async function checkPin(){
+  const val = document.getElementById('pinInput').value.trim();
+  if(val !== TEACHER_PIN){
+    document.getElementById('pinError').style.display = 'block';
+    return;
+  }
+  document.getElementById('pinModalBg').classList.remove('show');
+  await openTeacherPanel();
+}
+
+async function openTeacherPanel(){
+  document.getElementById('teacherModalBg').classList.add('show');
+  const content = document.getElementById('teacherContent');
+  content.innerHTML = 'Cargando...';
+  if(!sheetsReady()){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">⚠️ Falta configurar la conexión a la hoja de datos (SHEET_API_URL) en este archivo.</p>';
+    return;
+  }
+  try{
+    const [progRows, casoRows] = await Promise.all([sheetGet('Progreso'), sheetGet('Casos')]);
+    const byStudent = {};
+    progRows.forEach(r=>{
+      const name = r.Estudiante, mod = r.Modulo;
+      if(!name || !mod) return;
+      byStudent[name] = byStudent[name] || {};
+      byStudent[name][mod] = { score:Number(r.Score), total:Number(r.Total) };
+    });
+    const casosByStudent = {};
+    casoRows.forEach(r=>{
+      if(!r.Nombre) return;
+      casosByStudent[r.Nombre] = (casosByStudent[r.Nombre]||0) + 1;
+    });
+    Object.keys(casosByStudent).forEach(n=>{
+      byStudent[n] = byStudent[n] || {};
+      byStudent[n].casos = { score: casosByStudent[n]>=2 ? 1 : 0, total:1 };
+    });
+
+    const names = Object.keys(byStudent).sort();
+    if(names.length===0){ content.innerHTML = '<p style="font-size:12.5px;color:var(--muted);">Todavía no hay estudiantes con progreso guardado.</p>'; return; }
+    const levelAbbrev = (pctVal)=>{
+      if(pctVal===null) return '—';
+      const lvl = competencyLevel(pctVal);
+      const short = {"Logrado":"✓ Logrado","En proceso":"◐ En proceso","No logrado":"✕ No logrado"}[lvl.label] || lvl.label;
+      return `<span class="${lvl.cls}">${short}</span>`;
+    };
+    let html = '<p style="font-size:10.5px;color:var(--muted);margin-top:0;">Nivel por indicador: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado.</p>';
+    html += '<table class="progress-table"><tr><th>Estudiante</th><th>Antología</th><th>RA1a</th><th>RA1b</th><th>RA1c</th><th>Casos</th><th>Salidas</th></tr>';
+    names.forEach(n=>{
+      const d = byStudent[n];
+      const compPct = (mods)=>{
+        let sum=0,total=0,any=false;
+        mods.forEach(mid=>{ const x=d[mid]; if(x){ sum+=x.score; total+=x.total; any=true; } });
+        return any && total>0 ? Math.round((sum/total)*100) : null;
+      };
+      const okCell = (obj)=> obj ? (obj.score>0 ? '<span class="status-ok">✓ Logrado</span>' : '<span class="status-pending">Sin evidencia</span>') : '—';
+      const salidas = d.incidente_salida_pantalla ? d.incidente_salida_pantalla.score : 0;
+      const salidasCell = salidas > 0 ? `<span class="status-bad">⚠️ ${salidas}</span>` : '<span class="status-pending">0</span>';
+      html += `<tr>
+        <td>${escapeHtml(n)}</td>
+        <td class="center">${okCell(d.antologia)}</td>
+        <td class="center">${levelAbbrev(compPct(['concepto']))}</td>
+        <td class="center">${levelAbbrev(compPct(['entes','auxiliares','asocie1']))}</td>
+        <td class="center">${levelAbbrev(compPct(['asocie2']))}</td>
+        <td class="center">${okCell(d.casos)}</td>
+        <td class="center">${salidasCell}</td>
+      </tr>`;
+    });
+    html += '</table>';
+    content.innerHTML = html;
+  }catch(e){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">No se pudo cargar el panel (revisá la conexión a la hoja de datos).</p>';
+  }
+}
+document.getElementById('teacherModalClose').addEventListener('click', ()=>{
+  document.getElementById('teacherModalBg').classList.remove('show');
+});
+
+/* ============================================================
+   NOMBRE DEL ESTUDIANTE
+   ============================================================ */
+document.getElementById('studentName').addEventListener('input', function(){
+  studentName = this.value.trim();
+  document.getElementById('nameStatus').textContent = studentName ? '● identificado' : '';
+});
+document.getElementById('studentName').addEventListener('change', function(){
+  if(studentName) loadExistingProgress();
+});
+
+/* ============================================================
+   PRELLENADO DESDE UN ENLACE (?nombre=...)
+   ============================================================ */
+(function prefillFromLink(){
+  const params = new URLSearchParams(window.location.search);
+  const nombreParam = params.get('nombre');
+  if(nombreParam){
+    studentName = nombreParam;
+    document.getElementById('studentName').value = nombreParam;
+    document.getElementById('nameStatus').textContent = '● identificado';
+    loadExistingProgress();
+  }
+})();
+
+/* ============================================================
+   MODO ENFOQUE: pantalla completa + detección de salidas
+   ============================================================ */
+let salidaCount = 0;
+document.getElementById('focusModeBtn').addEventListener('click', ()=>{
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  if(req) req.call(el).catch(()=>{});
+});
+
+function showWarnBanner(msg){
+  let banner = document.getElementById('warnBanner');
+  if(!banner){
+    banner = document.createElement('div');
+    banner.id = 'warnBanner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:200;background:#EF6A5B;color:#fff;text-align:center;padding:8px 12px;font-size:12.5px;font-family:monospace;';
+    document.body.prepend(banner);
+  }
+  banner.textContent = msg;
+  banner.style.display = 'block';
+  clearTimeout(window._warnTimeout);
+  window._warnTimeout = setTimeout(()=>{ banner.style.display='none'; }, 6000);
+}
+
+function logSalida(){
+  salidaCount++;
+  showWarnBanner('⚠️ Se detectó que saliste de esta pestaña o ventana (van: ' + salidaCount + ').');
+  if(studentName && sheetsReady()){
+    sheetPost('Progreso', [new Date().toISOString(), studentName, 'incidente_salida_pantalla', salidaCount, salidaCount]).catch(()=>{});
+  }
+}
+
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) logSalida(); });
+
+window.addEventListener('beforeunload', function(e){
+  e.preventDefault();
+  e.returnValue = '';
+});
+
+document.addEventListener('contextmenu', e=> e.preventDefault());
+document.addEventListener('copy', e=> e.preventDefault());
+
+/* ============================================================
+   INICIO
+   ============================================================ */
+renderTabs();
+renderPage();
+</script>
+</body>
+</html>

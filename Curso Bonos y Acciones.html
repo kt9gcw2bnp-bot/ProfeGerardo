@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso · Bonos y Acciones</title>
+<style>
+:root{
+  --navy:#0E1B3D; --navy-deep:#0A1230;
+  --gold:#B8863C; --gold-light:#F4DD7A;
+  --teal:#2FC2AD; --coral:#EF6A5B;
+  --ink:#20242B; --paper:#F3F5F4; --muted:#5B6470; --line:#D8DCDD;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);padding-bottom:60px;}
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;padding:12px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.topbar h1{font-size:15.5px;margin:0 0 2px;}
+.topbar p{margin:0;font-size:10px;color:rgba(255,255,255,.65);font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;}
+.teacherBtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:10.5px;padding:5px 10px;border-radius:14px;cursor:pointer;}
+
+.namebar{background:#fff;border-bottom:1px solid var(--line);padding:9px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.namebar input{padding:7px 9px;border:1px solid var(--line);border-radius:6px;font-size:13px;flex:1;min-width:160px;}
+.namebar label{font-size:11px;color:var(--muted);font-family:var(--mono);}
+
+.tabs{display:flex;gap:4px;overflow-x:auto;background:#fff;border-bottom:1px solid var(--line);padding:8px 10px;}
+.tab{flex:0 0 auto;padding:7px 12px;border-radius:16px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid var(--line);color:var(--muted);white-space:nowrap;background:#f7f8f6;}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab.done::after{content:" ✓";color:var(--teal);}
+.tab.cert{border-color:var(--gold);}
+.tab.cert.active{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);}
+
+.page{max-width:760px;margin:0 auto;padding:16px;}
+.content-card{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:13.5px;line-height:1.55;color:var(--ink);}
+.content-card h2{font-size:16px;margin:0 0 8px;color:var(--navy);}
+
+.actcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;}
+.actcard h3{font-size:13.5px;margin:0 0 10px;color:var(--navy);}
+.btn{display:inline-block;padding:8px 16px;background:var(--navy);color:#fff;border:none;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.btn:hover{background:var(--navy-deep);}
+.btn:disabled{opacity:.45;cursor:default;}
+.btn.outline{background:#fff;color:var(--navy);border:1px solid var(--navy);}
+.scorepill{display:inline-block;font-family:var(--mono);font-size:11px;background:var(--teal);color:#fff;padding:3px 10px;border-radius:12px;margin-left:8px;}
+
+/* ---- QUIZ ---- */
+.qcard{border:1px solid var(--line);border-radius:8px;padding:12px 13px;margin-bottom:10px;}
+.qcard.correct{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset;}
+.qcard.incorrect{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral) inset;}
+.qtext{font-size:13px;font-weight:600;margin-bottom:8px;}
+.opt{display:flex;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;margin-top:6px;cursor:pointer;font-size:12.5px;}
+.opt:hover{background:#f7f8f6;}
+.opt .letter{font-family:var(--mono);font-weight:700;color:var(--navy);}
+.opt.locked{cursor:default;}
+.opt.chosen-correct{background:#e7f1ec;border-color:var(--teal);}
+.opt.chosen-incorrect{background:#f7e9e8;border-color:var(--coral);}
+.opt.reveal-correct{background:#e7f1ec;border-color:var(--teal);}
+.justif{margin-top:8px;padding:8px 10px;border-radius:6px;font-size:11.5px;display:none;}
+.justif.show{display:block;}
+.justif.ok{background:#e7f1ec;color:#1e4a37;}
+.justif.bad{background:#f7e9e8;color:#6f2626;}
+
+/* ---- MATCHING ---- */
+.match-table{width:100%;border-collapse:collapse;margin-top:6px;}
+.match-table td{padding:6px 4px;font-size:12.5px;vertical-align:middle;}
+.match-table select{width:100%;font-size:12.5px;padding:6px;border-radius:5px;border:1px solid var(--line);}
+.match-row.ok select{border-color:var(--teal);background:#e7f1ec;}
+.match-row.bad select{border-color:var(--coral);background:#f7e9e8;}
+.bank{font-size:11px;color:var(--muted);background:#f7f8f6;border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-top:8px;}
+
+/* ---- WORD SEARCH ---- */
+.ws-wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center;}
+.ws-grid{display:grid;gap:1px;background:#dfe3e6;border:2px solid var(--navy);border-radius:6px;padding:3px;touch-action:none;}
+.ws-cell{width:19px;height:19px;display:flex;align-items:center;justify-content:center;background:#fff;font-family:var(--mono);font-weight:700;font-size:9.5px;border-radius:2px;cursor:pointer;-webkit-user-select:none;user-select:none;}
+.ws-cell.selected{background:var(--gold-light);}
+.ws-cell.found{background:var(--teal);color:#fff;}
+.ws-list{flex:0 0 160px;}
+.ws-list ul{list-style:none;margin:0;padding:0;}
+.ws-list li{font-family:var(--mono);font-size:11px;padding:4px 7px;border-radius:5px;margin-bottom:3px;background:#f7f8f6;border:1px solid var(--line);}
+.ws-list li.found{background:var(--teal);color:#fff;border-color:var(--teal);text-decoration:line-through;}
+
+/* ---- CROSSWORD ---- */
+.cw-wrap{display:flex;gap:18px;flex-wrap:wrap;}
+.cw-grid{display:grid;gap:1px;background:#1c1f24;border:2px solid var(--navy);border-radius:4px;padding:2px;}
+.cw-cell{width:23px;height:23px;position:relative;background:#fff;}
+.cw-cell.blocked{background:#1c1f24;}
+.cw-cell input{width:100%;height:100%;border:none;text-align:center;font-family:var(--mono);font-weight:700;font-size:12px;text-transform:uppercase;background:transparent;padding:0;}
+.cw-cell input.ok{background:#e7f1ec;color:#1e4a37;}
+.cw-cell input.bad{background:#f7e9e8;color:#6f2626;}
+.cw-num{position:absolute;top:0px;left:1px;font-size:7px;color:var(--gold);font-family:var(--mono);}
+.cw-clues{flex:1;min-width:200px;font-size:11.5px;}
+.cw-clues b{color:var(--navy);display:block;margin:8px 0 3px;font-size:11px;}
+.cw-clues li{margin-bottom:4px;}
+
+/* ---- CASOS / ASIENTOS ---- */
+.caso-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:16px;}
+.caso-card .caso-tag{font-family:var(--mono);font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;}
+.caso-card p.enunciado{font-size:13px;margin:6px 0 10px;color:var(--ink);}
+.entry-table{width:100%;border-collapse:collapse;margin:8px 0;}
+.entry-table th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;padding:6px 6px;text-align:left;}
+.entry-table td{padding:5px 6px;border-bottom:1px solid var(--line);vertical-align:middle;}
+.entry-table select{width:100%;font-size:12px;padding:5px;border-radius:5px;border:1px solid var(--line);}
+.entry-table input[type=number]{width:100%;font-size:12px;padding:5px;border-radius:5px;border:1px solid var(--line);font-family:var(--mono);}
+.entry-row.ok select, .entry-row.ok input{border-color:var(--teal);background:#e7f1ec;}
+.entry-row.bad select, .entry-row.bad input{border-color:var(--coral);background:#f7e9e8;}
+.side-label{font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--navy);width:46px;}
+.caso-result{margin-top:8px;padding:8px 10px;border-radius:6px;font-size:11.5px;display:none;}
+.caso-result.show{display:block;}
+.caso-result.ok{background:#e7f1ec;color:#1e4a37;}
+.caso-result.bad{background:#f7e9e8;color:#6f2626;}
+
+/* ---- CERTIFICADO ---- */
+.progress-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+.progress-table th,.progress-table td{border:1px solid var(--line);padding:7px 9px;font-size:12px;text-align:left;}
+.progress-table th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;}
+.progress-table td.center{text-align:center;}
+.status-ok{color:var(--teal);font-weight:700;}
+.status-mid{color:#c98a2c;font-weight:700;}
+.status-bad{color:var(--coral);font-weight:700;}
+.status-pending{color:var(--muted);}
+.competency-desc{font-size:10.5px;color:var(--muted);display:block;margin-top:2px;}
+.ra-tag{font-family:var(--mono);font-size:9.5px;color:var(--gold);font-weight:700;}
+
+.certificate{display:none;border:8px double var(--gold);border-radius:10px;padding:34px 24px;text-align:center;background:#fffdf7;margin-top:10px;}
+.certificate.show{display:block;}
+.certificate .kicker{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;}
+.certificate h2{font-size:22px;color:var(--navy);margin:10px 0 4px;font-family:Georgia,serif;}
+.certificate .name{font-size:26px;font-weight:700;color:var(--navy-deep);margin:14px 0;font-family:Georgia,serif;border-bottom:2px solid var(--gold);display:inline-block;padding-bottom:6px;}
+.certificate p{font-size:12.5px;color:var(--muted);max-width:440px;margin:6px auto;}
+.certificate .seal{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d488,#a97c29);margin:14px auto 0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#3a2a06;font-weight:700;}
+
+.locked-msg{text-align:center;color:var(--muted);font-size:12.5px;padding:30px 20px;background:#fff;border:1px dashed var(--line);border-radius:8px;}
+
+/* PIN modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,18,48,.6);z-index:50;align-items:flex-start;justify-content:center;padding:30px 14px;overflow-y:auto;}
+.modal-bg.show{display:flex;}
+.modal{background:#fff;border-radius:10px;max-width:700px;width:100%;padding:20px;}
+.modal h3{margin:0 0 12px;color:var(--navy);}
+.modal .close{float:right;cursor:pointer;font-size:18px;color:var(--muted);}
+.pin-row{display:flex;gap:8px;margin-top:10px;}
+.pin-row input{flex:1;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-size:14px;font-family:var(--mono);letter-spacing:3px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div>
+      <h1>📜 Curso: Bonos y Acciones</h1>
+      <p>Contabilidad · Décimo año · Control contable del patrimonio y el pasivo</p>
+    </div>
+    <button class="teacherBtn" id="teacherBtnOpen">👩‍🏫 Panel docente</button>
+    <button class="teacherBtn" id="focusModeBtn" style="margin-left:6px;">🔒 Modo enfoque</button>
+  </div>
+</div>
+
+<div class="namebar">
+  <label>Tu nombre:</label>
+  <input type="text" id="studentName" placeholder="Nombre completo" maxlength="45">
+  <span id="nameStatus" style="font-size:11px;color:var(--muted);font-family:var(--mono);"></span>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="page" id="page"></div>
+
+<div class="modal-bg" id="pinModalBg">
+  <div class="modal">
+    <span class="close" id="pinModalClose">✕</span>
+    <h3>Panel docente</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin:0;">Ingrese el PIN para ver el progreso del grupo.</p>
+    <div class="pin-row">
+      <input type="password" id="pinInput" maxlength="6" placeholder="PIN">
+      <button class="btn" id="pinSubmit">Entrar</button>
+    </div>
+    <div id="pinError" style="color:var(--coral);font-size:11.5px;margin-top:6px;display:none;">PIN incorrecto.</div>
+  </div>
+</div>
+
+<div class="modal-bg" id="teacherModalBg">
+  <div class="modal">
+    <span class="close" id="teacherModalClose">✕</span>
+    <h3>Panel docente — progreso del curso</h3>
+    <div id="teacherContent">Cargando...</div>
+  </div>
+</div>
+
+<script>
+const TEACHER_PIN = "9986";
+
+/* ============================================================
+   CONFIGURACIÓN DE MÓDULOS
+   ============================================================ */
+const MODULES = [
+  { id:"bonos", label:"📄 Bonos", title:"Bonos por Pagar (Pasivo)",
+    content:"Cuando una empresa emite bonos, se está endeudando para financiarse. Cada bono tiene una tasa cupón fija y se compara contra la tasa de mercado: si la cupón es más atractiva, el bono se vende con prima (más caro); si es menos atractiva, se vende con descuento (más barato). El precio de emisión es el valor presente del valor nominal más el valor presente de los cupones futuros, descontados a la tasa de mercado.",
+    activityType:"wordsearch" },
+  { id:"acciones", label:"📈 Acciones", title:"Acciones y Patrimonio",
+    content:"Cuando la empresa emite sus propias acciones, está vendiendo pedazos de propiedad de sí misma: eso es patrimonio, no deuda. Las acciones comunes dan derecho a voto y dividendo variable; las preferentes no votan pero cobran dividendo fijo primero. El capital social refleja el valor nominal de las acciones emitidas, y las acciones en tesorería (readquiridas por la empresa) restan del patrimonio.",
+    activityType:"crossword" },
+  { id:"cuestionario", label:"❓ Cuestionario", title:"Cuestionario General",
+    content:"Repase la diferencia entre emitir e invertir: si la empresa emite un bono o una acción propia, es pasivo o patrimonio; si la empresa compra bonos o acciones de otra empresa, siempre es un activo (una inversión).",
+    activityType:"quiz" },
+  { id:"asocie1", label:"🔗 Asocie: Bonos", title:"Asocie — Términos de Bonos",
+    activityType:"matching1" },
+  { id:"asocie2", label:"🔗 Asocie: Acciones", title:"Asocie — Términos de Acciones",
+    activityType:"matching2" },
+  { id:"caso", label:"📝 Caso: Asientos", title:"Caso — Registro de Asientos de Diario",
+    activityType:"caso" },
+  { id:"certificado", label:"🏆 Certificado", title:"Certificado", activityType:"certificado" },
+];
+
+let activeModule = MODULES[0].id;
+let studentName = "";
+
+/* ============================================================
+   CONEXIÓN A GOOGLE SHEETS (vía Apps Script Web App)
+   Reemplazá SHEET_API_URL con la URL que termina en /exec
+   después de desplegar el script de Apps Script (una sola vez).
+   ============================================================ */
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxnUHWOQ6o8QhWCuFlREmrIYD53twJAAr2daANHmvp7g-Q9882vuogDsL3JySgo6Xfq/exec";
+
+function sheetsReady(){ return SHEET_API_URL && !SHEET_API_URL.startsWith('REEMPLAZAR'); }
+
+let jsonpCounter = 0;
+function jsonpRequest(url){
+  return new Promise((resolve, reject)=>{
+    const cbName = 'jsonp_cb_' + (jsonpCounter++) + '_' + Date.now();
+    const script = document.createElement('script');
+    let settled = false;
+    const cleanup = ()=>{ delete window[cbName]; if(script.parentNode) script.parentNode.removeChild(script); };
+    window[cbName] = (data)=>{ settled = true; cleanup(); resolve(data); };
+    script.onerror = ()=>{ if(!settled){ cleanup(); reject(new Error('Error de red (JSONP)')); } };
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    document.body.appendChild(script);
+    setTimeout(()=>{ if(!settled){ cleanup(); reject(new Error('Tiempo de espera agotado')); } }, 10000);
+  });
+}
+
+async function sheetGet(sheetName){
+  const data = await jsonpRequest(SHEET_API_URL + '?sheet=' + encodeURIComponent(sheetName));
+  return data.rows || [];
+}
+
+async function sheetPost(sheetName, row){
+  await fetch(SHEET_API_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({ sheet: sheetName, row })
+  });
+  return { ok:true };
+}
+
+/* ============================================================
+   PROGRESO (en memoria + Google Sheets compartido)
+   ============================================================ */
+const localProgress = {}; // moduleId -> {score,total}
+
+function pct(score,total){ return total>0 ? Math.round((score/total)*100) : 0; }
+
+async function saveProgress(moduleId, score, total){
+  localProgress[moduleId] = {score, total, ts:Date.now()};
+  renderTabs();
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const nowIso = new Date().toISOString();
+    await sheetPost('Progreso', [nowIso, studentName, moduleId, score, total]);
+  }catch(e){ /* falla silenciosa: el progreso local sigue funcionando */ }
+}
+
+/* ============================================================
+   ANTI-REINTENTO: bloquear actividades ya completadas
+   ============================================================ */
+function isLocked(moduleId){
+  return !!(localProgress[moduleId] && localProgress[moduleId].total > 0);
+}
+
+function renderLockedNotice(moduleId, activityLabel){
+  const p = localProgress[moduleId];
+  const pctVal = p.total>0 ? Math.round((p.score/p.total)*100) : 0;
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>✅ Actividad completada</h3>
+    <p style="font-size:13px;">Ya completaste <strong>${activityLabel}</strong>. Tu resultado fue <strong>${p.score} / ${p.total}</strong> (${pctVal}%).</p>
+    <p style="font-size:11px;color:var(--muted);">Esta actividad ya quedó registrada y no se puede repetir. Si crees que hay un error, consultá con tu docente.</p>`;
+  pageEl.appendChild(card);
+}
+
+async function loadExistingProgress(){
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const rows = await sheetGet('Progreso');
+    rows.filter(r => r.Estudiante === studentName).forEach(r=>{
+      const mod = r.Modulo;
+      if(!mod) return;
+      localProgress[mod] = { score:Number(r.Score), total:Number(r.Total), ts:new Date(r.Timestamp).getTime() };
+    });
+    if (typeof antologiaLeida !== 'undefined' && localProgress['antologia']) antologiaLeida = true;
+    renderTabs();
+    renderPage();
+  }catch(e){ /* si falla, las actividades siguen interactivas por seguridad */ }
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+const tabsEl = document.getElementById('tabs');
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  MODULES.forEach(m=>{
+    const t = document.createElement('div');
+    const done = localProgress[m.id] && localProgress[m.id].total>0;
+    t.className = 'tab' + (m.id===activeModule?' active':'') + (done?' done':'') + (m.id==='certificado'?' cert':'');
+    t.textContent = m.label;
+    t.addEventListener('click', ()=>{ activeModule = m.id; renderTabs(); renderPage(); });
+    tabsEl.appendChild(t);
+  });
+}
+
+/* ============================================================
+   RENDER PAGE ROUTER
+   ============================================================ */
+const pageEl = document.getElementById('page');
+function renderPage(){
+  const m = MODULES.find(x=>x.id===activeModule);
+  pageEl.innerHTML = '';
+  if(m.content){
+    const c = document.createElement('div');
+    c.className = 'content-card';
+    c.innerHTML = `<h2>${m.title}</h2><p>${m.content}</p>`;
+    pageEl.appendChild(c);
+  }
+  if(m.activityType==='wordsearch') renderWordSearch();
+  else if(m.activityType==='crossword') renderCrossword();
+  else if(m.activityType==='quiz') renderQuiz(QUIZ_BANK, 'cuestionario');
+  else if(m.activityType==='matching1') renderMatching(MATCH_BONOS, 'asocie1', 'Asocie — Bonos');
+  else if(m.activityType==='matching2') renderMatching(MATCH_ACCIONES, 'asocie2', 'Asocie — Acciones');
+  else if(m.activityType==='caso') renderCasos();
+  else if(m.activityType==='certificado') renderCertificado();
+}
+
+function escapeHtml(s){ return (s+"").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function fmt(n){ return Number(n).toLocaleString('es-CR'); }
+
+/* ============================================================
+   ACTIVIDAD 1: SOPA DE LETRAS (Bonos — 15 términos)
+   ============================================================ */
+const WS_DATA = {"size": 15, "grid": ["HCRNBSDRHUUSBSS", "MBHBREJNEERDSJR", "VFDSSUGLESDRWCS", "BTGDPVRNYMCPKOS", "OCLTESORERIAJHZ", "FAWYHSAABCSSTJQ", "PPCKXOCJTOCIOED", "QINCFTCUPONVYRK", "ETPDIVIDENDONBV", "CAYVROOTSNZKSKW", "LLOTPSNZUOTCCIP", "WVCBXWIEJLUOSVO", "JWMVLASOSLOFTDP", "BGYJPATRIMONIOE", "XHPRIMAMMPCFOMR"], "words": {"PATRIMONIO": [[13, 4], [13, 5], [13, 6], [13, 7], [13, 8], [13, 9], [13, 10], [13, 11], [13, 12], [13, 13]], "ACCIONISTA": [[5, 6], [6, 6], [7, 6], [8, 6], [9, 6], [10, 6], [11, 6], [12, 6], [13, 6], [14, 6]], "DESCUENTO": [[3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 9], [10, 10], [11, 11]], "TESORERIA": [[4, 3], [4, 4], [4, 5], [4, 6], [4, 7], [4, 8], [4, 9], [4, 10], [4, 11]], "DIVIDENDO": [[8, 3], [8, 4], [8, 5], [8, 6], [8, 7], [8, 8], [8, 9], [8, 10], [8, 11]], "ACCIONES": [[5, 1], [6, 2], [7, 3], [8, 4], [9, 5], [10, 6], [11, 7], [12, 8]], "CAPITAL": [[4, 1], [5, 1], [6, 1], [7, 1], [8, 1], [9, 1], [10, 1]], "RESCATE": [[0, 7], [1, 8], [2, 9], [3, 10], [4, 11], [5, 12], [6, 13]], "ACTIVO": [[5, 7], [6, 6], [7, 5], [8, 4], [9, 3], [10, 2]], "TITULO": [[7, 5], [8, 6], [9, 7], [10, 8], [11, 9], [12, 10]], "PASIVO": [[3, 11], [4, 11], [5, 11], [6, 11], [7, 11], [8, 11]], "EMISOR": [[2, 8], [3, 9], [4, 10], [5, 11], [6, 12], [7, 13]], "CUPON": [[7, 6], [7, 7], [7, 8], [7, 9], [7, 10]], "PRIMA": [[14, 2], [14, 3], [14, 4], [14, 5], [14, 6]], "BONOS": [[5, 8], [6, 9], [7, 10], [8, 11], [9, 12]]}};
+
+function renderWordSearch(){
+  if(isLocked('bonos')){
+    renderLockedNotice('bonos', 'la sopa de letras');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const total = Object.keys(WS_DATA.words).length;
+  card.innerHTML = `<h3>Sopa de letras — encontrá los ${total} términos <span class="scorepill" id="wsScorePill">0 / ${total}</span></h3>
+    <div class="ws-wrap">
+      <div class="ws-grid" id="wsGrid" style="grid-template-columns:repeat(${WS_DATA.size},19px);"></div>
+      <div class="ws-list"><ul id="wsList"></ul></div>
+    </div>`;
+  pageEl.appendChild(card);
+
+  const gridEl = document.getElementById('wsGrid');
+  const cells = [];
+  for(let r=0;r<WS_DATA.size;r++){
+    const row=[];
+    for(let c=0;c<WS_DATA.size;c++){
+      const div = document.createElement('div');
+      div.className='ws-cell';
+      div.textContent = WS_DATA.grid[r][c];
+      div.dataset.r=r; div.dataset.c=c;
+      gridEl.appendChild(div);
+      row.push(div);
+    }
+    cells.push(row);
+  }
+  const wordKeys = Object.keys(WS_DATA.words);
+  const wordCellSet = {};
+  wordKeys.forEach(w=>{ wordCellSet[w] = new Set(WS_DATA.words[w].map(([r,c])=>r+','+c)); });
+  const listEl = document.getElementById('wsList');
+  const liByWord = {};
+  wordKeys.slice().sort().forEach(w=>{
+    const li = document.createElement('li');
+    li.textContent = w;
+    listEl.appendChild(li);
+    liByWord[w]=li;
+  });
+
+  let found=0;
+  let selecting=false, path=[];
+  function keyOf(r,c){return r+','+c;}
+  function clearSel(){ path.forEach(([r,c])=>{ if(!cells[r][c].classList.contains('found')) cells[r][c].classList.remove('selected'); }); }
+  function tryMatch(){
+    const selSet = new Set(path.map(([r,c])=>keyOf(r,c)));
+    for(const w of wordKeys){
+      if(liByWord[w].classList.contains('found')) continue;
+      const wSet = wordCellSet[w];
+      if(wSet.size!==selSet.size) continue;
+      let match=true;
+      for(const k of wSet){ if(!selSet.has(k)){match=false;break;} }
+      if(match){
+        WS_DATA.words[w].forEach(([r,c])=>{ cells[r][c].classList.add('found'); cells[r][c].classList.remove('selected'); });
+        liByWord[w].classList.add('found');
+        found++;
+        document.getElementById('wsScorePill').textContent = found+' / '+total;
+        if(found===total) saveProgress('bonos', found, total);
+        return true;
+      }
+    }
+    return false;
+  }
+  function startSel(r,c){ selecting=true; path=[[r,c]]; cells[r][c].classList.add('selected'); }
+  function moveSel(r,c){
+    if(!selecting) return;
+    const [r0,c0]=path[0];
+    const dr=r-r0, dc=c-c0;
+    if(dr!==0 && dc!==0 && Math.abs(dr)!==Math.abs(dc)) return;
+    const steps=Math.max(Math.abs(dr),Math.abs(dc));
+    const sdr=steps===0?0:Math.sign(dr), sdc=steps===0?0:Math.sign(dc);
+    clearSel(); path=[];
+    for(let i=0;i<=steps;i++){
+      const rr=r0+sdr*i, cc=c0+sdc*i;
+      if(rr<0||rr>=WS_DATA.size||cc<0||cc>=WS_DATA.size) break;
+      path.push([rr,cc]);
+      cells[rr][cc].classList.add('selected');
+    }
+  }
+  function endSel(){ if(!selecting) return; selecting=false; if(!tryMatch()) clearSel(); path=[]; }
+  gridEl.addEventListener('mousedown', e=>{ const t=e.target.closest('.ws-cell'); if(t) startSel(+t.dataset.r,+t.dataset.c); });
+  gridEl.addEventListener('mouseover', e=>{ const t=e.target.closest('.ws-cell'); if(t) moveSel(+t.dataset.r,+t.dataset.c); });
+  document.addEventListener('mouseup', endSel);
+  gridEl.addEventListener('touchstart', e=>{ const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); const c=t&&t.closest('.ws-cell'); if(c) startSel(+c.dataset.r,+c.dataset.c); }, {passive:true});
+  gridEl.addEventListener('touchmove', e=>{ const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); const c=t&&t.closest('.ws-cell'); if(c) moveSel(+c.dataset.r,+c.dataset.c); }, {passive:true});
+  document.addEventListener('touchend', endSel);
+}
+
+/* ============================================================
+   ACTIVIDAD 2: CRUCIGRAMA (Bonos y Acciones — vocabulario mixto)
+   ============================================================ */
+const CW_DATA = {"size": {"rows": 14, "cols": 13}, "grid": [".............", ".........C...", ".........U...", ".........PAR.", "....C....O...", "..P.ACCION...", "..R.P........", ".DIVIDENDO...", "..M.T.M......", "..A.A.I......", "....L.S......", ".....BONO....", "......R......", "............."], "words": [{"word": "DIVIDENDO", "clue": "Distribución de utilidades a los accionistas", "row": 7, "col": 1, "dir": "H", "num": 6}, {"word": "CAPITAL", "clue": "Cuenta patrimonial que refleja el valor nominal de las acciones emitidas", "row": 4, "col": 4, "dir": "V", "num": 3}, {"word": "EMISOR", "clue": "Empresa o entidad que pone en circulación un bono o una acción", "row": 7, "col": 6, "dir": "V", "num": 7}, {"word": "ACCION", "clue": "Parte en que se divide el capital social de una sociedad anónima", "row": 5, "col": 4, "dir": "H", "num": 5}, {"word": "PRIMA", "clue": "Excedente sobre el valor nominal cuando la tasa cupón es más atractiva que la del mercado", "row": 5, "col": 2, "dir": "V", "num": 4}, {"word": "CUPON", "clue": "Pago periódico de interés que promete un bono", "row": 1, "col": 9, "dir": "V", "num": 1}, {"word": "BONO", "clue": "Título de deuda que la empresa emite para financiarse", "row": 11, "col": 5, "dir": "H", "num": 8}, {"word": "PAR", "clue": "Se dice del bono cuando su precio de venta iguala al valor nominal", "row": 3, "col": 9, "dir": "H", "num": 2}]};
+
+function renderCrossword(){
+  if(isLocked('acciones')){
+    renderLockedNotice('acciones', 'el crucigrama');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const across = CW_DATA.words.filter(w=>w.dir==='H').sort((a,b)=>a.num-b.num);
+  const down = CW_DATA.words.filter(w=>w.dir==='V').sort((a,b)=>a.num-b.num);
+  card.innerHTML = `<h3>Crucigrama — completá según las pistas <span class="scorepill" id="cwScorePill">0%</span></h3>
+    <div class="cw-wrap">
+      <div class="cw-grid" id="cwGrid" style="grid-template-columns:repeat(${CW_DATA.size.cols},23px);"></div>
+      <div class="cw-clues">
+        <b>Horizontales</b><ul id="cwAcross"></ul>
+        <b>Verticales</b><ul id="cwDown"></ul>
+      </div>
+    </div>
+    <button class="btn" id="cwCheckBtn" style="margin-top:12px;">Comprobar crucigrama</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('cwAcross').innerHTML = across.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+  document.getElementById('cwDown').innerHTML = down.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+
+  const R = CW_DATA.size.rows, C = CW_DATA.size.cols;
+  const gridEl = document.getElementById('cwGrid');
+  const numAt = {};
+  CW_DATA.words.forEach(w=>{ numAt[w.row+','+w.col] = w.num; });
+  const inputs = {};
+  for(let r=0;r<R;r++){
+    for(let c=0;c<C;c++){
+      const ch = CW_DATA.grid[r][c];
+      const cell = document.createElement('div');
+      if(ch==='.'){
+        cell.className='cw-cell blocked';
+      } else {
+        cell.className='cw-cell';
+        const key = numAt[r+','+c];
+        if(key) cell.innerHTML = `<span class="cw-num">${key}</span>`;
+        const inp = document.createElement('input');
+        inp.maxLength=1;
+        inp.dataset.r=r; inp.dataset.c=c;
+        inp.addEventListener('input', function(){
+          this.value = this.value.toUpperCase().replace(/[^A-ZÑ]/g,'');
+          if(this.value){
+            const next = findNextInput(r,c);
+            if(next) next.focus();
+          }
+        });
+        cell.appendChild(inp);
+        inputs[r+','+c] = inp;
+      }
+      gridEl.appendChild(cell);
+    }
+  }
+  function findNextInput(r,c){
+    if(inputs[r+','+(c+1)]) return inputs[r+','+(c+1)];
+    if(inputs[(r+1)+','+c]) return inputs[(r+1)+','+c];
+    return null;
+  }
+
+  document.getElementById('cwCheckBtn').addEventListener('click', ()=>{
+    let correct=0, total=0;
+    for(const key in inputs){
+      const [r,c] = key.split(',').map(Number);
+      const expected = CW_DATA.grid[r][c];
+      const inp = inputs[key];
+      total++;
+      if(inp.value === expected){ inp.classList.add('ok'); inp.classList.remove('bad'); correct++; }
+      else{ inp.classList.add('bad'); inp.classList.remove('ok'); }
+    }
+    document.getElementById('cwScorePill').textContent = Math.round((correct/total)*100)+'%';
+    saveProgress('acciones', correct, total);
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 3: CUESTIONARIO GENERAL
+   ============================================================ */
+const QUIZ_BANK = [
+  { q:"Si la empresa emite bonos propios, ¿qué naturaleza contable tiene esa cuenta?", opts:["Activo","Pasivo","Patrimonio"], correct:1,
+    just:"Un bono emitido por la empresa es una deuda: pasivo." },
+  { q:"Si la empresa compra acciones de otra empresa como inversión, ¿qué naturaleza contable tiene?", opts:["Activo","Pasivo","Patrimonio"], correct:0,
+    just:"Cuando la empresa invierte (compra), siempre es un activo, sin importar si es bono o acción." },
+  { q:"Un bono se vende con descuento cuando:", opts:["La tasa cupón es mayor que la tasa de mercado","La tasa cupón es menor que la tasa de mercado","La tasa cupón es igual a la tasa de mercado"], correct:1,
+    just:"Si la tasa cupón es menos atractiva que la del mercado, el bono se vende más barato: con descuento." },
+  { q:"Al rescatar un bono antes del vencimiento, la ganancia o pérdida se calcula comparando:", opts:["El valor nominal contra el efectivo pagado","El valor en libros contra el efectivo pagado","El precio de mercado contra la tasa cupón"], correct:1,
+    just:"Se compara el valor en libros (nominal ± prima/descuento pendiente) contra lo realmente pagado por el rescate." },
+  { q:"Las acciones preferentes, respecto a las comunes:", opts:["Tienen derecho a voto y cobran dividendo variable","No tienen voto pero cobran dividendo fijo primero","Nunca reciben dividendos"], correct:1,
+    just:"Las preferentes ceden el voto a cambio de cobrar primero un dividendo fijo." },
+  { q:"Las acciones en tesorería, en el balance general, se presentan como:", opts:["Un activo","Una deducción del patrimonio","Un pasivo circulante"], correct:1,
+    just:"Las acciones propias readquiridas restan del patrimonio; nunca son un activo." },
+];
+
+function renderQuiz(bank, moduleId){
+  if(isLocked(moduleId)){
+    renderLockedNotice(moduleId, 'el cuestionario');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Cuestionario <span class="scorepill" id="qzScorePill-${moduleId}">0 / ${bank.length}</span></h3><div id="qzWrap-${moduleId}"></div>`;
+  pageEl.appendChild(card);
+  const wrap = document.getElementById('qzWrap-'+moduleId);
+  let score=0, answered=0;
+  bank.forEach((item,qi)=>{
+    const qcard = document.createElement('div');
+    qcard.className='qcard';
+    qcard.innerHTML = `<div class="qtext">${qi+1}. ${item.q}</div><div class="opts"></div><div class="justif"></div>`;
+    const optsDiv = qcard.querySelector('.opts');
+    const letters=['A','B','C'];
+    item.opts.forEach((optText,oi)=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(qcard.classList.contains('answered')) return;
+        qcard.classList.add('answered');
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = oi===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect) optsDiv.querySelectorAll('.opt')[item.correct].classList.add('reveal-correct');
+        qcard.classList.add(isCorrect?'correct':'incorrect');
+        const j = qcard.querySelector('.justif');
+        j.classList.add('show', isCorrect?'ok':'bad');
+        j.textContent = (isCorrect?'✓ ':'✕ ') + item.just;
+        if(isCorrect) score++;
+        answered++;
+        document.getElementById('qzScorePill-'+moduleId).textContent = score+' / '+bank.length;
+        if(answered===bank.length) saveProgress(moduleId, score, bank.length);
+      });
+      optsDiv.appendChild(opt);
+    });
+    wrap.appendChild(qcard);
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 4 y 5: DOS ASOCIES
+   ============================================================ */
+const MATCH_BONOS = {
+  terms:["Bono a la par","Bono con prima","Bono con descuento","Valor nominal","Tasa cupón"],
+  defs:[
+    "Tasa de interés fija que promete pagar el bono",
+    "El bono se vende más barato: la tasa cupón es menos atractiva que la del mercado",
+    "Monto que se paga al vencimiento del bono",
+    "El precio de venta es igual al valor nominal",
+    "El bono se vende más caro: la tasa cupón es más atractiva que la del mercado"
+  ],
+  correct:[3,4,1,2,0]
+};
+
+const MATCH_ACCIONES = {
+  terms:["Acción común","Acción preferente","Dividendo","Capital social","Acciones en tesorería"],
+  defs:[
+    "Cuenta patrimonial que refleja el valor nominal de las acciones emitidas",
+    "Acciones propias readquiridas; restan del patrimonio, nunca son un activo",
+    "Distribución de utilidades a los accionistas; no es un gasto",
+    "Con derecho a voto, dividendo variable, cobra de último",
+    "Sin voto, pero cobra dividendo fijo primero"
+  ],
+  correct:[3,4,2,0,1]
+};
+
+function renderMatching(data, moduleId, title){
+  if(isLocked(moduleId)){
+    renderLockedNotice(moduleId, 'el asocie');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const letters=['A','B','C','D','E'];
+  let rows='';
+  data.terms.forEach((t,i)=>{
+    rows += `<tr class="match-row" data-i="${i}"><td>${i+1}. ${t}</td><td><select data-i="${i}"><option value="">— Seleccione —</option>${data.defs.map((d,j)=>`<option value="${j}">${letters[j]}</option>`).join('')}</select></td></tr>`;
+  });
+  card.innerHTML = `<h3>${title} <span class="scorepill" id="mtScorePill-${moduleId}">0 / ${data.terms.length}</span></h3>
+    <table class="match-table" id="mtTable-${moduleId}"><tbody>${rows}</tbody></table>
+    <div class="bank"><b>Columna B</b><br>${data.defs.map((d,j)=>`${letters[j]}. ${d}`).join('<br>')}</div>
+    <button class="btn" id="mtCheckBtn-${moduleId}" style="margin-top:10px;">Comprobar</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('mtCheckBtn-'+moduleId).addEventListener('click', function(){
+    if(this.disabled) return;
+    const selects = document.querySelectorAll('#mtTable-'+moduleId+' select');
+    let correct=0, allAnswered=true;
+    selects.forEach(sel=>{
+      const i = parseInt(sel.dataset.i,10);
+      if(sel.value===""){ allAnswered=false; return; }
+      const row = sel.closest('.match-row');
+      if(parseInt(sel.value,10)===data.correct[i]){ row.classList.add('ok'); correct++; }
+      else row.classList.add('bad');
+    });
+    if(!allAnswered){ alert('Completá las '+data.terms.length+' relaciones antes de comprobar.'); return; }
+    selects.forEach(s=>s.disabled=true);
+    this.disabled=true;
+    document.getElementById('mtScorePill-'+moduleId).textContent = correct+' / '+data.terms.length;
+    saveProgress(moduleId, correct, data.terms.length);
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 6: CASO — REGISTRO DE ASIENTOS DE DIARIO
+   ============================================================ */
+const ACCOUNT_POOL = [
+  "Bancos","Bonos por pagar","Descuento en emisión de bonos","Prima en emisión de bonos",
+  "Capital social","Capital social — acciones preferentes","Dividendos por pagar",
+  "Utilidades retenidas","Inversión en títulos de deuda","Gasto por intereses",
+  "Acciones en tesorería","Ingresos por dividendos"
+];
+
+const CASES = [
+  {
+    id:"caso1", tag:"Bonos por pagar",
+    text:"La empresa Ferretería del Norte S.A. emite bonos con valor nominal de ₡20.000.000. Debido a que la tasa cupón es menos atractiva que la del mercado, los bonos se colocan en ₡18.500.000, de contado. Registre el asiento de emisión.",
+    rows:[
+      {label:"Debe", account:"Bancos", amount:18500000},
+      {label:"Debe", account:"Descuento en emisión de bonos", amount:1500000},
+      {label:"Haber", account:"Bonos por pagar", amount:20000000},
+    ]
+  },
+  {
+    id:"caso2", tag:"Emisión de acciones",
+    text:"La sociedad anónima Comercial del Valle emite 5.000 acciones comunes de valor nominal ₡1.000 cada una, colocadas a la par y pagadas de contado. Registre el asiento de emisión.",
+    rows:[
+      {label:"Debe", account:"Bancos", amount:5000000},
+      {label:"Haber", account:"Capital social", amount:5000000},
+    ]
+  },
+  {
+    id:"caso3", tag:"Dividendos",
+    text:"La junta de accionistas decreta un dividendo de ₡2.000.000 con cargo a las utilidades acumuladas, pendiente de pago. Registre el asiento del decreto (no el pago).",
+    rows:[
+      {label:"Debe", account:"Utilidades retenidas", amount:2000000},
+      {label:"Haber", account:"Dividendos por pagar", amount:2000000},
+    ]
+  }
+];
+
+function renderCasos(){
+  if(isLocked('caso')){
+    const info = document.createElement('div');
+    info.className = 'content-card';
+    info.innerHTML = `<h2>Caso — Registro de Asientos de Diario</h2>`;
+    pageEl.appendChild(info);
+    renderLockedNotice('caso', 'el caso de asientos de diario');
+    return;
+  }
+  const info = document.createElement('div');
+  info.className = 'content-card';
+  info.innerHTML = `<h2>Caso — Registro de Asientos de Diario</h2><p>Para cada caso, seleccione la cuenta correcta y digite el monto en cada línea del asiento. Presione <strong>Comprobar</strong> cuando termine cada caso. Necesita escribir su nombre arriba para que el resultado quede registrado.</p>`;
+  pageEl.appendChild(info);
+
+  window._casoState = { checked:{}, correctTotal:0, rowsTotal:0 };
+
+  CASES.forEach(caso=>{
+    const card = document.createElement('div');
+    card.className = 'caso-card';
+    let rowsHtml = '';
+    caso.rows.forEach((r,i)=>{
+      rowsHtml += `<tr class="entry-row" data-caso="${caso.id}" data-i="${i}">
+        <td class="side-label">${r.label}</td>
+        <td><select data-caso="${caso.id}" data-i="${i}" class="acc-select">
+          <option value="">— Seleccione la cuenta —</option>
+          ${ACCOUNT_POOL.map(a=>`<option value="${escapeHtml(a)}">${escapeHtml(a)}</option>`).join('')}
+        </select></td>
+        <td><input type="number" data-caso="${caso.id}" data-i="${i}" class="amt-input" placeholder="Monto ₡"></td>
+      </tr>`;
+    });
+    card.innerHTML = `
+      <div class="caso-tag">${caso.tag}</div>
+      <p class="enunciado">${caso.text}</p>
+      <table class="entry-table">
+        <tr><th>Debe/Haber</th><th>Cuenta</th><th>Monto (₡)</th></tr>
+        ${rowsHtml}
+      </table>
+      <button class="btn" data-check="${caso.id}">Comprobar este caso</button>
+      <div class="caso-result" id="result-${caso.id}"></div>
+    `;
+    pageEl.appendChild(card);
+  });
+
+  document.querySelectorAll('[data-check]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const caseId = btn.dataset.check;
+      if(btn.disabled) return;
+      const caso = CASES.find(c=>c.id===caseId);
+      let correctCount = 0;
+      let allFilled = true;
+      caso.rows.forEach((r,i)=>{
+        const sel = document.querySelector(`.acc-select[data-caso="${caseId}"][data-i="${i}"]`);
+        const inp = document.querySelector(`.amt-input[data-caso="${caseId}"][data-i="${i}"]`);
+        const row = sel.closest('.entry-row');
+        if(!sel.value || inp.value===""){ allFilled=false; return; }
+        const accOk = sel.value === r.account;
+        const amtOk = Number(inp.value) === r.amount;
+        if(accOk && amtOk){ row.classList.add('ok'); correctCount++; }
+        else{ row.classList.add('bad'); }
+      });
+      if(!allFilled){ alert('Complete todas las líneas del asiento antes de comprobar.'); return; }
+      document.querySelectorAll(`.acc-select[data-caso="${caseId}"], .amt-input[data-caso="${caseId}"]`).forEach(el=>el.disabled=true);
+      btn.disabled = true;
+
+      const resultEl = document.getElementById('result-'+caseId);
+      const ok = correctCount === caso.rows.length;
+      resultEl.classList.add('show', ok?'ok':'bad');
+      resultEl.textContent = ok
+        ? `✓ Correcto: ${correctCount}/${caso.rows.length} líneas del asiento cuadran.`
+        : `Revise su asiento: ${correctCount}/${caso.rows.length} líneas correctas.`;
+
+      window._casoState.checked[caseId] = { correct: correctCount, total: caso.rows.length };
+      const allDone = CASES.every(c=>window._casoState.checked[c.id]);
+      let sumCorrect=0, sumTotal=0;
+      Object.values(window._casoState.checked).forEach(v=>{ sumCorrect+=v.correct; sumTotal+=v.total; });
+      saveProgress('caso', sumCorrect, sumTotal);
+
+      if(studentName && sheetsReady()){
+        const summary = `${caso.tag}: ${correctCount}/${caso.rows.length} correctas`;
+        sheetPost('Casos', [new Date().toISOString(), caseId, studentName, summary]).catch(()=>{});
+      }
+
+      if(allDone){
+        const done = document.createElement('div');
+        done.style.cssText = 'text-align:center;color:var(--muted);font-size:12px;margin-top:6px;';
+        done.textContent = 'Los tres casos fueron comprobados. Revise el certificado para ver su nivel alcanzado.';
+        pageEl.appendChild(done);
+      }
+    });
+  });
+}
+
+/* ============================================================
+   CERTIFICADO
+   ============================================================ */
+const COMPETENCIAS = [
+  { ra:"RA1", unidad:"Activo/Pasivo/Patrimonio", modules:["cuestionario"],
+    text:"Analizar contablemente las cuentas de activo, pasivo y patrimonio relacionadas con bonos y acciones, distinguiendo emisión de inversión." },
+  { ra:"RA2", unidad:"Pasivo", modules:["bonos","asocie1"],
+    text:"Contabilizar los bonos por pagar: tipos y precios, valor presente, tasas de interés, retiro en la fecha de vencimiento y antes de esta." },
+  { ra:"RA3", unidad:"Patrimonio", modules:["acciones","asocie2"],
+    text:"Contabilizar las acciones propias de una sociedad anónima: características de acciones comunes y preferentes, dividendos y acciones en tesorería." },
+];
+
+function competencyScore(comp){
+  let sum=0, total=0, anyData=false;
+  comp.modules.forEach(mid=>{
+    const p = localProgress[mid];
+    if(p){ sum+=p.score; total+=p.total; anyData=true; }
+  });
+  return { sum, total, pct: anyData && total>0 ? Math.round((sum/total)*100) : null };
+}
+
+function competencyLevel(pctVal){
+  if(pctVal===null) return { label:"Sin evidencia", cls:"status-pending" };
+  if(pctVal<=50) return { label:"No logrado", cls:"status-bad" };
+  if(pctVal<=80) return { label:"En proceso", cls:"status-mid" };
+  return { label:"Logrado", cls:"status-ok" };
+}
+
+function renderCertificado(){
+  const card = document.createElement('div');
+  card.className = 'actcard';
+
+  let rows = '';
+  let allLogrado = true;
+  COMPETENCIAS.forEach(comp=>{
+    const s = competencyScore(comp);
+    const lvl = competencyLevel(s.pct);
+    if(lvl.label !== "Logrado") allLogrado = false;
+    rows += `<tr>
+      <td><span class="ra-tag">${comp.ra}</span><span class="competency-desc">${comp.text}</span></td>
+      <td class="center">${s.total>0 ? s.sum+' / '+s.total : '—'}</td>
+      <td class="center">${s.pct!==null ? s.pct+'%' : '—'}</td>
+      <td class="center"><span class="${lvl.cls}">${lvl.label}</span></td>
+    </tr>`;
+  });
+
+  const casoProg = localProgress['caso'];
+  const casoPct = casoProg && casoProg.total>0 ? Math.round((casoProg.score/casoProg.total)*100) : null;
+  const casoLvl = competencyLevel(casoPct);
+  if(casoLvl.label !== "Logrado") allLogrado = false;
+  rows += `<tr><td><span class="ra-tag">Aplicación</span><span class="competency-desc">Caso práctico — registro de asientos de diario</span></td>
+    <td class="center">${casoProg ? casoProg.score+' / '+casoProg.total : '—'}</td>
+    <td class="center">${casoPct!==null ? casoPct+'%' : '—'}</td>
+    <td class="center"><span class="${casoLvl.cls}">${casoLvl.label}</span></td></tr>`;
+
+  const finalOk = allLogrado;
+
+  card.innerHTML = `
+    <h3>Evaluación por competencias</h3>
+    <p style="font-size:11px;color:var(--muted);margin:-4px 0 10px;">Escala: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado. Basada en los resultados de aprendizaje del Programa de Estudio DETCE-MEP, unidad "Control contable de los activos, pasivos y patrimonio".</p>
+    <table class="progress-table">
+      <tr><th>Resultado de aprendizaje</th><th>Puntaje</th><th>%</th><th>Nivel</th></tr>
+      ${rows}
+    </table>
+    ${finalOk ? `
+      <div class="certificate show" id="certBlock">
+        <div class="kicker">Contable CR · Décimo Año</div>
+        <h2>Certificado de Aprobación</h2>
+        <p>Se otorga el presente certificado a</p>
+        <div class="name">${escapeHtml(studentName || '____________________')}</div>
+        <p>por haber alcanzado el nivel <strong>Logrado</strong> en todos los resultados de aprendizaje evaluados en el curso <strong>Bonos y Acciones</strong> (bonos por pagar, acciones y patrimonio, cuestionario general) y en el caso práctico de registro de asientos de diario.</p>
+        <div class="seal">MEP<br>10°</div>
+        <p style="margin-top:14px;font-size:10.5px;">Contabilidad · Gestión Contable · Prof. Gerardo Gonzalez Gonzalez</p>
+      </div>
+      <button class="btn" style="margin-top:12px;" onclick="window.print()">Imprimir / Guardar como PDF</button>
+    ` : `<div class="locked-msg">🔒 El certificado se desbloquea cuando los cuatro resultados de aprendizaje (RA1, RA2, RA3 y Aplicación) alcanzan el nivel <strong>Logrado</strong> (81% o más).</div>`}
+  `;
+  pageEl.appendChild(card);
+}
+
+/* ============================================================
+   PANEL DOCENTE (protegido con PIN)
+   ============================================================ */
+document.getElementById('teacherBtnOpen').addEventListener('click', ()=>{
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinError').style.display = 'none';
+  document.getElementById('pinModalBg').classList.add('show');
+  document.getElementById('pinInput').focus();
+});
+document.getElementById('pinModalClose').addEventListener('click', ()=>{
+  document.getElementById('pinModalBg').classList.remove('show');
+});
+document.getElementById('pinSubmit').addEventListener('click', checkPin);
+document.getElementById('pinInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkPin(); });
+
+async function checkPin(){
+  const val = document.getElementById('pinInput').value.trim();
+  if(val !== TEACHER_PIN){
+    document.getElementById('pinError').style.display = 'block';
+    return;
+  }
+  document.getElementById('pinModalBg').classList.remove('show');
+  await openTeacherPanel();
+}
+
+async function openTeacherPanel(){
+  document.getElementById('teacherModalBg').classList.add('show');
+  const content = document.getElementById('teacherContent');
+  content.innerHTML = 'Cargando...';
+  if(!sheetsReady()){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">⚠️ Falta configurar la conexión a la hoja de datos (SHEET_API_URL) en este archivo.</p>';
+    return;
+  }
+  try{
+    const [progRows, casoRows] = await Promise.all([sheetGet('Progreso'), sheetGet('Casos')]);
+    const byStudent = {};
+    progRows.forEach(r=>{
+      const name = r.Estudiante, mod = r.Modulo;
+      if(!name || !mod) return;
+      byStudent[name] = byStudent[name] || {};
+      byStudent[name][mod] = { score:Number(r.Score), total:Number(r.Total) };
+    });
+    const casoCountByStudent = {};
+    casoRows.forEach(r=>{
+      if(!r.Nombre) return;
+      casoCountByStudent[r.Nombre] = (casoCountByStudent[r.Nombre]||0) + 1;
+    });
+
+    const names = Object.keys(byStudent).sort();
+    if(names.length===0){ content.innerHTML = '<p style="font-size:12.5px;color:var(--muted);">Todavía no hay estudiantes con progreso guardado.</p>'; return; }
+    const levelAbbrev = (pctVal)=>{
+      if(pctVal===null) return '—';
+      const lvl = competencyLevel(pctVal);
+      const short = {"Logrado":"✓ Logrado","En proceso":"◐ En proceso","No logrado":"✕ No logrado"}[lvl.label] || lvl.label;
+      return `<span class="${lvl.cls}">${short}</span>`;
+    };
+    let html = '<p style="font-size:10.5px;color:var(--muted);margin-top:0;">Nivel por resultado de aprendizaje: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado.</p>';
+    html += '<table class="progress-table"><tr><th>Estudiante</th><th>RA1 General</th><th>RA2 Bonos</th><th>RA3 Acciones</th><th>Caso (Asientos)</th><th>Salidas</th></tr>';
+    names.forEach(n=>{
+      const d = byStudent[n];
+      const compPct = (mods)=>{
+        let sum=0,total=0,any=false;
+        mods.forEach(mid=>{ const x=d[mid]; if(x){ sum+=x.score; total+=x.total; any=true; } });
+        return any && total>0 ? Math.round((sum/total)*100) : null;
+      };
+      const casoData = d['caso'];
+      const casoPctVal = casoData && casoData.total>0 ? Math.round((casoData.score/casoData.total)*100) : null;
+      const salidas = d.incidente_salida_pantalla ? d.incidente_salida_pantalla.score : 0;
+      const salidasCell = salidas > 0 ? `<span class="status-bad">⚠️ ${salidas}</span>` : '<span class="status-pending">0</span>';
+      html += `<tr>
+        <td>${escapeHtml(n)}</td>
+        <td class="center">${levelAbbrev(compPct(['cuestionario']))}</td>
+        <td class="center">${levelAbbrev(compPct(['bonos','asocie1']))}</td>
+        <td class="center">${levelAbbrev(compPct(['acciones','asocie2']))}</td>
+        <td class="center">${levelAbbrev(casoPctVal)}</td>
+        <td class="center">${salidasCell}</td>
+      </tr>`;
+    });
+    html += '</table>';
+    content.innerHTML = html;
+  }catch(e){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">No se pudo cargar el panel (revisá la conexión a la hoja de datos).</p>';
+  }
+}
+document.getElementById('teacherModalClose').addEventListener('click', ()=>{
+  document.getElementById('teacherModalBg').classList.remove('show');
+});
+
+/* ============================================================
+   NOMBRE DEL ESTUDIANTE
+   ============================================================ */
+document.getElementById('studentName').addEventListener('input', function(){
+  studentName = this.value.trim();
+  document.getElementById('nameStatus').textContent = studentName ? '● identificado' : '';
+});
+document.getElementById('studentName').addEventListener('change', function(){
+  if(studentName) loadExistingProgress();
+});
+
+/* ============================================================
+   PRELLENADO DESDE EL PORTAL (?nombre=...)
+   ============================================================ */
+(function prefillFromPortal(){
+  const params = new URLSearchParams(window.location.search);
+  const nombreParam = params.get('nombre');
+  if(nombreParam){
+    studentName = nombreParam;
+    document.getElementById('studentName').value = nombreParam;
+    document.getElementById('nameStatus').textContent = '● identificado';
+    loadExistingProgress();
+  }
+})();
+
+/* ============================================================
+   MODO ENFOQUE: pantalla completa + detección de salidas
+   ============================================================ */
+let salidaCount = 0;
+document.getElementById('focusModeBtn').addEventListener('click', ()=>{
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  if(req) req.call(el).catch(()=>{});
+});
+
+function showWarnBanner(msg){
+  let banner = document.getElementById('warnBanner');
+  if(!banner){
+    banner = document.createElement('div');
+    banner.id = 'warnBanner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:200;background:#EF6A5B;color:#fff;text-align:center;padding:8px 12px;font-size:12.5px;font-family:monospace;';
+    document.body.prepend(banner);
+  }
+  banner.textContent = msg;
+  banner.style.display = 'block';
+  clearTimeout(window._warnTimeout);
+  window._warnTimeout = setTimeout(()=>{ banner.style.display='none'; }, 6000);
+}
+
+function logSalida(){
+  salidaCount++;
+  showWarnBanner('⚠️ Se detectó que saliste de esta pestaña o ventana (van: ' + salidaCount + ').');
+  if(studentName && sheetsReady()){
+    sheetPost('Progreso', [new Date().toISOString(), studentName, 'incidente_salida_pantalla', salidaCount, salidaCount]).catch(()=>{});
+  }
+}
+
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) logSalida(); });
+
+window.addEventListener('beforeunload', function(e){
+  e.preventDefault();
+  e.returnValue = '';
+});
+
+document.addEventListener('contextmenu', e=> e.preventDefault());
+document.addEventListener('copy', e=> e.preventDefault());
+
+/* ============================================================
+   INICIO
+   ============================================================ */
+renderTabs();
+renderPage();
+</script>
+</body>
+</html>

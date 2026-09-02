@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso · Pagos Electrónicos y Ciudadanía Digital</title>
+<style>
+:root{
+  --navy:#0E1B3D; --navy-deep:#0A1230;
+  --gold:#B8863C; --gold-light:#F4DD7A;
+  --teal:#2FC2AD; --coral:#EF6A5B;
+  --ink:#20242B; --paper:#F3F5F4; --muted:#5B6470; --line:#D8DCDD;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);padding-bottom:60px;}
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;padding:12px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.topbar h1{font-size:15.5px;margin:0 0 2px;}
+.topbar p{margin:0;font-size:10px;color:rgba(255,255,255,.65);font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;}
+.teacherBtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:10.5px;padding:5px 10px;border-radius:14px;cursor:pointer;}
+
+.namebar{background:#fff;border-bottom:1px solid var(--line);padding:9px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.namebar input{padding:7px 9px;border:1px solid var(--line);border-radius:6px;font-size:13px;flex:1;min-width:160px;}
+.namebar label{font-size:11px;color:var(--muted);font-family:var(--mono);}
+
+.tabs{display:flex;gap:4px;overflow-x:auto;background:#fff;border-bottom:1px solid var(--line);padding:8px 10px;}
+.tab{flex:0 0 auto;padding:7px 12px;border-radius:16px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid var(--line);color:var(--muted);white-space:nowrap;background:#f7f8f6;}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab.done::after{content:" ✓";color:var(--teal);}
+.tab.cert{border-color:var(--gold);}
+.tab.cert.active{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);}
+
+.page{max-width:760px;margin:0 auto;padding:16px;}
+.content-card{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:13.5px;line-height:1.55;color:var(--ink);}
+.content-card h2{font-size:16px;margin:0 0 8px;color:var(--navy);}
+
+.actcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;}
+.actcard h3{font-size:13.5px;margin:0 0 10px;color:var(--navy);}
+.btn{display:inline-block;padding:8px 16px;background:var(--navy);color:#fff;border:none;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.btn:hover{background:var(--navy-deep);}
+.btn:disabled{opacity:.45;cursor:default;}
+.btn.outline{background:#fff;color:var(--navy);border:1px solid var(--navy);}
+.scorepill{display:inline-block;font-family:var(--mono);font-size:11px;background:var(--teal);color:#fff;padding:3px 10px;border-radius:12px;margin-left:8px;}
+
+/* ---- QUIZ ---- */
+.qcard{border:1px solid var(--line);border-radius:8px;padding:12px 13px;margin-bottom:10px;}
+.qcard.correct{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset;}
+.qcard.incorrect{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral) inset;}
+.qtext{font-size:13px;font-weight:600;margin-bottom:8px;}
+.opt{display:flex;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;margin-top:6px;cursor:pointer;font-size:12.5px;}
+.opt:hover{background:#f7f8f6;}
+.opt .letter{font-family:var(--mono);font-weight:700;color:var(--navy);}
+.opt.locked{cursor:default;}
+.opt.chosen-correct{background:#e7f1ec;border-color:var(--teal);}
+.opt.chosen-incorrect{background:#f7e9e8;border-color:var(--coral);}
+.opt.reveal-correct{background:#e7f1ec;border-color:var(--teal);}
+.justif{margin-top:8px;padding:8px 10px;border-radius:6px;font-size:11.5px;display:none;}
+.justif.show{display:block;}
+.justif.ok{background:#e7f1ec;color:#1e4a37;}
+.justif.bad{background:#f7e9e8;color:#6f2626;}
+
+/* ---- MATCHING ---- */
+.match-table{width:100%;border-collapse:collapse;margin-top:6px;}
+.match-table td{padding:6px 4px;font-size:12.5px;vertical-align:middle;}
+.match-table select{width:100%;font-size:12.5px;padding:6px;border-radius:5px;border:1px solid var(--line);}
+.match-row.ok select{border-color:var(--teal);background:#e7f1ec;}
+.match-row.bad select{border-color:var(--coral);background:#f7e9e8;}
+.bank{font-size:11px;color:var(--muted);background:#f7f8f6;border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-top:8px;}
+
+/* ---- WORD SEARCH ---- */
+.ws-wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center;}
+.ws-grid{display:grid;gap:1px;background:#dfe3e6;border:2px solid var(--navy);border-radius:6px;padding:3px;touch-action:none;}
+.ws-cell{width:19px;height:19px;display:flex;align-items:center;justify-content:center;background:#fff;font-family:var(--mono);font-weight:700;font-size:9.5px;border-radius:2px;cursor:pointer;-webkit-user-select:none;user-select:none;}
+.ws-cell.selected{background:var(--gold-light);}
+.ws-cell.found{background:var(--teal);color:#fff;}
+.ws-list{flex:0 0 160px;}
+.ws-list ul{list-style:none;margin:0;padding:0;}
+.ws-list li{font-family:var(--mono);font-size:11px;padding:4px 7px;border-radius:5px;margin-bottom:3px;background:#f7f8f6;border:1px solid var(--line);}
+.ws-list li.found{background:var(--teal);color:#fff;border-color:var(--teal);text-decoration:line-through;}
+
+/* ---- CROSSWORD ---- */
+.cw-wrap{display:flex;gap:18px;flex-wrap:wrap;}
+.cw-grid{display:grid;gap:1px;background:#1c1f24;border:2px solid var(--navy);border-radius:4px;padding:2px;}
+.cw-cell{width:23px;height:23px;position:relative;background:#fff;}
+.cw-cell.blocked{background:#1c1f24;}
+.cw-cell input{width:100%;height:100%;border:none;text-align:center;font-family:var(--mono);font-weight:700;font-size:12px;text-transform:uppercase;background:transparent;padding:0;}
+.cw-cell input.ok{background:#e7f1ec;color:#1e4a37;}
+.cw-cell input.bad{background:#f7e9e8;color:#6f2626;}
+.cw-num{position:absolute;top:0px;left:1px;font-size:7px;color:var(--gold);font-family:var(--mono);}
+.cw-clues{flex:1;min-width:200px;font-size:11.5px;}
+.cw-clues b{color:var(--navy);display:block;margin:8px 0 3px;font-size:11px;}
+.cw-clues li{margin-bottom:4px;}
+
+/* ---- CASOS ---- */
+.caso-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:16px;}
+.caso-card .caso-tag{font-family:var(--mono);font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;}
+.caso-card p.enunciado{font-size:13px;margin:6px 0 10px;color:var(--ink);}
+.caso-msgs{margin-top:10px;}
+.caso-msg{background:#f7f8f6;border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:12.5px;}
+.caso-msg .mhead{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-bottom:3px;}
+.caso-msg .mname{font-weight:700;color:var(--navy);}
+.caso-msg.reply{margin-left:18px;border-left:3px solid var(--teal);}
+.reply-btn{font-size:10.5px;color:var(--teal);cursor:pointer;font-weight:600;margin-top:2px;display:inline-block;}
+textarea.caso-input{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-family:var(--sans);font-size:12.5px;min-height:50px;margin-top:6px;}
+
+/* ---- CERTIFICADO ---- */
+.progress-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+.progress-table th,.progress-table td{border:1px solid var(--line);padding:7px 9px;font-size:12px;text-align:left;}
+.progress-table th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;}
+.progress-table td.center{text-align:center;}
+.status-ok{color:var(--teal);font-weight:700;}
+.status-mid{color:#c98a2c;font-weight:700;}
+.status-bad{color:var(--coral);font-weight:700;}
+.status-pending{color:var(--muted);}
+.competency-desc{font-size:10.5px;color:var(--muted);display:block;margin-top:2px;}
+.ra-tag{font-family:var(--mono);font-size:9.5px;color:var(--gold);font-weight:700;}
+.crest{width:auto;height:92px;object-fit:contain;margin:0 auto 8px;display:block;}
+.crest-placeholder{width:64px;height:64px;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;border:2px dashed var(--line);border-radius:8px;font-size:9px;color:var(--muted);text-align:center;line-height:1.2;}
+
+.certificate{display:none;border:8px double var(--gold);border-radius:10px;padding:34px 24px;text-align:center;background:#fffdf7;margin-top:10px;}
+.certificate.show{display:block;}
+.certificate .kicker{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;}
+.certificate h2{font-size:22px;color:var(--navy);margin:10px 0 4px;font-family:Georgia,serif;}
+.certificate .name{font-size:26px;font-weight:700;color:var(--navy-deep);margin:14px 0;font-family:Georgia,serif;border-bottom:2px solid var(--gold);display:inline-block;padding-bottom:6px;}
+.certificate p{font-size:12.5px;color:var(--muted);max-width:440px;margin:6px auto;}
+.certificate .seal{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d488,#a97c29);margin:14px auto 0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#3a2a06;font-weight:700;}
+
+.locked-msg{text-align:center;color:var(--muted);font-size:12.5px;padding:30px 20px;background:#fff;border:1px dashed var(--line);border-radius:8px;}
+
+/* Panel docente modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,18,48,.6);z-index:50;align-items:flex-start;justify-content:center;padding:30px 14px;overflow-y:auto;}
+.modal-bg.show{display:flex;}
+.modal{background:#fff;border-radius:10px;max-width:700px;width:100%;padding:20px;}
+.modal h3{margin:0 0 12px;color:var(--navy);}
+.modal .close{float:right;cursor:pointer;font-size:18px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div>
+      <h1>💳 Curso: Pagos Electrónicos y Ciudadanía Digital</h1>
+      <p>Contabilidad · Décimo año · Trabajo asincrónico</p>
+    </div>
+    <button class="teacherBtn" id="teacherBtnOpen">👩‍🏫 Panel docente</button>
+    <button class="teacherBtn" id="focusModeBtn" style="margin-left:6px;">🔒 Modo enfoque</button>
+  </div>
+</div>
+
+<div class="namebar">
+  <label>Tu nombre:</label>
+  <input type="text" id="studentName" placeholder="Nombre completo" maxlength="45">
+  <span id="nameStatus" style="font-size:11px;color:var(--muted);font-family:var(--mono);"></span>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="page" id="page"></div>
+
+<div class="modal-bg" id="teacherModalBg">
+  <div class="modal">
+    <span class="close" id="teacherModalClose">✕</span>
+    <h3>Panel docente — progreso del curso</h3>
+    <div id="teacherContent">Cargando...</div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CONFIGURACIÓN DE MÓDULOS
+   ============================================================ */
+const MODULES = [
+  { id:"tarjetas", label:"💳 Tarjetas", title:"Tarjetas de Crédito y Débito",
+    content:"Una tarjeta de crédito es un instrumento de pago que permite comprar con dinero prestado por el banco, generando una deuda que debe pagarse —con o sin intereses— según se cancele el saldo dentro del período de gracia. La tarjeta de débito, en cambio, utiliza fondos propios ya depositados en la cuenta del titular. Es clave conocer el cupo disponible, la cuota de manejo, el pago mínimo y los derechos y deberes del tarjetahabiente para un uso responsable.",
+    activityType:"wordsearch" },
+  { id:"firma", label:"✍️ Firma Digital", title:"Firma Digital",
+    content:"La firma digital certificada es un mecanismo con validez legal que permite firmar documentos electrónicos con el mismo valor que una firma manuscrita. Se emite por entidades certificadoras autorizadas y se utiliza en trámites tributarios, contratos y gestiones bancarias sin necesidad de presencia física. El titular es responsable de resguardar la confidencialidad de su clave y de notificar cualquier uso indebido del certificado.",
+    activityType:"crossword" },
+  { id:"netiqueta", label:"💬 Netiqueta", title:"Normas de Netiqueta",
+    content:"La netiqueta es el conjunto de normas de cortesía y respeto para comunicarnos correctamente en internet: no escribir en mayúsculas sostenidas, pensar antes de enviar, cuidar la ortografía, respetar los tiempos de respuesta y mantener siempre un trato respetuoso. Todo esto se enmarca en la ciudadanía digital con equidad, que exige tratar a todas las personas por igual, sin discriminar.",
+    activityType:"quiz" },
+  { id:"sinpe", label:"🏦 SINPE", title:"Sistema Nacional de Pagos Electrónicos",
+    content:"El SINPE es la infraestructura administrada por el Banco Central de Costa Rica que permite transferencias entre las distintas entidades financieras del país. Su cámara de compensación liquida las operaciones entre bancos, y existen modalidades de transferencia inmediata y por lotes, según la urgencia de cada operación.",
+    activityType:"quiz2" },
+  { id:"movil", label:"📲 SINPE Móvil", title:"SINPE Móvil y Transferencias Digitales",
+    content:"SINPE Móvil es un servicio que asocia un número de teléfono a una cuenta bancaria, permitiendo transferencias rápidas entre personas sin necesidad de conocer el número de cuenta completo. Junto con las transferencias interbancarias tradicionales, forma parte de los servicios que ofrece el SINPE para modernizar los pagos electrónicos en Costa Rica.",
+    activityType:"matching" },
+  { id:"casos", label:"⚖️ Casos y Debate", title:"Casos y Debate (módulo compartido)",
+    activityType:"casos" },
+  { id:"certificado", label:"🏆 Certificado", title:"Certificado", activityType:"certificado" },
+];
+
+let activeModule = MODULES[0].id;
+let studentName = "";
+
+/* ============================================================
+   CONEXIÓN A GOOGLE SHEETS (vía Apps Script Web App)
+   ============================================================ */
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbxnUHWOQ6o8QhWCuFlREmrIYD53twJAAr2daANHmvp7g-Q9882vuogDsL3JySgo6Xfq/exec";
+
+function sheetsReady(){ return SHEET_API_URL && !SHEET_API_URL.startsWith('REEMPLAZAR'); }
+
+let jsonpCounter = 0;
+function jsonpRequest(url){
+  return new Promise((resolve, reject)=>{
+    const cbName = 'jsonp_cb_' + (jsonpCounter++) + '_' + Date.now();
+    const script = document.createElement('script');
+    let settled = false;
+    const cleanup = ()=>{ delete window[cbName]; if(script.parentNode) script.parentNode.removeChild(script); };
+    window[cbName] = (data)=>{ settled = true; cleanup(); resolve(data); };
+    script.onerror = ()=>{ if(!settled){ cleanup(); reject(new Error('Error de red (JSONP)')); } };
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    document.body.appendChild(script);
+    setTimeout(()=>{ if(!settled){ cleanup(); reject(new Error('Tiempo de espera agotado')); } }, 10000);
+  });
+}
+
+async function sheetGet(sheetName){
+  const data = await jsonpRequest(SHEET_API_URL + '?sheet=' + encodeURIComponent(sheetName));
+  return data.rows || [];
+}
+
+async function sheetPost(sheetName, row){
+  await fetch(SHEET_API_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({ sheet: sheetName, row })
+  });
+  return { ok:true };
+}
+
+/* ============================================================
+   PROGRESO (en memoria + Google Sheets compartido)
+   ============================================================ */
+const localProgress = {}; // moduleId -> {score,total}
+
+function pct(score,total){ return total>0 ? Math.round((score/total)*100) : 0; }
+
+async function saveProgress(moduleId, score, total){
+  localProgress[moduleId] = {score, total, ts:Date.now()};
+  renderTabs();
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const nowIso = new Date().toISOString();
+    await sheetPost('Progreso', [nowIso, studentName, moduleId, score, total]);
+  }catch(e){ /* falla silenciosa: el progreso local sigue funcionando */ }
+}
+
+async function saveCasoParticipation(done){
+  localProgress['casos'] = {score: done?1:0, total:1, ts:Date.now()};
+  renderTabs();
+  // La participación en Casos ya queda registrada por los propios posts en la hoja "Casos".
+}
+
+/* ============================================================
+   ANTI-REINTENTO: bloquear actividades ya completadas
+   ============================================================ */
+function isLocked(moduleId){
+  return !!(localProgress[moduleId] && localProgress[moduleId].total > 0);
+}
+
+function renderLockedNotice(moduleId, activityLabel){
+  const p = localProgress[moduleId];
+  const pctVal = p.total>0 ? Math.round((p.score/p.total)*100) : 0;
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>✅ Actividad completada</h3>
+    <p style="font-size:13px;">Ya completaste <strong>${activityLabel}</strong>. Tu resultado fue <strong>${p.score} / ${p.total}</strong> (${pctVal}%).</p>
+    <p style="font-size:11px;color:var(--muted);">Esta actividad ya quedó registrada y no se puede repetir. Si crees que hay un error, consultá con tu docente.</p>`;
+  pageEl.appendChild(card);
+}
+
+async function loadExistingProgress(){
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const rows = await sheetGet('Progreso');
+    rows.filter(r => r.Estudiante === studentName).forEach(r=>{
+      const mod = r.Modulo;
+      if(!mod) return;
+      localProgress[mod] = { score:Number(r.Score), total:Number(r.Total), ts:new Date(r.Timestamp).getTime() };
+    });
+    if (typeof antologiaLeida !== 'undefined' && localProgress['antologia']) antologiaLeida = true;
+    renderTabs();
+    renderPage();
+  }catch(e){ /* si falla, las actividades siguen interactivas por seguridad */ }
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+const tabsEl = document.getElementById('tabs');
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  MODULES.forEach(m=>{
+    const t = document.createElement('div');
+    const done = localProgress[m.id] && (m.id==='casos' ? localProgress[m.id].score>0 : localProgress[m.id].total>0);
+    t.className = 'tab' + (m.id===activeModule?' active':'') + (done?' done':'') + (m.id==='certificado'?' cert':'');
+    t.textContent = m.label;
+    t.addEventListener('click', ()=>{ activeModule = m.id; renderTabs(); renderPage(); });
+    tabsEl.appendChild(t);
+  });
+}
+
+/* ============================================================
+   RENDER PAGE ROUTER
+   ============================================================ */
+const pageEl = document.getElementById('page');
+function renderPage(){
+  const m = MODULES.find(x=>x.id===activeModule);
+  pageEl.innerHTML = '';
+  if(m.content){
+    const c = document.createElement('div');
+    c.className = 'content-card';
+    c.innerHTML = `<h2>${m.title}</h2><p>${m.content}</p>`;
+    pageEl.appendChild(c);
+  }
+  if(m.activityType==='wordsearch') renderWordSearch();
+  else if(m.activityType==='crossword') renderCrossword();
+  else if(m.activityType==='quiz') renderQuiz(NETIQUETA_QUIZ, 'netiqueta');
+  else if(m.activityType==='quiz2') renderQuiz(SINPE_QUIZ, 'sinpe');
+  else if(m.activityType==='matching') renderMatching();
+  else if(m.activityType==='casos') renderCasos();
+  else if(m.activityType==='certificado') renderCertificado();
+}
+
+function escapeHtml(s){ return (s+"").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ============================================================
+   ACTIVIDAD 1: SOPA DE LETRAS (Tarjetas)
+   ============================================================ */
+const WS_DATA = {"size": 15, "grid": ["VHDQAVYEGCUPOOI", "EOEOFIEBRAPTIFU", "NBBOCUOTATIHAOA", "CVIQAXTJCENOMIK", "IVTVIAPUIJZQMUE", "MCOMNYOEARUNIIA", "IIOTIDERCAWDCER", "ENKHOIURNTAAYUI", "NTAUCOIUEDECRIC", "TERANWTAIMBIZOM", "ORBRAPJSIDUHIGU", "OEUXBEOSMMUQLAU", "OSCLOROCONTRATO", "RWOIORRALUTITEO", "KZOMFAYIIOMUAYU"], "words": {"VENCIMIENTO": [[0, 0], [1, 0], [2, 0], [3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0], [10, 0]], "MOROSIDAD": [[14, 3], [13, 4], [12, 5], [11, 6], [10, 7], [9, 8], [8, 9], [7, 10], [6, 11]], "CONTRATO": [[12, 7], [12, 8], [12, 9], [12, 10], [12, 11], [12, 12], [12, 13], [12, 14]], "TARJETA": [[7, 9], [6, 9], [5, 9], [4, 9], [3, 9], [2, 9], [1, 9]], "CREDITO": [[6, 8], [6, 7], [6, 6], [6, 5], [6, 4], [6, 3], [6, 2]], "INTERES": [[6, 1], [7, 1], [8, 1], [9, 1], [10, 1], [11, 1], [12, 1]], "TITULAR": [[13, 12], [13, 11], [13, 10], [13, 9], [13, 8], [13, 7], [13, 6]], "DEBITO": [[0, 2], [1, 2], [2, 2], [3, 2], [4, 2], [5, 2]], "GRACIA": [[0, 8], [1, 8], [2, 8], [3, 8], [4, 8], [5, 8]], "EMISOR": [[8, 10], [9, 9], [10, 8], [11, 7], [12, 6], [13, 5]], "CUOTA": [[2, 4], [2, 5], [2, 6], [2, 7], [2, 8]], "BANCO": [[11, 4], [10, 4], [9, 4], [8, 4], [7, 4]], "CUPO": [[0, 9], [0, 10], [0, 11], [0, 12]], "CVV": [[5, 1], [4, 1], [3, 1]], "PIN": [[1, 10], [2, 10], [3, 10]]}};
+
+function renderWordSearch(){
+  if(isLocked('tarjetas')){
+    renderLockedNotice('tarjetas', 'la sopa de letras');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Sopa de letras — encontrá los 15 términos <span class="scorepill" id="wsScorePill">0 / 15</span></h3>
+    <div class="ws-wrap">
+      <div class="ws-grid" id="wsGrid" style="grid-template-columns:repeat(${WS_DATA.size},19px);"></div>
+      <div class="ws-list"><ul id="wsList"></ul></div>
+    </div>`;
+  pageEl.appendChild(card);
+
+  const gridEl = document.getElementById('wsGrid');
+  const cells = [];
+  for(let r=0;r<WS_DATA.size;r++){
+    const row=[];
+    for(let c=0;c<WS_DATA.size;c++){
+      const div = document.createElement('div');
+      div.className='ws-cell';
+      div.textContent = WS_DATA.grid[r][c];
+      div.dataset.r=r; div.dataset.c=c;
+      gridEl.appendChild(div);
+      row.push(div);
+    }
+    cells.push(row);
+  }
+  const wordKeys = Object.keys(WS_DATA.words);
+  const wordCellSet = {};
+  wordKeys.forEach(w=>{ wordCellSet[w] = new Set(WS_DATA.words[w].map(([r,c])=>r+','+c)); });
+  const listEl = document.getElementById('wsList');
+  const liByWord = {};
+  wordKeys.slice().sort().forEach(w=>{
+    const li = document.createElement('li');
+    li.textContent = w;
+    listEl.appendChild(li);
+    liByWord[w]=li;
+  });
+
+  let found=0; const total=wordKeys.length;
+  let selecting=false, path=[];
+  function keyOf(r,c){return r+','+c;}
+  function clearSel(){ path.forEach(([r,c])=>{ if(!cells[r][c].classList.contains('found')) cells[r][c].classList.remove('selected'); }); }
+  function tryMatch(){
+    const selSet = new Set(path.map(([r,c])=>keyOf(r,c)));
+    for(const w of wordKeys){
+      if(liByWord[w].classList.contains('found')) continue;
+      const wSet = wordCellSet[w];
+      if(wSet.size!==selSet.size) continue;
+      let match=true;
+      for(const k of wSet){ if(!selSet.has(k)){match=false;break;} }
+      if(match){
+        WS_DATA.words[w].forEach(([r,c])=>{ cells[r][c].classList.add('found'); cells[r][c].classList.remove('selected'); });
+        liByWord[w].classList.add('found');
+        found++;
+        document.getElementById('wsScorePill').textContent = found+' / '+total;
+        if(found===total) saveProgress('tarjetas', found, total);
+        return true;
+      }
+    }
+    return false;
+  }
+  function startSel(r,c){ selecting=true; path=[[r,c]]; cells[r][c].classList.add('selected'); }
+  function moveSel(r,c){
+    if(!selecting) return;
+    const [r0,c0]=path[0];
+    const dr=r-r0, dc=c-c0;
+    if(dr!==0 && dc!==0 && Math.abs(dr)!==Math.abs(dc)) return;
+    const steps=Math.max(Math.abs(dr),Math.abs(dc));
+    const sdr=steps===0?0:Math.sign(dr), sdc=steps===0?0:Math.sign(dc);
+    clearSel(); path=[];
+    for(let i=0;i<=steps;i++){
+      const rr=r0+sdr*i, cc=c0+sdc*i;
+      if(rr<0||rr>=WS_DATA.size||cc<0||cc>=WS_DATA.size) break;
+      path.push([rr,cc]);
+      cells[rr][cc].classList.add('selected');
+    }
+  }
+  function endSel(){ if(!selecting) return; selecting=false; if(!tryMatch()) clearSel(); path=[]; }
+  gridEl.addEventListener('mousedown', e=>{ const t=e.target.closest('.ws-cell'); if(t) startSel(+t.dataset.r,+t.dataset.c); });
+  gridEl.addEventListener('mouseover', e=>{ const t=e.target.closest('.ws-cell'); if(t) moveSel(+t.dataset.r,+t.dataset.c); });
+  document.addEventListener('mouseup', endSel);
+  gridEl.addEventListener('touchstart', e=>{ const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); const c=t&&t.closest('.ws-cell'); if(c) startSel(+c.dataset.r,+c.dataset.c); }, {passive:true});
+  gridEl.addEventListener('touchmove', e=>{ const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); const c=t&&t.closest('.ws-cell'); if(c) moveSel(+c.dataset.r,+c.dataset.c); }, {passive:true});
+  document.addEventListener('touchend', endSel);
+}
+
+/* ============================================================
+   ACTIVIDAD 2: CRUCIGRAMA (Firma digital)
+   ============================================================ */
+const CW_DATA = {"size": {"rows": 13, "cols": 11}, "grid": ["........T..", "...EMISOR..", "CERTIFICADO", ".....S..M..", ".....E..I..", ".....G.CT..", "....DU.LEY.", "...FIRMA...", "....GI.V...", "....ID.E...", "....TA.....", "....AD.....", "....L......"], "words": [{"word": "FIRMA", "clue": "Mecanismo que da validez legal a un documento electrónico", "row": 7, "col": 3, "dir": "H", "num": 8}, {"word": "CLAVE", "clue": "Código secreto que protege el certificado de firma digital", "row": 5, "col": 7, "dir": "V", "num": 5}, {"word": "LEY", "clue": "Norma que regula la validez de la firma digital en Costa Rica", "row": 6, "col": 7, "dir": "H", "num": 7}, {"word": "TRAMITE", "clue": "Gestión que puede hacerse con firma digital sin ir presencialmente", "row": 0, "col": 8, "dir": "V", "num": 1}, {"word": "SEGURIDAD", "clue": "Conjunto de medidas para proteger la información electrónica", "row": 3, "col": 5, "dir": "V", "num": 4}, {"word": "EMISOR", "clue": "Entidad certificadora que emite el certificado de firma", "row": 1, "col": 3, "dir": "H", "num": 2}, {"word": "CERTIFICADO", "clue": "Documento digital que respalda la identidad del firmante", "row": 2, "col": 0, "dir": "H", "num": 3}, {"word": "DIGITAL", "clue": "Adjetivo que describe algo hecho en formato electrónico", "row": 6, "col": 4, "dir": "V", "num": 6}]};
+
+function renderCrossword(){
+  if(isLocked('firma')){
+    renderLockedNotice('firma', 'el crucigrama');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const across = CW_DATA.words.filter(w=>w.dir==='H').sort((a,b)=>a.num-b.num);
+  const down = CW_DATA.words.filter(w=>w.dir==='V').sort((a,b)=>a.num-b.num);
+  card.innerHTML = `<h3>Crucigrama — completá según las pistas <span class="scorepill" id="cwScorePill">0%</span></h3>
+    <div class="cw-wrap">
+      <div class="cw-grid" id="cwGrid" style="grid-template-columns:repeat(${CW_DATA.size.cols},23px);"></div>
+      <div class="cw-clues">
+        <b>Horizontales</b><ul id="cwAcross"></ul>
+        <b>Verticales</b><ul id="cwDown"></ul>
+      </div>
+    </div>
+    <button class="btn" id="cwCheckBtn" style="margin-top:12px;">Comprobar crucigrama</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('cwAcross').innerHTML = across.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+  document.getElementById('cwDown').innerHTML = down.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+
+  const R = CW_DATA.size.rows, C = CW_DATA.size.cols;
+  const gridEl = document.getElementById('cwGrid');
+  const numAt = {};
+  CW_DATA.words.forEach(w=>{ numAt[w.row+','+w.col] = w.num; });
+  const inputs = {};
+  for(let r=0;r<R;r++){
+    for(let c=0;c<C;c++){
+      const ch = CW_DATA.grid[r][c];
+      const cell = document.createElement('div');
+      if(ch==='.'){
+        cell.className='cw-cell blocked';
+      } else {
+        cell.className='cw-cell';
+        const key = numAt[r+','+c];
+        if(key) cell.innerHTML = `<span class="cw-num">${key}</span>`;
+        const inp = document.createElement('input');
+        inp.maxLength=1;
+        inp.dataset.r=r; inp.dataset.c=c;
+        inp.addEventListener('input', function(){
+          this.value = this.value.toUpperCase().replace(/[^A-ZÑ]/g,'');
+          if(this.value){
+            const next = findNextInput(r,c);
+            if(next) next.focus();
+          }
+        });
+        cell.appendChild(inp);
+        inputs[r+','+c] = inp;
+      }
+      gridEl.appendChild(cell);
+    }
+  }
+  function findNextInput(r,c){
+    // try right first, then down
+    if(inputs[r+','+(c+1)]) return inputs[r+','+(c+1)];
+    if(inputs[(r+1)+','+c]) return inputs[(r+1)+','+c];
+    return null;
+  }
+
+  document.getElementById('cwCheckBtn').addEventListener('click', ()=>{
+    let correct=0, total=0;
+    for(const key in inputs){
+      const [r,c] = key.split(',').map(Number);
+      const expected = CW_DATA.grid[r][c];
+      const inp = inputs[key];
+      total++;
+      if(inp.value === expected){ inp.classList.add('ok'); inp.classList.remove('bad'); correct++; }
+      else{ inp.classList.add('bad'); inp.classList.remove('ok'); }
+    }
+    document.getElementById('cwScorePill').textContent = Math.round((correct/total)*100)+'%';
+    saveProgress('firma', correct, total);
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 3: CUESTIONARIO (Netiqueta) y 4: (SINPE)
+   ============================================================ */
+const NETIQUETA_QUIZ = [
+  { q:"¿Qué es la netiqueta?", opts:["Un antivirus para redes sociales.","El conjunto de normas de cortesía para comunicarse en internet.","Un programa para bloquear correos no deseados."], correct:1,
+    just:"La netiqueta son las normas de cortesía y respeto para comunicarnos en entornos digitales." },
+  { q:"Escribir TODO EN MAYÚSCULAS en un mensaje se interpreta como:", opts:["Estar gritando o hablando con enojo.","Un mensaje más fácil de leer.","Una forma de destacar sin ninguna connotación."], correct:0,
+    just:"Las mayúsculas sostenidas se perciben como un grito." },
+  { q:"Antes de enviar un mensaje cuando estás molesto/a, la netiqueta recomienda:", opts:["Enviarlo de inmediato.","Pensarlo y revisarlo antes de enviar.","Escribirlo en mayúsculas."], correct:1,
+    just:"Pensar antes de enviar evita malentendidos." },
+  { q:"La ciudadanía digital con equidad implica:", opts:["Tratar con respeto a todas las personas, sin discriminar.","Responder solo a quienes piensan igual.","Ignorar opiniones distintas."], correct:0,
+    just:"Promueve el respeto a la diversidad también en espacios digitales." },
+  { q:"Compartir una conversación privada sin permiso:", opts:["Es aceptable si no parece importante.","Va en contra de la netiqueta y afecta la privacidad.","Es una práctica recomendada."], correct:1,
+    just:"Compartir información privada sin autorización viola la confianza de las personas." },
+  { q:"El spam en un chat grupal se refiere a:", opts:["Un tipo de emoji.","Mensajes repetitivos o irrelevantes que saturan la conversación.","Un método de organizar mensajes."], correct:1,
+    just:"El spam satura el chat con contenido no solicitado." },
+];
+
+const SINPE_QUIZ = [
+  { q:"¿Qué institución administra el SINPE?", opts:["El Banco Central de Costa Rica (BCCR).","El Ministerio de Hacienda.","Cada banco comercial de forma independiente."], correct:0,
+    just:"El BCCR administra el SINPE como infraestructura nacional de pagos." },
+  { q:"La cámara de compensación del SINPE:", opts:["Liquida las transferencias entre distintas entidades bancarias.","Emite tarjetas de crédito.","Autoriza la firma digital."], correct:0,
+    just:"La cámara de compensación procesa y liquida las transferencias interbancarias." },
+  { q:"La transferencia inmediata, a diferencia de la de lotes:", opts:["Se acredita en tiempo real.","Solo aplica a montos altos.","No requiere cuenta destino."], correct:0,
+    just:"La inmediata acredita en tiempo real; la de lotes se procesa en grupos por horario." },
+  { q:"SINPE Móvil permite transferencias usando:", opts:["El número de teléfono asociado a una cuenta bancaria.","Solo el número de cédula.","Una tarjeta de crédito internacional."], correct:0,
+    just:"SINPE Móvil vincula un número de teléfono a una cuenta bancaria." },
+  { q:"Una ventaja del SINPE para la economía costarricense es:", opts:["Aumentar el uso de efectivo.","Facilitar la trazabilidad y reducir el uso de efectivo.","Eliminar la necesidad de tener cuenta bancaria."], correct:1,
+    just:"El SINPE promueve pagos electrónicos trazables." },
+];
+
+function renderQuiz(bank, moduleId){
+  if(isLocked(moduleId)){
+    renderLockedNotice(moduleId, 'el cuestionario');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Cuestionario <span class="scorepill" id="qzScorePill-${moduleId}">0 / ${bank.length}</span></h3><div id="qzWrap-${moduleId}"></div>`;
+  pageEl.appendChild(card);
+  const wrap = document.getElementById('qzWrap-'+moduleId);
+  let score=0, answered=0;
+  bank.forEach((item,qi)=>{
+    const qcard = document.createElement('div');
+    qcard.className='qcard';
+    qcard.innerHTML = `<div class="qtext">${qi+1}. ${item.q}</div><div class="opts"></div><div class="justif"></div>`;
+    const optsDiv = qcard.querySelector('.opts');
+    const letters=['A','B','C'];
+    item.opts.forEach((optText,oi)=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(qcard.classList.contains('answered')) return;
+        qcard.classList.add('answered');
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = oi===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect) optsDiv.querySelectorAll('.opt')[item.correct].classList.add('reveal-correct');
+        qcard.classList.add(isCorrect?'correct':'incorrect');
+        const j = qcard.querySelector('.justif');
+        j.classList.add('show', isCorrect?'ok':'bad');
+        j.textContent = (isCorrect?'✓ ':'✕ ') + item.just;
+        if(isCorrect) score++;
+        answered++;
+        document.getElementById('qzScorePill-'+moduleId).textContent = score+' / '+bank.length;
+        if(answered===bank.length) saveProgress(moduleId, score, bank.length);
+      });
+      optsDiv.appendChild(opt);
+    });
+    wrap.appendChild(qcard);
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 5: ASOCIE (SINPE Móvil / Transferencias)
+   ============================================================ */
+const MATCH_DATA = {
+  terms:["SINPE Móvil","Cámara de compensación","Transferencia inmediata","Transferencia por lotes","BCCR"],
+  defs:[
+    "Modalidad que se procesa en grupos, en horarios establecidos.",
+    "Entidad que administra el Sistema Nacional de Pagos Electrónicos.",
+    "Servicio que asocia un número de teléfono a una cuenta bancaria.",
+    "Se acredita en tiempo real, apenas se realiza la operación.",
+    "Proceso que liquida las transferencias entre distintos bancos."
+  ],
+  correct:[2,4,3,0,1]
+};
+
+function renderMatching(){
+  if(isLocked('movil')){
+    renderLockedNotice('movil', 'el asocie');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const letters=['A','B','C','D','E'];
+  let rows='';
+  MATCH_DATA.terms.forEach((t,i)=>{
+    rows += `<tr class="match-row" data-i="${i}"><td>${i+1}. ${t}</td><td><select data-i="${i}"><option value="">— Seleccione —</option>${MATCH_DATA.defs.map((d,j)=>`<option value="${j}">${letters[j]}</option>`).join('')}</select></td></tr>`;
+  });
+  card.innerHTML = `<h3>Asocie — relacione ambas columnas <span class="scorepill" id="mtScorePill">0 / 5</span></h3>
+    <table class="match-table"><tbody>${rows}</tbody></table>
+    <div class="bank"><b>Columna B</b><br>${MATCH_DATA.defs.map((d,j)=>`${letters[j]}. ${d}`).join('<br>')}</div>
+    <button class="btn" id="mtCheckBtn" style="margin-top:10px;">Comprobar</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('mtCheckBtn').addEventListener('click', function(){
+    if(this.disabled) return;
+    const selects = document.querySelectorAll('.match-table select');
+    let correct=0, allAnswered=true;
+    selects.forEach(sel=>{
+      const i = parseInt(sel.dataset.i,10);
+      if(sel.value===""){ allAnswered=false; return; }
+      const row = sel.closest('.match-row');
+      if(parseInt(sel.value,10)===MATCH_DATA.correct[i]){ row.classList.add('ok'); correct++; }
+      else row.classList.add('bad');
+    });
+    if(!allAnswered){ alert('Completá las 5 relaciones antes de comprobar.'); return; }
+    selects.forEach(s=>s.disabled=true);
+    this.disabled=true;
+    document.getElementById('mtScorePill').textContent = correct+' / 5';
+    saveProgress('movil', correct, 5);
+  });
+}
+
+/* ============================================================
+   MÓDULO CASOS Y DEBATE (compartido)
+   ============================================================ */
+const CASOS = [
+  { id:"caso1", tag:"Tarjetas de crédito", text:"Andrés tiene una tarjeta de crédito con un cupo de ₡800.000. Este mes gastó ₡650.000 y solo puede pagar el pago mínimo indicado en su estado de cuenta. ¿Qué le recomendarías para evitar el sobreendeudamiento?" },
+  { id:"caso2", tag:"Firma digital", text:"Una empresa le pide a Valeria firmar un contrato importante de forma remota, sin poder verse en persona. ¿Cómo podría hacerlo de forma segura y con validez legal?" },
+  { id:"caso3", tag:"Netiqueta + SINPE", text:"En el chat de un grupo de trabajo, alguien escribe en mayúsculas y con varios signos de exclamación porque nadie ha confirmado una transferencia SINPE pendiente. ¿Cómo responderías aplicando las normas de netiqueta?" },
+];
+
+function renderCasos(){
+  const info = document.createElement('div');
+  info.className = 'content-card';
+  info.innerHTML = `<h2>Casos y Debate</h2><p>Este módulo se comparte con toda la clase. Elegí al menos <strong>un caso</strong>, escribí tu respuesta, y luego respondé (con respeto) al aporte de <strong>al menos un compañero</strong>. Necesitás escribir tu nombre arriba para participar.</p>`;
+  if(!sheetsReady()){
+    info.innerHTML += `<p style="color:var(--coral);font-size:12px;">⚠️ Falta configurar la conexión a la hoja de datos (SHEET_API_URL). Avisale a tu docente.</p>`;
+  }
+  pageEl.appendChild(info);
+
+  CASOS.forEach(caso=>{
+    const card = document.createElement('div');
+    card.className = 'caso-card';
+    card.innerHTML = `
+      <div class="caso-tag">${caso.tag}</div>
+      <p class="enunciado">${caso.text}</p>
+      <div class="caso-msgs" id="msgs-${caso.id}"><div style="font-size:11px;color:var(--muted);">Cargando respuestas...</div></div>
+      <textarea class="caso-input" id="input-${caso.id}" placeholder="Escribí tu respuesta o tu comentario a un compañero..."></textarea>
+      <button class="btn" data-caso="${caso.id}">Publicar</button>
+    `;
+    pageEl.appendChild(card);
+  });
+
+  document.querySelectorAll('[data-caso]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const casoId = btn.dataset.caso;
+      if(!studentName){ alert('Escribí tu nombre arriba antes de participar.'); return; }
+      const text = document.getElementById('input-'+casoId).value.trim();
+      if(!text) return;
+      try{
+        const nowIso = new Date().toISOString();
+        await sheetPost('Casos', [nowIso, casoId, studentName, text]);
+        document.getElementById('input-'+casoId).value='';
+        await loadCasoMessages(casoId);
+        checkCasoParticipation();
+      }catch(e){
+        alert('No se pudo publicar. Revisá la conexión a la hoja de datos.');
+      }
+    });
+  });
+
+  CASOS.forEach(c=>loadCasoMessages(c.id));
+}
+
+async function loadCasoMessages(casoId){
+  const wrap = document.getElementById('msgs-'+casoId);
+  if(!wrap) return;
+  if(!sheetsReady()){
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--coral);">Hoja de datos no configurada todavía.</div>';
+    return;
+  }
+  try{
+    const rows = await sheetGet('Casos');
+    const items = rows
+      .filter(r => r.CasoId === casoId)
+      .map(r => ({ name: r.Nombre, text: r.Texto, ts: new Date(r.Timestamp).getTime() }));
+    if(items.length===0){ wrap.innerHTML = '<div style="font-size:11px;color:var(--muted);">Nadie ha respondido todavía.</div>'; return; }
+    items.sort((a,b)=>a.ts-b.ts);
+    wrap.innerHTML = items.map(m=>`<div class="caso-msg"><div class="mhead"><span class="mname">${escapeHtml(m.name)}</span><span>${new Date(m.ts).toLocaleTimeString('es-CR',{hour:'2-digit',minute:'2-digit'})}</span></div>${escapeHtml(m.text)}</div>`).join('');
+  }catch(e){
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--coral);">No se pudo cargar (revisá la conexión a la hoja de datos).</div>';
+  }
+}
+
+async function checkCasoParticipation(){
+  if(!studentName || !sheetsReady()) return;
+  let ownCount = 0;
+  try{
+    for(const caso of CASOS){
+      const rows = await sheetGet('Casos');
+      ownCount += rows.filter(r => r.CasoId === caso.id && r.Nombre === studentName).length;
+    }
+  }catch(e){}
+  // participation = at least 2 posts (interpreted as: 1 own case answer + 1 reply)
+  saveCasoParticipation(ownCount >= 2);
+}
+
+/* ============================================================
+   CERTIFICADO
+   ============================================================ */
+/* Evaluación por competencias: cada resultado de aprendizaje (RA) oficial del
+   Programa de Estudio DETCE-MEP, agrupando los módulos que lo evidencian. */
+const COMPETENCIAS = [
+  { ra:"RA1", unidad:"SINPE", modules:["sinpe","movil"],
+    text:"Analizar el funcionamiento del Sistema Nacional de Pagos Electrónicos (SINPE), según la normativa contable, gubernamental y bancaria vigente." },
+  { ra:"RA2", unidad:"SINPE", modules:["firma"],
+    text:"Explicar los procedimientos necesarios para el uso adecuado del servicio de firma digital, importancia, lugares de adquisición y seguridad electrónica que ofrece." },
+  { ra:"RA3", unidad:"SINPE", modules:["tarjetas"],
+    text:"Usar sana, correcta e inteligentemente las tarjetas de crédito y débito, según los lineamientos emitidos por las entidades bancarias." },
+  { ra:"RA5", unidad:"TIC", modules:["netiqueta"],
+    text:"Demostrar los principios de la ciudadanía digital con equidad, en el uso de Normas de Netiqueta." },
+];
+
+function competencyScore(comp){
+  let sum=0, total=0, anyData=false;
+  comp.modules.forEach(mid=>{
+    const p = localProgress[mid];
+    if(p){ sum+=p.score; total+=p.total; anyData=true; }
+  });
+  return { sum, total, pct: anyData && total>0 ? Math.round((sum/total)*100) : null };
+}
+
+function competencyLevel(pctVal){
+  if(pctVal===null) return { label:"Sin evidencia", cls:"status-pending" };
+  if(pctVal<=50) return { label:"No logrado", cls:"status-bad" };
+  if(pctVal<=80) return { label:"En proceso", cls:"status-mid" };
+  return { label:"Logrado", cls:"status-ok" };
+}
+
+function renderCertificado(){
+  const card = document.createElement('div');
+  card.className = 'actcard';
+
+  let rows = '';
+  let allLogrado = true;
+  COMPETENCIAS.forEach(comp=>{
+    const s = competencyScore(comp);
+    const lvl = competencyLevel(s.pct);
+    if(lvl.label !== "Logrado") allLogrado = false;
+    rows += `<tr>
+      <td><span class="ra-tag">${comp.ra}</span><span class="competency-desc">${comp.text}</span></td>
+      <td class="center">${s.total>0 ? s.sum+' / '+s.total : '—'}</td>
+      <td class="center">${s.pct!==null ? s.pct+'%' : '—'}</td>
+      <td class="center"><span class="${lvl.cls}">${lvl.label}</span></td>
+    </tr>`;
+  });
+  const casoOk = localProgress['casos'] && localProgress['casos'].score>0;
+  rows += `<tr><td><span class="ra-tag">Participación</span><span class="competency-desc">Módulo compartido de Casos y Debate</span></td><td class="center">—</td><td class="center">—</td><td class="center">${casoOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
+  const finalOk = allLogrado && casoOk;
+
+  card.innerHTML = `
+    <h3>Evaluación por competencias</h3>
+    <p style="font-size:11px;color:var(--muted);margin:-4px 0 10px;">Escala: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado. Basada en los resultados de aprendizaje del Programa de Estudio DETCE-MEP (unidades SINPE y TIC aplicada a la Contabilidad).</p>
+    <table class="progress-table">
+      <tr><th>Resultado de aprendizaje</th><th>Puntaje</th><th>%</th><th>Nivel</th></tr>
+      ${rows}
+    </table>
+    ${finalOk ? `
+      <div class="certificate show" id="certBlock">
+        <div class="kicker">Contable CR · Décimo Año</div>
+        <h2>Certificado de Aprobación</h2>
+        <p>Se otorga el presente certificado a</p>
+        <div class="name">${escapeHtml(studentName || '____________________')}</div>
+        <p>por haber alcanzado el nivel <strong>Logrado</strong> en todos los resultados de aprendizaje evaluados en el curso <strong>Pagos Electrónicos y Ciudadanía Digital</strong> (SINPE, firma digital, tarjetas de crédito y débito, y netiqueta), incluyendo la participación en el módulo de casos y debate.</p>
+        <div class="seal">MEP<br>10°</div>
+        <p style="margin-top:14px;font-size:10.5px;">Contabilidad · Gestión en Tecnologías Digitales Contables · Prof. Gerardo Gonzalez Gonzalez</p>
+      </div>
+      <button class="btn" style="margin-top:12px;" onclick="window.print()">Imprimir / Guardar como PDF</button>
+    ` : `<div class="locked-msg">🔒 El certificado se desbloquea cuando los cuatro resultados de aprendizaje alcanzan el nivel <strong>Logrado</strong> (81% o más) y hay participación registrada en Casos y Debate.</div>`}
+  `;
+  pageEl.appendChild(card);
+}
+
+/* ============================================================
+   PANEL DOCENTE
+   ============================================================ */
+document.getElementById('teacherBtnOpen').addEventListener('click', async ()=>{
+  document.getElementById('teacherModalBg').classList.add('show');
+  const content = document.getElementById('teacherContent');
+  content.innerHTML = 'Cargando...';
+  if(!sheetsReady()){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">⚠️ Falta configurar la conexión a la hoja de datos (SHEET_API_URL) en este archivo.</p>';
+    return;
+  }
+  try{
+    const [progRows, casoRows] = await Promise.all([sheetGet('Progreso'), sheetGet('Casos')]);
+    const byStudent = {};
+    progRows.forEach(r=>{
+      const name = r.Estudiante, mod = r.Modulo;
+      if(!name || !mod) return;
+      byStudent[name] = byStudent[name] || {};
+      // último registro gana (por si el estudiante repitió el módulo)
+      byStudent[name][mod] = { score:Number(r.Score), total:Number(r.Total) };
+    });
+    const casosByStudent = {};
+    casoRows.forEach(r=>{
+      if(!r.Nombre) return;
+      casosByStudent[r.Nombre] = (casosByStudent[r.Nombre]||0) + 1;
+    });
+    Object.keys(casosByStudent).forEach(n=>{
+      byStudent[n] = byStudent[n] || {};
+      byStudent[n].casos = { score: casosByStudent[n]>=2 ? 1 : 0, total:1 };
+    });
+
+    const names = Object.keys(byStudent).sort();
+    if(names.length===0){ content.innerHTML = '<p style="font-size:12.5px;color:var(--muted);">Todavía no hay estudiantes con progreso guardado.</p>'; return; }
+    const levelAbbrev = (pctVal)=>{
+      if(pctVal===null) return '—';
+      const lvl = competencyLevel(pctVal);
+      const short = {"Logrado":"✓ Logrado","En proceso":"◐ En proceso","No logrado":"✕ No logrado"}[lvl.label] || lvl.label;
+      return `<span class="${lvl.cls}">${short}</span>`;
+    };
+    let html = '<p style="font-size:10.5px;color:var(--muted);margin-top:0;">Nivel por resultado de aprendizaje: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado.</p>';
+    html += '<table class="progress-table"><tr><th>Estudiante</th><th>RA1 SINPE</th><th>RA2 Firma</th><th>RA3 Tarjetas</th><th>RA5 Netiqueta</th><th>Casos</th><th>Salidas</th></tr>';
+    names.forEach(n=>{
+      const d = byStudent[n];
+      const compPct = (mods)=>{
+        let sum=0,total=0,any=false;
+        mods.forEach(mid=>{ const x=d[mid]; if(x){ sum+=x.score; total+=x.total; any=true; } });
+        return any && total>0 ? Math.round((sum/total)*100) : null;
+      };
+      const casosCell = d.casos ? (d.casos.score>0 ? '<span class="status-ok">✓ Logrado</span>' : '<span class="status-pending">Sin evidencia</span>') : '—';
+      const salidas = d.incidente_salida_pantalla ? d.incidente_salida_pantalla.score : 0;
+      const salidasCell = salidas > 0 ? `<span class="status-bad">⚠️ ${salidas}</span>` : '<span class="status-pending">0</span>';
+      html += `<tr>
+        <td>${escapeHtml(n)}</td>
+        <td class="center">${levelAbbrev(compPct(['sinpe','movil']))}</td>
+        <td class="center">${levelAbbrev(compPct(['firma']))}</td>
+        <td class="center">${levelAbbrev(compPct(['tarjetas']))}</td>
+        <td class="center">${levelAbbrev(compPct(['netiqueta']))}</td>
+        <td class="center">${casosCell}</td>
+        <td class="center">${salidasCell}</td>
+      </tr>`;
+    });
+    html += '</table>';
+    content.innerHTML = html;
+  }catch(e){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">No se pudo cargar el panel (revisá la conexión a la hoja de datos).</p>';
+  }
+});
+document.getElementById('teacherModalClose').addEventListener('click', ()=>{
+  document.getElementById('teacherModalBg').classList.remove('show');
+});
+
+/* ============================================================
+   NOMBRE DEL ESTUDIANTE
+   ============================================================ */
+document.getElementById('studentName').addEventListener('input', function(){
+  studentName = this.value.trim();
+  document.getElementById('nameStatus').textContent = studentName ? '● identificado' : '';
+});
+document.getElementById('studentName').addEventListener('change', function(){
+  if(studentName) loadExistingProgress();
+});
+
+/* ============================================================
+   PRELLENADO DESDE EL PORTAL (?nombre=...)
+   ============================================================ */
+(function prefillFromPortal(){
+  const params = new URLSearchParams(window.location.search);
+  const nombreParam = params.get('nombre');
+  if(nombreParam){
+    studentName = nombreParam;
+    document.getElementById('studentName').value = nombreParam;
+    document.getElementById('nameStatus').textContent = '● identificado';
+    loadExistingProgress();
+  }
+})();
+
+/* ============================================================
+   MODO ENFOQUE: pantalla completa + detección de salidas
+   ============================================================ */
+let salidaCount = 0;
+document.getElementById('focusModeBtn').addEventListener('click', ()=>{
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  if(req) req.call(el).catch(()=>{});
+});
+
+function showWarnBanner(msg){
+  let banner = document.getElementById('warnBanner');
+  if(!banner){
+    banner = document.createElement('div');
+    banner.id = 'warnBanner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:200;background:#EF6A5B;color:#fff;text-align:center;padding:8px 12px;font-size:12.5px;font-family:monospace;';
+    document.body.prepend(banner);
+  }
+  banner.textContent = msg;
+  banner.style.display = 'block';
+  clearTimeout(window._warnTimeout);
+  window._warnTimeout = setTimeout(()=>{ banner.style.display='none'; }, 6000);
+}
+
+function logSalida(){
+  salidaCount++;
+  showWarnBanner('⚠️ Se detectó que saliste de esta pestaña o ventana (van: ' + salidaCount + ').');
+  if(studentName && sheetsReady()){
+    sheetPost('Progreso', [new Date().toISOString(), studentName, 'incidente_salida_pantalla', salidaCount, salidaCount]).catch(()=>{});
+  }
+}
+
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) logSalida(); });
+
+window.addEventListener('beforeunload', function(e){
+  e.preventDefault();
+  e.returnValue = '';
+});
+
+document.addEventListener('contextmenu', e=> e.preventDefault());
+document.addEventListener('copy', e=> e.preventDefault());
+
+/* ============================================================
+   INICIO
+   ============================================================ */
+renderTabs();
+renderPage();
+</script>
+</body>
+</html>
