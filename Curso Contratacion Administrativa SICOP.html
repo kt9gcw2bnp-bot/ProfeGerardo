@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso · Contratación Administrativa y SICOP</title>
+<style>
+:root{
+  --navy:#0E1B3D; --navy-deep:#0A1230;
+  --gold:#B8863C; --gold-light:#F4DD7A;
+  --teal:#2FC2AD; --coral:#EF6A5B;
+  --ink:#20242B; --paper:#F3F5F4; --muted:#5B6470; --line:#D8DCDD;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);padding-bottom:60px;}
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;padding:12px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.topbar h1{font-size:15.5px;margin:0 0 2px;}
+.topbar p{margin:0;font-size:10px;color:rgba(255,255,255,.65);font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;}
+.teacherBtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:10.5px;padding:5px 10px;border-radius:14px;cursor:pointer;}
+
+.namebar{background:#fff;border-bottom:1px solid var(--line);padding:9px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.namebar input{padding:7px 9px;border:1px solid var(--line);border-radius:6px;font-size:13px;flex:1;min-width:160px;}
+.namebar label{font-size:11px;color:var(--muted);font-family:var(--mono);}
+
+.tabs{display:flex;gap:4px;overflow-x:auto;background:#fff;border-bottom:1px solid var(--line);padding:8px 10px;}
+.tab{flex:0 0 auto;padding:7px 12px;border-radius:16px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid var(--line);color:var(--muted);white-space:nowrap;background:#f7f8f6;}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab.done::after{content:" ✓";color:var(--teal);}
+.tab.cert{border-color:var(--gold);}
+.tab.cert.active{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);}
+.tab.tab-locked{opacity:.45;}
+.tab.tab-locked::before{content:"🔒 ";}
+
+/* ---- ANTOLOGIA / INFOGRAFIA ---- */
+.info-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;border-radius:12px;padding:22px 20px;margin-bottom:16px;text-align:center;}
+.info-hero .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:2px;color:var(--gold-light);text-transform:uppercase;}
+.info-hero h2{margin:8px 0 4px;font-size:19px;}
+.info-hero p{margin:0;font-size:12px;color:rgba(255,255,255,.75);}
+.info-block{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden;}
+.info-block::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--block-color,var(--gold));}
+.info-block .ib-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.info-block .ib-icon{font-size:22px;flex-shrink:0;}
+.info-block h3{margin:0;font-size:14.5px;color:var(--navy);}
+.info-block p{font-size:12.5px;line-height:1.6;margin:0 0 8px;color:var(--ink);}
+.info-block ul{margin:6px 0 0;padding-left:18px;font-size:12px;line-height:1.7;color:var(--ink);}
+.info-block .ib-tag{display:inline-block;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.5px;background:#f7f8f6;color:var(--muted);padding:2px 8px;border-radius:10px;margin-top:6px;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;}
+@media (max-width:480px){.info-grid{grid-template-columns:1fr;}}
+.info-mini{background:#f7f8f6;border:1px solid var(--line);border-radius:8px;padding:10px 12px;}
+.info-mini b{display:block;font-size:12px;color:var(--navy);margin-bottom:3px;}
+.info-mini span{font-size:11px;color:var(--muted);line-height:1.4;}
+.info-steps{list-style:none;margin:8px 0 0;padding:0;counter-reset:step;}
+.info-steps li{position:relative;padding:8px 0 8px 34px;font-size:12px;border-left:2px solid var(--line);margin-left:12px;}
+.info-steps li::before{counter-increment:step;content:counter(step);position:absolute;left:-13px;top:6px;width:24px;height:24px;background:var(--navy);color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:700;}
+.info-steps li:last-child{border-left:2px solid transparent;}
+.info-steps b{display:block;color:var(--navy);font-size:12.5px;}
+.read-confirm{text-align:center;margin:20px 0 6px;}
+.read-confirm .btn{padding:12px 26px;font-size:13.5px;}
+.read-confirm p{font-size:11.5px;color:var(--muted);margin-top:8px;}
+
+.page{max-width:760px;margin:0 auto;padding:16px;}
+.content-card{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:13.5px;line-height:1.55;color:var(--ink);}
+.content-card h2{font-size:16px;margin:0 0 8px;color:var(--navy);}
+
+.actcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;}
+.actcard h3{font-size:13.5px;margin:0 0 10px;color:var(--navy);}
+.btn{display:inline-block;padding:8px 16px;background:var(--navy);color:#fff;border:none;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.btn:hover{background:var(--navy-deep);}
+.btn:disabled{opacity:.45;cursor:default;}
+.scorepill{display:inline-block;font-family:var(--mono);font-size:11px;background:var(--teal);color:#fff;padding:3px 10px;border-radius:12px;margin-left:8px;}
+
+/* ---- QUIZ ---- */
+.qcard{border:1px solid var(--line);border-radius:8px;padding:12px 13px;margin-bottom:10px;}
+.qcard.correct{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset;}
+.qcard.incorrect{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral) inset;}
+.qtext{font-size:13px;font-weight:600;margin-bottom:8px;}
+.opt{display:flex;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;margin-top:6px;cursor:pointer;font-size:12.5px;}
+.opt:hover{background:#f7f8f6;}
+.opt .letter{font-family:var(--mono);font-weight:700;color:var(--navy);}
+.opt.locked{cursor:default;}
+.opt.chosen-correct{background:#e7f1ec;border-color:var(--teal);}
+.opt.chosen-incorrect{background:#f7e9e8;border-color:var(--coral);}
+.opt.reveal-correct{background:#e7f1ec;border-color:var(--teal);}
+.justif{margin-top:8px;padding:8px 10px;border-radius:6px;font-size:11.5px;display:none;}
+.justif.show{display:block;}
+.justif.ok{background:#e7f1ec;color:#1e4a37;}
+.justif.bad{background:#f7e9e8;color:#6f2626;}
+
+/* ---- MATCHING ---- */
+.match-table{width:100%;border-collapse:collapse;margin-top:6px;}
+.match-table td{padding:6px 4px;font-size:12.5px;vertical-align:middle;}
+.match-table select{width:100%;font-size:12.5px;padding:6px;border-radius:5px;border:1px solid var(--line);}
+.match-row.ok select{border-color:var(--teal);background:#e7f1ec;}
+.match-row.bad select{border-color:var(--coral);background:#f7e9e8;}
+.bank{font-size:11px;color:var(--muted);background:#f7f8f6;border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-top:8px;}
+
+/* ---- WORD SEARCH ---- */
+.ws-wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center;}
+.ws-grid{display:grid;gap:1px;background:#dfe3e6;border:2px solid var(--navy);border-radius:6px;padding:3px;touch-action:none;}
+.ws-cell{width:19px;height:19px;display:flex;align-items:center;justify-content:center;background:#fff;font-family:var(--mono);font-weight:700;font-size:9.5px;border-radius:2px;cursor:pointer;-webkit-user-select:none;user-select:none;}
+.ws-cell.selected{background:var(--gold-light);}
+.ws-cell.found{background:var(--teal);color:#fff;}
+.ws-list{flex:0 0 170px;}
+.ws-list ul{list-style:none;margin:0;padding:0;}
+.ws-list li{font-family:var(--mono);font-size:11px;padding:4px 7px;border-radius:5px;margin-bottom:3px;background:#f7f8f6;border:1px solid var(--line);}
+.ws-list li.found{background:var(--teal);color:#fff;border-color:var(--teal);text-decoration:line-through;}
+
+/* ---- CROSSWORD ---- */
+.cw-wrap{display:flex;gap:18px;flex-wrap:wrap;}
+.cw-grid{display:grid;gap:1px;background:#1c1f24;border:2px solid var(--navy);border-radius:4px;padding:2px;}
+.cw-cell{width:22px;height:22px;position:relative;background:#fff;}
+.cw-cell.blocked{background:#1c1f24;}
+.cw-cell input{width:100%;height:100%;border:none;text-align:center;font-family:var(--mono);font-weight:700;font-size:11.5px;text-transform:uppercase;background:transparent;padding:0;}
+.cw-cell input.ok{background:#e7f1ec;color:#1e4a37;}
+.cw-cell input.bad{background:#f7e9e8;color:#6f2626;}
+.cw-num{position:absolute;top:0px;left:1px;font-size:6.5px;color:var(--gold);font-family:var(--mono);}
+.cw-clues{flex:1;min-width:200px;font-size:11.5px;}
+.cw-clues b{color:var(--navy);display:block;margin:8px 0 3px;font-size:11px;}
+.cw-clues li{margin-bottom:4px;}
+
+/* ---- TRABAJO EN CLASE (casos) ---- */
+.caso-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:16px;}
+.caso-card.correct{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset;}
+.caso-card.incorrect{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral) inset;}
+.caso-card .caso-tag{font-family:var(--mono);font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;}
+.caso-card .caso-inst{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.caso-card p.enunciado{font-size:13px;margin:8px 0 4px;color:var(--ink);}
+.caso-card .caso-monto{font-family:var(--mono);font-weight:700;color:var(--navy);font-size:13px;margin:4px 0 10px;}
+textarea.caso-input{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-family:var(--sans);font-size:12.5px;min-height:60px;margin-top:10px;}
+.caso-opts{margin-top:10px;}
+
+/* ---- CERTIFICADO ---- */
+.progress-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+.progress-table th,.progress-table td{border:1px solid var(--line);padding:7px 9px;font-size:12px;text-align:left;}
+.progress-table th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;}
+.progress-table td.center{text-align:center;}
+.status-ok{color:var(--teal);font-weight:700;}
+.status-mid{color:#c98a2c;font-weight:700;}
+.status-bad{color:var(--coral);font-weight:700;}
+.status-pending{color:var(--muted);}
+.competency-desc{font-size:10.5px;color:var(--muted);display:block;margin-top:2px;}
+.ra-tag{font-family:var(--mono);font-size:9.5px;color:var(--gold);font-weight:700;}
+
+.certificate{display:none;border:8px double var(--gold);border-radius:10px;padding:34px 24px;text-align:center;background:#fffdf7;margin-top:10px;}
+.certificate.show{display:block;}
+.certificate .kicker{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;}
+.certificate h2{font-size:22px;color:var(--navy);margin:10px 0 4px;font-family:Georgia,serif;}
+.certificate .name{font-size:26px;font-weight:700;color:var(--navy-deep);margin:14px 0;font-family:Georgia,serif;border-bottom:2px solid var(--gold);display:inline-block;padding-bottom:6px;}
+.certificate p{font-size:12.5px;color:var(--muted);max-width:440px;margin:6px auto;}
+.certificate .seal{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d488,#a97c29);margin:14px auto 0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#3a2a06;font-weight:700;}
+
+.locked-msg{text-align:center;color:var(--muted);font-size:12.5px;padding:30px 20px;background:#fff;border:1px dashed var(--line);border-radius:8px;}
+
+/* PIN modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,18,48,.6);z-index:50;align-items:flex-start;justify-content:center;padding:30px 14px;overflow-y:auto;}
+.modal-bg.show{display:flex;}
+.modal{background:#fff;border-radius:10px;max-width:700px;width:100%;padding:20px;}
+.modal h3{margin:0 0 12px;color:var(--navy);}
+.modal .close{float:right;cursor:pointer;font-size:18px;color:var(--muted);}
+.pin-row{display:flex;gap:8px;margin-top:10px;}
+.pin-row input{flex:1;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-size:14px;font-family:var(--mono);letter-spacing:3px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div>
+      <h1>🏛️ Curso: Contratación Administrativa y SICOP</h1>
+      <p>Contabilidad · Undécimo año · Gestión pública</p>
+    </div>
+    <button class="teacherBtn" id="teacherBtnOpen">👩‍🏫 Panel docente</button>
+    <button class="teacherBtn" id="focusModeBtn" style="margin-left:6px;">🔒 Modo enfoque</button>
+  </div>
+</div>
+
+<div class="namebar">
+  <label>Tu nombre:</label>
+  <input type="text" id="studentName" placeholder="Nombre completo" maxlength="45">
+  <span id="nameStatus" style="font-size:11px;color:var(--muted);font-family:var(--mono);"></span>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="page" id="page"></div>
+
+<div class="modal-bg" id="pinModalBg">
+  <div class="modal">
+    <span class="close" id="pinModalClose">✕</span>
+    <h3>Panel docente</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin:0;">Ingrese el PIN para ver el progreso del grupo.</p>
+    <div class="pin-row">
+      <input type="password" id="pinInput" maxlength="6" placeholder="PIN">
+      <button class="btn" id="pinSubmit">Entrar</button>
+    </div>
+    <div id="pinError" style="color:var(--coral);font-size:11.5px;margin-top:6px;display:none;">PIN incorrecto.</div>
+  </div>
+</div>
+
+<div class="modal-bg" id="teacherModalBg">
+  <div class="modal">
+    <span class="close" id="teacherModalClose">✕</span>
+    <h3>Panel docente — progreso del curso</h3>
+    <div id="teacherContent">Cargando...</div>
+  </div>
+</div>
+
+<script>
+const TEACHER_PIN = "9986";
+
+/* ============================================================
+   CONFIGURACIÓN DE MÓDULOS
+   ============================================================ */
+const MODULES = [
+  { id:"antologia", label:"📘 Antología", title:"Antología — Contratación Administrativa y SICOP", activityType:"antologia" },
+  { id:"concepto", label:"🔤 Sopa de letras", title:"Vocabulario de la Contratación Pública",
+    content:"La Ley General de Contratación Pública, N.° 9986, vigente desde el 1° de diciembre de 2022, derogó la antigua Ley de Contratación Administrativa (N.° 7494) y reorganizó por completo la forma en que las instituciones públicas costarricenses adquieren bienes, servicios y obras — con trámites 100% electrónicos a través del Sistema Integrado de Compras Públicas (SICOP).",
+    activityType:"wordsearch" },
+  { id:"procedimientos", label:"🗂️ Crucigrama", title:"Tipos de Procedimiento",
+    content:"Los procedimientos ordinarios (licitación mayor, menor o reducida) se determinan según el monto estimado, de acuerdo con el artículo 36 de la Ley 9986. Los procedimientos especiales, como la urgencia, se activan por una condición del caso — no por el monto. La contratación directa no es un procedimiento ordinario, sino una excepción taxativa que solo aplica en los casos que la propia ley enumera.",
+    activityType:"crossword" },
+  { id:"principios", label:"⚖️ Cuestionario", title:"Principios Rectores",
+    content:"La actividad contractual del Estado se rige por principios como eficiencia, eficacia, publicidad y transparencia, libre competencia, igualdad, buena fe, seguridad jurídica, rendición de cuentas, integridad y probidad, y planificación. Un cartel que vulnera alguno de estos principios —aunque esté bien redactado en lo demás— puede ser objetado o anulado.",
+    activityType:"quiz" },
+  { id:"vf", label:"✅ Verdadero/Falso", title:"Verdadero o Falso",
+    content:"Repasemos con afirmaciones que pueden ser ciertas o falsas — prestá atención a los detalles: un solo matiz puede cambiar la respuesta.",
+    activityType:"vf" },
+  { id:"tipos", label:"🔗 Asocie", title:"Asocie — Tipos de Procedimiento", activityType:"matching" },
+  { id:"trabajo", label:"📝 Trabajo en clase", title:"Trabajo en clase — El aula como Proveeduría", activityType:"trabajo" },
+  { id:"casos", label:"💬 Casos y Debate", title:"Casos y Debate (módulo compartido)", activityType:"casos" },
+  { id:"miro", label:"🧠 Lluvia de Ideas", title:"Lluvia de Ideas — Tablero Colaborativo", activityType:"miro" },
+  { id:"certificado", label:"🏆 Certificado", title:"Certificado", activityType:"certificado" },
+];
+
+/* Orden secuencial: cada actividad debe completarse para desbloquear la siguiente.
+   Solo se puede regresar a la Antología; el Certificado siempre es visible. */
+const ORDER = ["antologia","concepto","procedimientos","principios","vf","tipos","trabajo","casos","miro"];
+
+function isStepDone(id){
+  if(id==='antologia') return antologiaLeida;
+  if(id==='casos') return !!(localProgress['casos'] && localProgress['casos'].score>0);
+  if(id==='miro') return !!(localProgress['miro'] && localProgress['miro'].score>0);
+  return !!(localProgress[id] && localProgress[id].total>0);
+}
+
+function currentStepIndex(){
+  for(let i=0;i<ORDER.length;i++){ if(!isStepDone(ORDER[i])) return i; }
+  return ORDER.length;
+}
+
+let activeModule = MODULES[0].id;
+let studentName = "";
+let antologiaLeida = false;
+
+/* ============================================================
+   CONEXIÓN A GOOGLE SHEETS (vía Apps Script Web App)
+   ============================================================ */
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbzMGf_Gpf6UWswFPSqEBMdq-93GxGkrURsT4jtO9Jaz8yT5gyMMtp1btlcDZjRCeuAb/exec";
+
+function sheetsReady(){ return SHEET_API_URL && !SHEET_API_URL.startsWith('REEMPLAZAR'); }
+
+let jsonpCounter = 0;
+function jsonpRequest(url){
+  return new Promise((resolve, reject)=>{
+    const cbName = 'jsonp_cb_' + (jsonpCounter++) + '_' + Date.now();
+    const script = document.createElement('script');
+    let settled = false;
+    const cleanup = ()=>{ delete window[cbName]; if(script.parentNode) script.parentNode.removeChild(script); };
+    window[cbName] = (data)=>{ settled = true; cleanup(); resolve(data); };
+    script.onerror = ()=>{ if(!settled){ cleanup(); reject(new Error('Error de red (JSONP)')); } };
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    document.body.appendChild(script);
+    setTimeout(()=>{ if(!settled){ cleanup(); reject(new Error('Tiempo de espera agotado')); } }, 10000);
+  });
+}
+
+async function sheetGet(sheetName){
+  const data = await jsonpRequest(SHEET_API_URL + '?sheet=' + encodeURIComponent(sheetName));
+  return data.rows || [];
+}
+
+async function sheetPost(sheetName, row){
+  await fetch(SHEET_API_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({ sheet: sheetName, row })
+  });
+  return { ok:true };
+}
+
+/* ============================================================
+   PROGRESO (en memoria + Google Sheets compartido)
+   ============================================================ */
+const localProgress = {};
+
+function pct(score,total){ return total>0 ? Math.round((score/total)*100) : 0; }
+
+async function saveProgress(moduleId, score, total){
+  localProgress[moduleId] = {score, total, ts:Date.now()};
+  renderTabs();
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const nowIso = new Date().toISOString();
+    await sheetPost('Progreso', [nowIso, studentName, moduleId, score, total]);
+  }catch(e){ /* falla silenciosa: el progreso local sigue funcionando */ }
+}
+
+/* ============================================================
+   ANTI-REINTENTO: bloquear actividades ya completadas
+   ============================================================ */
+function isLocked(moduleId){
+  return !!(localProgress[moduleId] && localProgress[moduleId].total > 0);
+}
+
+function renderLockedNotice(moduleId, activityLabel){
+  const p = localProgress[moduleId];
+  const pctVal = p.total>0 ? Math.round((p.score/p.total)*100) : 0;
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>✅ Actividad completada</h3>
+    <p style="font-size:13px;">Ya completaste <strong>${activityLabel}</strong>. Tu resultado fue <strong>${p.score} / ${p.total}</strong> (${pctVal}%).</p>
+    <p style="font-size:11px;color:var(--muted);">Esta actividad ya quedó registrada y no se puede repetir. Si crees que hay un error, consultá con tu docente.</p>`;
+  pageEl.appendChild(card);
+}
+
+async function loadExistingProgress(){
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const rows = await sheetGet('Progreso');
+    rows.filter(r => r.Estudiante === studentName).forEach(r=>{
+      const mod = r.Modulo;
+      if(!mod) return;
+      localProgress[mod] = { score:Number(r.Score), total:Number(r.Total), ts:new Date(r.Timestamp).getTime() };
+    });
+    if(localProgress['antologia']) antologiaLeida = true;
+    renderTabs();
+    renderPage();
+  }catch(e){ /* si falla, las actividades siguen interactivas por seguridad */ }
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+const tabsEl = document.getElementById('tabs');
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  const curIdx = currentStepIndex();
+  MODULES.forEach(m=>{
+    const t = document.createElement('div');
+    const done = isStepDone(m.id);
+    const orderIdx = ORDER.indexOf(m.id);
+    let clickable;
+    if(m.id==='certificado' || m.id==='antologia') clickable = true;
+    else clickable = (orderIdx === curIdx);
+    t.className = 'tab' + (m.id===activeModule?' active':'') + (done?' done':'') + (m.id==='certificado'?' cert':'') + (!clickable?' tab-locked':'');
+    t.textContent = m.label;
+    t.addEventListener('click', ()=>{
+      if(!clickable){
+        if(orderIdx > curIdx) alert('Primero debés completar la actividad actual antes de avanzar a esta.');
+        else alert('Ya completaste esta actividad — solo podés regresar a la Antología, no a etapas anteriores.');
+        return;
+      }
+      activeModule = m.id;
+      renderTabs(); renderPage();
+    });
+    tabsEl.appendChild(t);
+  });
+}
+
+/* ============================================================
+   RENDER PAGE ROUTER
+   ============================================================ */
+const pageEl = document.getElementById('page');
+function renderPage(){
+  const m = MODULES.find(x=>x.id===activeModule);
+  pageEl.innerHTML = '';
+  if(m.content){
+    const c = document.createElement('div');
+    c.className = 'content-card';
+    c.innerHTML = `<h2>${m.title}</h2><p>${m.content}</p>`;
+    pageEl.appendChild(c);
+  }
+  if(m.activityType==='antologia') renderAntologia();
+  else if(m.activityType==='wordsearch') renderWordSearch();
+  else if(m.activityType==='crossword') renderCrossword();
+  else if(m.activityType==='quiz') renderQuiz();
+  else if(m.activityType==='vf') renderVF();
+  else if(m.activityType==='matching') renderMatching();
+  else if(m.activityType==='trabajo') renderTrabajo();
+  else if(m.activityType==='casos') renderCasos();
+  else if(m.activityType==='miro') renderMiro();
+  else if(m.activityType==='certificado') renderCertificado();
+  maybeShowContinue();
+}
+
+function maybeShowContinue(){
+  if(activeModule==='certificado') return;
+  if(!isStepDone(activeModule)) return;
+  const idx = ORDER.indexOf(activeModule);
+  if(idx===-1) return;
+  const nextId = (idx+1<ORDER.length) ? ORDER[idx+1] : 'certificado';
+  const nextMod = MODULES.find(x=>x.id===nextId);
+  const bar = document.createElement('div');
+  bar.className = 'read-confirm';
+  bar.innerHTML = `<button class="btn" id="continueBtn">➡️ Continuar a: ${nextMod.label}</button>`;
+  pageEl.appendChild(bar);
+  document.getElementById('continueBtn').addEventListener('click', ()=>{
+    activeModule = nextId; renderTabs(); renderPage();
+  });
+}
+
+function escapeHtml(s){ return (s+"").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ============================================================
+   MÓDULO 0: ANTOLOGÍA (infografía de lectura obligatoria)
+   ============================================================ */
+function renderAntologia(){
+  const card = document.createElement('div');
+  card.innerHTML = `
+    <div class="info-hero">
+      <div class="kicker">Antología · Undécimo Año · Gestión Pública</div>
+      <h2>🏛️ Contratación Administrativa y SICOP</h2>
+      <p>Leé con calma cada bloque antes de pasar a las actividades — todas se desbloquean en orden, una por una.</p>
+    </div>
+
+    <div class="info-block" style="--block-color:#B8863C;">
+      <div class="ib-head"><span class="ib-icon">📜</span><h3>1. De una ley a otra</h3></div>
+      <p>La <strong>Ley General de Contratación Pública, N.° 9986</strong>, vigente desde el <strong>1° de diciembre de 2022</strong>, derogó la antigua <strong>Ley de Contratación Administrativa, N.° 7494</strong> (de 1995), y reorganizó por completo la forma en que el Estado costarricense compra bienes, servicios y obras. La base constitucional de fondo no cambió: el artículo 182 de la Constitución Política exige que toda obra, compra o venta con fondos públicos se tramite mediante un procedimiento de concurso.</p>
+      <div class="info-grid">
+        <div class="info-mini"><b>Ley 7494 (derogada)</b><span>Procedimientos más lentos, mayoritariamente en papel, y uso excesivo de la contratación directa como excepción.</span></div>
+        <div class="info-mini"><b>Ley 9986 (vigente)</b><span>Trámite 100% electrónico a través del SICOP, ética expresa, planificación y procedimientos simplificados.</span></div>
+      </div>
+      <span class="ib-tag">RA1</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#2FC2AD;">
+      <div class="ib-head"><span class="ib-icon">💻</span><h3>2. ¿Qué es el SICOP?</h3></div>
+      <p>El <strong>Sistema Integrado de Compras Públicas (SICOP)</strong> es la plataforma electrónica única mediante la cual las instituciones públicas costarricenses tramitan sus compras, y donde las empresas y personas físicas presentan sus ofertas. Fue creado en 2015 (Decreto Ejecutivo N.° 38830 H-MICITT) y reemplazó a plataformas anteriores como CompraRed y Mer-Link, que generaban duplicidad de sistemas y falta de estandarización.</p>
+      <p>Un dato curioso: el SICOP se desarrolló tomando como base el modelo surcoreano <strong>KONEPS</strong> (Korea ON-line E-Procurement System), gracias a un convenio de cooperación entre Costa Rica y la República de Corea del Sur, país líder mundial en compras electrónicas.</p>
+      <div class="info-grid">
+        <div class="info-mini"><b>Características clave</b><span>Ventanilla única, estandarización de procesos, registro único de proveedores, uso obligatorio de firma digital, comercio electrónico, modelo "cero papel", catálogo de bienes y servicios navegable, expediente electrónico de acceso público.</span></div>
+        <div class="info-mini"><b>Para venderle al Estado</b><span>Se necesita firma digital vigente, estar al día con la CCSS, contar con cuenta bancaria a nombre propio, estar inscrito en Tributación con facturas electrónicas, y tener las pólizas correspondientes — trámites que se gestionan mediante el <strong>Sistema Electrónico de Reconocimiento (SER)</strong>.</span></div>
+      </div>
+      <span class="ib-tag">RA1</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#0E1B3D;">
+      <div class="ib-head"><span class="ib-icon">⚖️</span><h3>3. Principios rectores</h3></div>
+      <p>Toda actividad de contratación pública se rige, entre otros, por estos principios:</p>
+      <ul>
+        <li><strong>Eficiencia y eficacia</strong> — usar bien los recursos públicos para cumplir los fines de la institución.</li>
+        <li><strong>Igualdad y libre competencia</strong> — todos los oferentes participan bajo las mismas reglas, sin requisitos hechos a la medida de uno solo.</li>
+        <li><strong>Publicidad y transparencia</strong> — todo procedimiento y su expediente son de acceso público.</li>
+        <li><strong>Planificación</strong> — se compra lo necesario, en el momento en que se necesita.</li>
+        <li><strong>Buena fe y seguridad jurídica</strong> — reglas claras y estables, con honestidad presumida entre las partes.</li>
+        <li><strong>Rendición de cuentas e integridad</strong> — cada decisión queda registrada y justificada, sin conflictos de interés.</li>
+      </ul>
+      <span class="ib-tag">RA1</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#EF6A5B;">
+      <div class="ib-head"><span class="ib-icon">🗂️</span><h3>4. Tipos de procedimiento</h3></div>
+      <div class="info-grid">
+        <div class="info-mini"><b>Ordinarios (según el monto)</b><span>Licitación mayor, menor o reducida, según los umbrales del artículo 36 de la Ley 9986 — por ejemplo, la licitación reducida aplica hasta ₡64.559.795 para bienes y servicios (monto vigente según resolución de la Contraloría General, actualizado periódicamente). El antiguo nombre "licitación pública" ya no existe.</span></div>
+        <div class="info-mini"><b>Especiales</b><span>Urgencia (necesidad inmediata y comprobada) y bienes inmuebles (reglas propias para comprar o alquilar edificios y terrenos).</span></div>
+        <div class="info-mini"><b>Extraordinarios</b><span>Remate (venta al mejor postor) y subasta (variante para bienes o derechos específicos).</span></div>
+        <div class="info-mini"><b>Contratación directa</b><span>No es un procedimiento ordinario, sino una <strong>excepción taxativa</strong> (art. 3): solo aplica en los casos que la propia ley enumera — caja chica, emergencia declarada, arte/cultura, convenios entre entes públicos, entre otros.</span></div>
+      </div>
+      <span class="ib-tag">RA4</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#B8863C;">
+      <div class="ib-head"><span class="ib-icon">🛣️</span><h3>5. La ruta completa de una contratación</h3></div>
+      <p>Un procedimiento ordinario avanza por once fases, desde que nace la necesidad hasta que se paga la factura:</p>
+      <ol class="info-steps">
+        <li><b>A. Planificación</b>La unidad solicitante define qué necesita, en qué cantidad, y verifica que haya contenido presupuestario.</li>
+        <li><b>B. Definición de la modalidad</b>Según los umbrales del artículo 36, se determina el procedimiento aplicable.</li>
+        <li><b>C. Elaboración y publicación del cartel</b>Se redacta con participación de las unidades usuaria, técnica, legal y financiera, y se publica en el SICOP.</li>
+        <li><b>D. Consultas y objeciones</b>Cualquier interesado puede pedir aclaraciones u objetar el cartel antes de ofertar.</li>
+        <li><b>E. Apertura de ofertas</b>Se reciben y abren las propuestas electrónicas presentadas dentro del plazo.</li>
+        <li><b>F. Selección y adjudicación</b>Se aplica el sistema de evaluación del cartel y se elige la oferta más conveniente.</li>
+        <li><b>G. Recursos de apelación o revocatoria</b>Los oferentes no favorecidos pueden recurrir la decisión de adjudicación.</li>
+        <li><b>H. Firmeza de la adjudicación</b>Una vez resueltos los recursos, la adjudicación queda en firme.</li>
+        <li><b>I. Confección del contrato</b>Se formaliza el contrato o la orden de compra con el adjudicatario.</li>
+        <li><b>J. Recepción y verificación</b>Se recibe y verifica el bien, servicio u obra contratada.</li>
+        <li><b>K. Pago de la factura</b>La Administración cancela al contratista, cerrando el ciclo.</li>
+      </ol>
+      <span class="ib-tag">RA4</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#2FC2AD;">
+      <div class="ib-head"><span class="ib-icon">📋</span><h3>6. El cartel de licitación: su estructura</h3></div>
+      <p>El cartel es el documento que fija las reglas del concurso. Su estructura oficial tiene estas partes:</p>
+      <div class="info-grid">
+        <div class="info-mini"><b>Encabezado</b><span>Identifica la institución, la unidad de proveeduría, el tipo de procedimiento y el objeto contractual.</span></div>
+        <div class="info-mini"><b>Clausulado</b><span>Se organiza en cláusulas generales, técnicas y de documentación legal — llamadas <strong>cláusulas invariables</strong> porque no pueden modificarse tras la publicación sin una enmienda formal.</span></div>
+        <div class="info-mini"><b>Sistema de evaluación</b><span>Los criterios con que se calificará cada oferta (precio, plazo, calidad, experiencia), ponderados para sumar 100%.</span></div>
+        <div class="info-mini"><b>Cierre</b><span>Plazos, forma de presentación de ofertas y disposiciones finales del concurso.</span></div>
+      </div>
+      <p style="margin-top:10px;"><strong>Errores comunes:</strong> objeto contractual ambiguo, requisitos hechos a la medida de un solo proveedor, criterios de evaluación subjetivos, y plazos poco realistas — cualquiera de ellos puede motivar un recurso de objeción antes de la apertura de ofertas.</p>
+      <span class="ib-tag">RA4</span>
+    </div>
+
+    <div class="read-confirm">
+      <button class="btn" id="confirmReadBtn">✅ Ya leí la antología, continuar</button>
+      <p>Al confirmar, empieza el recorrido por las actividades — cada una desbloquea la siguiente.</p>
+    </div>
+  `;
+  pageEl.appendChild(card);
+
+  document.getElementById('confirmReadBtn').addEventListener('click', ()=>{
+    antologiaLeida = true;
+    saveProgress('antologia', 1, 1);
+    activeModule = 'concepto';
+    renderTabs(); renderPage();
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 1: SOPA DE LETRAS
+   ============================================================ */
+const WS_DATA = {"size": 18, "grid": ["SCDAYMKGGKMLTHGXGN", "PLANIFICACIONRSVRB", "BFLEGEGATZMACEXQOU", "ZGGZNUURRXLGKMUHGP", "ACONTRATACIONASBAO", "IDKJKGLENSMPUTIURF", "KGJPXEDLSDDIRECTAE", "ZYJUFNARPTRVJEOCNR", "FGABDCDZAPTLJWPDTT", "VMJLJIUPROVEEDURIA", "GDOIGACOEZCKUMBRAL", "OMZCBRBANUWDIDLUDG", "GKLICITACIONFWIEPB", "PTZDDQIIIILTPUCSBD", "PEZAXTOWAPOSUBASTA", "YADDINPYZPLNHADMSJ", "OFBEDSTBTGZGJWFROR", "WQQWQMHQGWTOJWOKEL"], "words": {"PLANIFICACION": [[1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8], [1, 9], [1, 10], [1, 11], [1, 12]], "TRANSPARENCIA": [[2, 8], [3, 8], [4, 8], [5, 8], [6, 8], [7, 8], [8, 8], [9, 8], [10, 8], [11, 8], [12, 8], [13, 8], [14, 8]], "CONTRATACION": [[4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [4, 7], [4, 8], [4, 9], [4, 10], [4, 11], [4, 12]], "ADJUDICACION": [[4, 0], [5, 1], [6, 2], [7, 3], [8, 4], [9, 5], [10, 6], [11, 7], [12, 8], [13, 9], [14, 10], [15, 11]], "PROVEEDURIA": [[9, 7], [9, 8], [9, 9], [9, 10], [9, 11], [9, 12], [9, 13], [9, 14], [9, 15], [9, 16], [9, 17]], "PUBLICIDAD": [[6, 3], [7, 3], [8, 3], [9, 3], [10, 3], [11, 3], [12, 3], [13, 3], [14, 3], [15, 3]], "LICITACION": [[12, 2], [12, 3], [12, 4], [12, 5], [12, 6], [12, 7], [12, 8], [12, 9], [12, 10], [12, 11]], "EJECUCION": [[7, 13], [8, 12], [9, 11], [10, 10], [11, 9], [12, 8], [13, 7], [14, 6], [15, 5]], "IGUALDAD": [[1, 6], [2, 6], [3, 6], [4, 6], [5, 6], [6, 6], [7, 6], [8, 6]], "GARANTIA": [[3, 16], [4, 16], [5, 16], [6, 16], [7, 16], [8, 16], [9, 16], [10, 16]], "PROBIDAD": [[8, 9], [9, 8], [10, 7], [11, 6], [12, 5], [13, 4], [14, 3], [15, 2]], "URGENCIA": [[3, 5], [4, 5], [5, 5], [6, 5], [7, 5], [8, 5], [9, 5], [10, 5]], "DIRECTA": [[6, 10], [6, 11], [6, 12], [6, 13], [6, 14], [6, 15], [6, 16]], "PUBLICA": [[8, 14], [9, 14], [10, 14], [11, 14], [12, 14], [13, 14], [14, 14]], "SUBASTA": [[14, 11], [14, 12], [14, 13], [14, 14], [14, 15], [14, 16], [14, 17]], "REMATE": [[1, 13], [2, 13], [3, 13], [4, 13], [5, 13], [6, 13]], "UMBRAL": [[10, 12], [10, 13], [10, 14], [10, 15], [10, 16], [10, 17]], "CARTEL": [[1, 7], [2, 7], [3, 7], [4, 7], [5, 7], [6, 7]], "OFERTA": [[4, 17], [5, 17], [6, 17], [7, 17], [8, 17], [9, 17]], "SICOP": [[4, 14], [5, 14], [6, 14], [7, 14], [8, 14]]}};
+
+function renderWordSearch(){
+  if(isLocked('concepto')){
+    renderLockedNotice('concepto', 'la sopa de letras');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const total = Object.keys(WS_DATA.words).length;
+  const cellPx = WS_DATA.size > 16 ? 15 : 19;
+  card.innerHTML = `<h3>Sopa de letras — encontrá los ${total} términos <span class="scorepill" id="wsScorePill">0 / ${total}</span></h3>
+    <div class="ws-wrap">
+      <div class="ws-grid" id="wsGrid" style="grid-template-columns:repeat(${WS_DATA.size},${cellPx}px);"></div>
+      <div class="ws-list"><ul id="wsList"></ul></div>
+    </div>`;
+  pageEl.appendChild(card);
+
+  const gridEl = document.getElementById('wsGrid');
+  const cells = [];
+  for(let r=0;r<WS_DATA.size;r++){
+    const row=[];
+    for(let c=0;c<WS_DATA.size;c++){
+      const div = document.createElement('div');
+      div.className='ws-cell';
+      div.style.width = cellPx+'px';
+      div.style.height = cellPx+'px';
+      div.style.fontSize = (WS_DATA.size>16 ? '7.5px' : '9.5px');
+      div.textContent = WS_DATA.grid[r][c];
+      div.dataset.r=r; div.dataset.c=c;
+      gridEl.appendChild(div);
+      row.push(div);
+    }
+    cells.push(row);
+  }
+  const wordKeys = Object.keys(WS_DATA.words);
+  const wordCellSet = {};
+  wordKeys.forEach(w=>{ wordCellSet[w] = new Set(WS_DATA.words[w].map(([r,c])=>r+','+c)); });
+  const listEl = document.getElementById('wsList');
+  const liByWord = {};
+  wordKeys.slice().sort().forEach(w=>{
+    const li = document.createElement('li');
+    li.textContent = w;
+    listEl.appendChild(li);
+    liByWord[w]=li;
+  });
+
+  let found=0;
+  let selecting=false, path=[];
+  function keyOf(r,c){return r+','+c;}
+  function clearSel(){ path.forEach(([r,c])=>{ if(!cells[r][c].classList.contains('found')) cells[r][c].classList.remove('selected'); }); }
+  function tryMatch(){
+    const selSet = new Set(path.map(([r,c])=>keyOf(r,c)));
+    for(const w of wordKeys){
+      if(liByWord[w].classList.contains('found')) continue;
+      const wSet = wordCellSet[w];
+      if(wSet.size!==selSet.size) continue;
+      let match=true;
+      for(const k of wSet){ if(!selSet.has(k)){match=false;break;} }
+      if(match){
+        WS_DATA.words[w].forEach(([r,c])=>{ cells[r][c].classList.add('found'); cells[r][c].classList.remove('selected'); });
+        liByWord[w].classList.add('found');
+        found++;
+        document.getElementById('wsScorePill').textContent = found+' / '+total;
+        if(found===total) saveProgress('concepto', found, total);
+        return true;
+      }
+    }
+    return false;
+  }
+  function startSel(r,c){ selecting=true; path=[[r,c]]; cells[r][c].classList.add('selected'); }
+  function moveSel(r,c){
+    if(!selecting) return;
+    const [r0,c0]=path[0];
+    const dr=r-r0, dc=c-c0;
+    if(dr!==0 && dc!==0 && Math.abs(dr)!==Math.abs(dc)) return;
+    const steps=Math.max(Math.abs(dr),Math.abs(dc));
+    const sdr=steps===0?0:Math.sign(dr), sdc=steps===0?0:Math.sign(dc);
+    clearSel(); path=[];
+    for(let i=0;i<=steps;i++){
+      const rr=r0+sdr*i, cc=c0+sdc*i;
+      if(rr<0||rr>=WS_DATA.size||cc<0||cc>=WS_DATA.size) break;
+      path.push([rr,cc]);
+      cells[rr][cc].classList.add('selected');
+    }
+  }
+  function endSel(){ if(!selecting) return; selecting=false; if(!tryMatch()) clearSel(); path=[]; }
+  gridEl.addEventListener('mousedown', e=>{ const t=e.target.closest('.ws-cell'); if(t) startSel(+t.dataset.r,+t.dataset.c); });
+  gridEl.addEventListener('mouseover', e=>{ const t=e.target.closest('.ws-cell'); if(t) moveSel(+t.dataset.r,+t.dataset.c); });
+  document.addEventListener('mouseup', endSel);
+  gridEl.addEventListener('touchstart', e=>{ const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); const c=t&&t.closest('.ws-cell'); if(c) startSel(+c.dataset.r,+c.dataset.c); }, {passive:true});
+  gridEl.addEventListener('touchmove', e=>{ const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); const c=t&&t.closest('.ws-cell'); if(c) moveSel(+c.dataset.r,+c.dataset.c); }, {passive:true});
+  document.addEventListener('touchend', endSel);
+}
+
+/* ============================================================
+   ACTIVIDAD 2: CRUCIGRAMA
+   ============================================================ */
+const CW_DATA = {"size": {"rows": 12, "cols": 16}, "grid": ["................", "...........P....", "......L.C..R....", ".ADJUDICACION...", "..I.R.C.R..B....", "..R.G.I.T.SICOP.", "..E.E.T.E..D....", "..C.N.A.L..A....", "..T.C.C....D....", "..A.I.I.........", "....A.OFERTA....", "......N........."], "words": [{"word": "ADJUDICACION", "clue": "Etapa en la que se elige la oferta mas conveniente para el interes publico", "row": 3, "col": 1, "dir": "H", "num": 4}, {"word": "LICITACION", "clue": "Procedimiento ordinario cuyo tipo (mayor, menor o reducida) depende del monto", "row": 2, "col": 6, "dir": "V", "num": 2}, {"word": "URGENCIA", "clue": "Procedimiento especial que se activa por una necesidad inmediata y comprobada, no por el monto", "row": 3, "col": 4, "dir": "V", "num": 6}, {"word": "PROBIDAD", "clue": "Principio de actuacion etica, sin conflictos de interes, en la contratacion", "row": 1, "col": 11, "dir": "V", "num": 1}, {"word": "DIRECTA", "clue": "Contratacion que es una excepcion taxativa, no un procedimiento ordinario", "row": 3, "col": 2, "dir": "V", "num": 5}, {"word": "CARTEL", "clue": "Documento que fija las reglas del concurso: objeto, requisitos y criterios", "row": 2, "col": 8, "dir": "V", "num": 3}, {"word": "OFERTA", "clue": "Propuesta que presenta un proveedor dentro del plazo fijado en el cartel", "row": 10, "col": 6, "dir": "H", "num": 8}, {"word": "SICOP", "clue": "Sistema electronico donde se tramitan las contrataciones publicas en Costa Rica", "row": 5, "col": 10, "dir": "H", "num": 7}]};
+
+function renderCrossword(){
+  if(isLocked('procedimientos')){
+    renderLockedNotice('procedimientos', 'el crucigrama');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const across = CW_DATA.words.filter(w=>w.dir==='H').sort((a,b)=>a.num-b.num);
+  const down = CW_DATA.words.filter(w=>w.dir==='V').sort((a,b)=>a.num-b.num);
+  card.innerHTML = `<h3>Crucigrama — completá según las pistas <span class="scorepill" id="cwScorePill">0%</span></h3>
+    <div class="cw-wrap">
+      <div class="cw-grid" id="cwGrid" style="grid-template-columns:repeat(${CW_DATA.size.cols},22px);"></div>
+      <div class="cw-clues">
+        <b>Horizontales</b><ul id="cwAcross"></ul>
+        <b>Verticales</b><ul id="cwDown"></ul>
+      </div>
+    </div>
+    <button class="btn" id="cwCheckBtn" style="margin-top:12px;">Comprobar crucigrama</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('cwAcross').innerHTML = across.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+  document.getElementById('cwDown').innerHTML = down.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+
+  const R = CW_DATA.size.rows, C = CW_DATA.size.cols;
+  const gridEl = document.getElementById('cwGrid');
+  const numAt = {};
+  CW_DATA.words.forEach(w=>{ numAt[w.row+','+w.col] = w.num; });
+  const inputs = {};
+  for(let r=0;r<R;r++){
+    for(let c=0;c<C;c++){
+      const ch = CW_DATA.grid[r][c];
+      const cell = document.createElement('div');
+      if(ch==='.'){
+        cell.className='cw-cell blocked';
+      } else {
+        cell.className='cw-cell';
+        const key = numAt[r+','+c];
+        if(key) cell.innerHTML = `<span class="cw-num">${key}</span>`;
+        const inp = document.createElement('input');
+        inp.maxLength=1;
+        inp.dataset.r=r; inp.dataset.c=c;
+        inp.addEventListener('input', function(){
+          this.value = this.value.toUpperCase().replace(/[^A-ZÑ]/g,'');
+          if(this.value){
+            const next = findNextInput(r,c);
+            if(next) next.focus();
+          }
+        });
+        cell.appendChild(inp);
+        inputs[r+','+c] = inp;
+      }
+      gridEl.appendChild(cell);
+    }
+  }
+  function findNextInput(r,c){
+    if(inputs[r+','+(c+1)]) return inputs[r+','+(c+1)];
+    if(inputs[(r+1)+','+c]) return inputs[(r+1)+','+c];
+    return null;
+  }
+
+  document.getElementById('cwCheckBtn').addEventListener('click', ()=>{
+    let correct=0, total=0;
+    for(const key in inputs){
+      const [r,c] = key.split(',').map(Number);
+      const expected = CW_DATA.grid[r][c];
+      const inp = inputs[key];
+      total++;
+      if(inp.value === expected){ inp.classList.add('ok'); inp.classList.remove('bad'); correct++; }
+      else{ inp.classList.add('bad'); inp.classList.remove('ok'); }
+    }
+    document.getElementById('cwScorePill').textContent = Math.round((correct/total)*100)+'%';
+    saveProgress('procedimientos', correct, total);
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 3: CUESTIONARIO
+   ============================================================ */
+const QUIZ_BANK = [
+  { q:"¿Qué ley rige actualmente la contratación pública en Costa Rica?", opts:["Ley 7494","Ley 9986","Ley 8511"], correct:1,
+    just:"La Ley 9986 está vigente desde el 1° de diciembre de 2022 y derogó a la Ley 7494." },
+  { q:"¿Qué principio garantiza que todos los oferentes compitan bajo las mismas reglas?", opts:["Igualdad y libre competencia","Rendición de cuentas","Buena fe"], correct:0,
+    just:"La igualdad y libre competencia impide requisitos hechos a la medida de un solo oferente." },
+  { q:"¿Cómo se llamaba el procedimiento que hoy se conoce como licitación mayor, menor o reducida?", opts:["Contratación directa","Licitación pública","Remate"], correct:1,
+    just:"Ese nombre ya no existe: la Ley 9986 lo sustituyó por la escala mayor/menor/reducida según el monto." },
+  { q:"¿Qué activa un procedimiento especial de urgencia, en vez del monto?", opts:["Una necesidad inmediata y comprobada","El tipo de institución que compra","La cantidad de oferentes disponibles"], correct:0,
+    just:"La urgencia depende de una condición del caso (riesgo o necesidad inmediata), no del monto estimado." },
+  { q:"¿Qué es la contratación directa?", opts:["Un procedimiento ordinario más","Una excepción taxativa que solo aplica en los casos que la ley enumera","Un sinónimo de licitación reducida"], correct:1,
+    just:"No es un procedimiento ordinario: por reglamento no se pueden crear excepciones nuevas fuera de las que enumera la ley." },
+  { q:"¿En qué sistema electrónico se tramitan las contrataciones públicas en Costa Rica?", opts:["SICOP","AplicaMEP","SINPE"], correct:0,
+    just:"El SICOP es el sistema oficial de compras del Estado costarricense." },
+];
+
+function renderQuiz(){
+  if(isLocked('principios')){
+    renderLockedNotice('principios', 'el cuestionario');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Cuestionario <span class="scorepill" id="qzScorePill">0 / ${QUIZ_BANK.length}</span></h3><div id="qzWrap"></div>`;
+  pageEl.appendChild(card);
+  const wrap = document.getElementById('qzWrap');
+  let score=0, answered=0;
+  QUIZ_BANK.forEach((item,qi)=>{
+    const qcard = document.createElement('div');
+    qcard.className='qcard';
+    qcard.innerHTML = `<div class="qtext">${qi+1}. ${item.q}</div><div class="opts"></div><div class="justif"></div>`;
+    const optsDiv = qcard.querySelector('.opts');
+    const letters=['A','B','C'];
+    item.opts.forEach((optText,oi)=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(qcard.classList.contains('answered')) return;
+        qcard.classList.add('answered');
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = oi===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect) optsDiv.querySelectorAll('.opt')[item.correct].classList.add('reveal-correct');
+        qcard.classList.add(isCorrect?'correct':'incorrect');
+        const j = qcard.querySelector('.justif');
+        j.classList.add('show', isCorrect?'ok':'bad');
+        j.textContent = (isCorrect?'✓ ':'✕ ') + item.just;
+        if(isCorrect) score++;
+        answered++;
+        document.getElementById('qzScorePill').textContent = score+' / '+QUIZ_BANK.length;
+        if(answered===QUIZ_BANK.length) saveProgress('principios', score, QUIZ_BANK.length);
+      });
+      optsDiv.appendChild(opt);
+    });
+    wrap.appendChild(qcard);
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD: VERDADERO O FALSO
+   ============================================================ */
+const VF_BANK = [
+  { s:"La Ley 9986 deroga la Ley 7494 y está vigente desde el 1° de diciembre de 2022.", correct:true,
+    just:"Correcto: la Ley 9986 entró en vigencia esa fecha, derogando la Ley 7494." },
+  { s:"El nombre \"licitación pública\" se sigue usando oficialmente en la Ley 9986.", correct:false,
+    just:"Falso: ese nombre ya no existe, fue sustituido por licitación mayor, menor o reducida según el monto." },
+  { s:"La contratación directa es un procedimiento ordinario más, aplicable cuando conviene a la Administración.", correct:false,
+    just:"Falso: es una excepción taxativa, solo aplica en los casos que la propia ley enumera." },
+  { s:"El procedimiento de urgencia se activa por una condición del caso, no por el monto estimado.", correct:true,
+    just:"Correcto: la urgencia depende de una necesidad inmediata y comprobada." },
+  { s:"El SICOP es el sistema electrónico donde se tramitan las contrataciones públicas en Costa Rica.", correct:true,
+    just:"Correcto." },
+  { s:"Un cartel con requisitos hechos a la medida de un solo proveedor respeta el principio de igualdad.", correct:false,
+    just:"Falso: eso viola los principios de igualdad y libre competencia." },
+];
+
+function renderVF(){
+  if(isLocked('vf')){
+    renderLockedNotice('vf', 'el ejercicio de Verdadero/Falso');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Verdadero o Falso <span class="scorepill" id="vfScorePill">0 / ${VF_BANK.length}</span></h3><div id="vfWrap"></div>`;
+  pageEl.appendChild(card);
+  const wrap = document.getElementById('vfWrap');
+  let score=0, answered=0;
+  VF_BANK.forEach((item,qi)=>{
+    const qcard = document.createElement('div');
+    qcard.className='qcard';
+    qcard.innerHTML = `<div class="qtext">${qi+1}. ${item.s}</div><div class="opts"></div><div class="justif"></div>`;
+    const optsDiv = qcard.querySelector('.opts');
+    [["Verdadero",true],["Falso",false]].forEach(([label,val])=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML = `<span class="letter">${val?'V':'F'}</span><span>${label}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(qcard.classList.contains('answered')) return;
+        qcard.classList.add('answered');
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = val===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect){
+          const correctOpt = [...optsDiv.querySelectorAll('.opt')].find((o,i)=> (i===0)===item.correct);
+          if(correctOpt) correctOpt.classList.add('reveal-correct');
+        }
+        qcard.classList.add(isCorrect?'correct':'incorrect');
+        const j = qcard.querySelector('.justif');
+        j.classList.add('show', isCorrect?'ok':'bad');
+        j.textContent = (isCorrect?'✓ ':'✕ ') + item.just;
+        if(isCorrect) score++;
+        answered++;
+        document.getElementById('vfScorePill').textContent = score+' / '+VF_BANK.length;
+        if(answered===VF_BANK.length) saveProgress('vf', score, VF_BANK.length);
+      });
+      optsDiv.appendChild(opt);
+    });
+    wrap.appendChild(qcard);
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 4: ASOCIE
+   ============================================================ */
+const MATCH_DATA = {
+  terms:["Licitación mayor","Licitación menor","Licitación reducida","Urgencia","Contratación directa"],
+  defs:[
+    "Necesidad inmediata y comprobada que exige actuar sin agotar los plazos ordinarios",
+    "Procedimiento aplicable a los montos más altos, según el artículo 36 de la Ley 9986",
+    "Excepción taxativa que solo aplica en los casos que la propia ley enumera",
+    "Procedimiento aplicable a montos intermedios",
+    "Procedimiento aplicable a los montos más bajos"
+  ],
+  correct:[1,3,4,0,2]
+};
+
+function renderMatching(){
+  if(isLocked('tipos')){
+    renderLockedNotice('tipos', 'el asocie');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const letters=['A','B','C','D','E'];
+  let rows='';
+  MATCH_DATA.terms.forEach((t,i)=>{
+    rows += `<tr class="match-row" data-i="${i}"><td>${i+1}. ${t}</td><td><select data-i="${i}"><option value="">— Seleccione —</option>${MATCH_DATA.defs.map((d,j)=>`<option value="${j}">${letters[j]}</option>`).join('')}</select></td></tr>`;
+  });
+  card.innerHTML = `<h3>Asocie — relacione ambas columnas <span class="scorepill" id="mtScorePill">0 / 5</span></h3>
+    <table class="match-table"><tbody>${rows}</tbody></table>
+    <div class="bank"><b>Columna B</b><br>${MATCH_DATA.defs.map((d,j)=>`${letters[j]}. ${d}`).join('<br>')}</div>
+    <button class="btn" id="mtCheckBtn" style="margin-top:10px;">Comprobar</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('mtCheckBtn').addEventListener('click', function(){
+    if(this.disabled) return;
+    const selects = document.querySelectorAll('.match-table select');
+    let correct=0, allAnswered=true;
+    selects.forEach(sel=>{
+      const i = parseInt(sel.dataset.i,10);
+      if(sel.value===""){ allAnswered=false; return; }
+      const row = sel.closest('.match-row');
+      if(parseInt(sel.value,10)===MATCH_DATA.correct[i]){ row.classList.add('ok'); correct++; }
+      else row.classList.add('bad');
+    });
+    if(!allAnswered){ alert('Completá las 5 relaciones antes de comprobar.'); return; }
+    selects.forEach(s=>s.disabled=true);
+    this.disabled=true;
+    document.getElementById('mtScorePill').textContent = correct+' / 5';
+    saveProgress('tipos', correct, 5);
+  });
+}
+
+/* ============================================================
+   MÓDULO: TRABAJO EN CLASE — El aula como Proveeduría
+   (4 casos reales, adaptados de la actividad de aula)
+   ============================================================ */
+const CASOS_TRABAJO = [
+  { id:"caso1", tag:"Caso 1", inst:"Colegio Técnico Profesional (MEP), Alajuela",
+    text:"Compra trimestral de resmas de papel, tóner para impresoras y útiles de oficina para la administración del centro educativo. Es una compra recurrente y de bajo monto; el colegio necesita reponer existencias antes de que inicie el periodo de exámenes.",
+    monto:"₡4.500.000",
+    opts:["Licitación mayor","Licitación menor","Licitación reducida"], correct:2,
+    just:"Está muy por debajo del umbral inferior del artículo 36 de la Ley 9986 — le corresponde licitación reducida." },
+  { id:"caso2", tag:"Caso 2", inst:"Liceo académico (MEP), Heredia",
+    text:"Compra de 40 computadoras portátiles, mobiliario y licencias de software para un nuevo laboratorio de cómputo. El proyecto está presupuestado para el próximo curso lectivo; no hay urgencia, pero el monto es considerablemente mayor que una compra de suministros.",
+    monto:"₡85.000.000",
+    opts:["Licitación menor","Licitación reducida","Procedimiento de urgencia"], correct:0,
+    just:"Cae entre el umbral inferior y el superior del artículo 36 — le corresponde licitación menor." },
+  { id:"caso3", tag:"Caso 3", inst:"Caja Costarricense de Seguro Social (CCSS), Cartago",
+    text:"Construcción de un edificio de tres niveles para consulta externa, incluyendo obra civil, electromecánica e instalaciones especiales. Es una obra pública de gran escala, financiada con presupuesto institucional plurianual y sujeta a fiscalización de la Contraloría General de la República.",
+    monto:"₡2.100.000.000",
+    opts:["Licitación reducida","Licitación mayor (obra pública)","Contratación directa"], correct:1,
+    just:"Supera ampliamente el umbral superior; además es obra pública, con umbrales propios más altos — le corresponde licitación mayor." },
+  { id:"caso4", tag:"Caso 4", inst:"Municipalidad, Zona de los Santos",
+    text:"Reparación estructural de un puente colapsado que es la única vía de acceso a dos comunidades, tras un temporal. Las comunidades quedaron incomunicadas; existe riesgo comprobado para la salud y seguridad de las personas si la reparación no inicia de inmediato.",
+    monto:"₡45.000.000",
+    opts:["Licitación reducida (por el monto)","Procedimiento especial de urgencia","Remate"], correct:1,
+    just:"Aquí el monto no decide el procedimiento: el riesgo comprobado a la seguridad de las comunidades activa la urgencia, una vía aparte que no depende del monto." },
+];
+
+function renderTrabajo(){
+  if(isLocked('trabajo')){
+    const info = document.createElement('div');
+    info.className = 'content-card';
+    info.innerHTML = `<h2>Trabajo en clase — El aula como Proveeduría</h2>`;
+    pageEl.appendChild(info);
+    renderLockedNotice('trabajo', 'el trabajo en clase');
+    return;
+  }
+
+  const info = document.createElement('div');
+  info.className = 'content-card';
+  info.innerHTML = `<h2>Trabajo en clase — El aula como Proveeduría</h2>
+    <p>Vas a actuar como <strong>Comisión Compradora</strong>: para cada caso real, determiná qué procedimiento de contratación corresponde según el monto y el contexto — no según una etiqueta — y justificá tu decisión en un par de líneas, como lo haría una proveeduría institucional.</p>`;
+  if(!sheetsReady()){
+    info.innerHTML += `<p style="color:var(--coral);font-size:12px;">⚠️ Falta configurar la conexión a la hoja de datos. Avisale a tu docente.</p>`;
+  }
+  pageEl.appendChild(info);
+
+  let correctCount = 0, answeredCount = 0;
+
+  CASOS_TRABAJO.forEach(caso=>{
+    const card = document.createElement('div');
+    card.className = 'caso-card';
+    const letters = ['A','B','C'];
+    card.innerHTML = `
+      <div class="caso-tag">${caso.tag}</div>
+      <div class="caso-inst">${escapeHtml(caso.inst)}</div>
+      <p class="enunciado">${caso.text}</p>
+      <div class="caso-monto">Monto estimado: ${caso.monto}</div>
+      <div class="caso-opts"></div>
+      <div class="justif"></div>
+      <textarea class="caso-input" id="just-${caso.id}" placeholder="Justificá brevemente tu respuesta (2-3 líneas)..."></textarea>
+      <button class="btn" data-caso="${caso.id}" style="margin-top:8px;">Publicar respuesta</button>
+    `;
+    const optsDiv = card.querySelector('.caso-opts');
+    caso.opts.forEach((optText, oi)=>{
+      const opt = document.createElement('div');
+      opt.className = 'opt';
+      opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(card.dataset.answered) return;
+        card.dataset.chosen = oi;
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.remove('chosen-correct','chosen-incorrect'));
+        opt.style.outline = '2px solid var(--navy)';
+        optsDiv.querySelectorAll('.opt').forEach(o=>{ if(o!==opt) o.style.outline=''; });
+      });
+      optsDiv.appendChild(opt);
+    });
+    pageEl.appendChild(card);
+
+    card.querySelector('[data-caso]').addEventListener('click', async ()=>{
+      if(card.dataset.answered) return;
+      if(card.dataset.chosen === undefined){ alert('Elegí un procedimiento antes de publicar.'); return; }
+      if(!studentName){ alert('Escribí tu nombre arriba antes de participar.'); return; }
+      const oi = Number(card.dataset.chosen);
+      const isCorrect = oi === caso.correct;
+      const textoJust = document.getElementById('just-'+caso.id).value.trim();
+
+      card.dataset.answered = '1';
+      optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+      optsDiv.querySelectorAll('.opt')[oi].classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+      if(!isCorrect) optsDiv.querySelectorAll('.opt')[caso.correct].classList.add('reveal-correct');
+      card.classList.add(isCorrect?'correct':'incorrect');
+      const j = card.querySelector('.justif');
+      j.classList.add('show', isCorrect?'ok':'bad');
+      j.textContent = (isCorrect?'✓ ':'✕ ') + caso.just;
+
+      if(isCorrect) correctCount++;
+      answeredCount++;
+
+      try{
+        const nowIso = new Date().toISOString();
+        await sheetPost('Casos', [nowIso, caso.id, studentName, (isCorrect?'[CORRECTO] ':'[INCORRECTO] ') + (textoJust||'(sin justificación escrita)')]);
+      }catch(e){}
+
+      if(answeredCount === CASOS_TRABAJO.length){
+        saveProgress('trabajo', correctCount, CASOS_TRABAJO.length);
+      }
+    });
+  });
+}
+
+/* ============================================================
+   MÓDULO: CASOS Y DEBATE (comentarios abiertos, compartido)
+   ============================================================ */
+const DEBATE_TEMAS = [
+  { id:"debate1", tag:"SICOP y transparencia", text:"¿Por qué creés que la ley exige que todo procedimiento se publique electrónicamente en el SICOP, en vez de tramitarse en papel dentro de cada institución?" },
+  { id:"debate2", tag:"Principios en riesgo", text:"Un funcionario redacta un cartel copiando exactamente las especificaciones técnicas de un único fabricante conocido, sin darse cuenta de que eso limita a otros oferentes. ¿Qué principio está en riesgo y cómo lo corregirías?" },
+  { id:"debate3", tag:"Contratación directa", text:"¿Creés que la contratación directa debería ampliarse a más casos de los que ya permite la ley, o mantenerse estrictamente limitada? Justificá tu postura." },
+];
+
+function renderCasos(){
+  if(isLocked('casos')){
+    renderLockedNotice('casos', 'Casos y Debate');
+    return;
+  }
+  const info = document.createElement('div');
+  info.className = 'content-card';
+  info.innerHTML = `<h2>Casos y Debate</h2><p>Este módulo se comparte con toda la clase. Elegí al menos <strong>un tema</strong>, escribí tu opinión, y luego respondé (con respeto) al aporte de <strong>al menos un compañero</strong>. Necesitás escribir tu nombre arriba para participar.</p>`;
+  if(!sheetsReady()){
+    info.innerHTML += `<p style="color:var(--coral);font-size:12px;">⚠️ Falta configurar la conexión a la hoja de datos. Avisale a tu docente.</p>`;
+  }
+  pageEl.appendChild(info);
+
+  DEBATE_TEMAS.forEach(tema=>{
+    const card = document.createElement('div');
+    card.className = 'caso-card';
+    card.innerHTML = `
+      <div class="caso-tag">${tema.tag}</div>
+      <p class="enunciado">${tema.text}</p>
+      <div class="caso-msgs" id="msgs-${tema.id}"><div style="font-size:11px;color:var(--muted);">Cargando respuestas...</div></div>
+      <textarea class="caso-input" id="input-${tema.id}" placeholder="Escribí tu opinión o tu comentario a un compañero..."></textarea>
+      <button class="btn" data-tema="${tema.id}" style="margin-top:8px;">Publicar</button>
+    `;
+    pageEl.appendChild(card);
+  });
+
+  document.querySelectorAll('[data-tema]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const temaId = btn.dataset.tema;
+      if(!studentName){ alert('Escribí tu nombre arriba antes de participar.'); return; }
+      const text = document.getElementById('input-'+temaId).value.trim();
+      if(!text) return;
+      try{
+        const nowIso = new Date().toISOString();
+        await sheetPost('Casos', [nowIso, temaId, studentName, text]);
+        document.getElementById('input-'+temaId).value='';
+        await loadDebateMessages(temaId);
+        checkDebateParticipation();
+      }catch(e){
+        alert('No se pudo publicar. Revisá la conexión a la hoja de datos.');
+      }
+    });
+  });
+
+  DEBATE_TEMAS.forEach(t=>loadDebateMessages(t.id));
+}
+
+async function loadDebateMessages(temaId){
+  const wrap = document.getElementById('msgs-'+temaId);
+  if(!wrap) return;
+  if(!sheetsReady()){
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--coral);">Hoja de datos no configurada todavía.</div>';
+    return;
+  }
+  try{
+    const rows = await sheetGet('Casos');
+    const items = rows
+      .filter(r => r.CasoId === temaId)
+      .map(r => ({ name: r.Nombre, text: r.Texto, ts: new Date(r.Timestamp).getTime() }));
+    if(items.length===0){ wrap.innerHTML = '<div style="font-size:11px;color:var(--muted);">Nadie ha respondido todavía.</div>'; return; }
+    items.sort((a,b)=>a.ts-b.ts);
+    wrap.innerHTML = items.map(m=>`<div class="caso-msg"><div class="mhead"><span class="mname">${escapeHtml(m.name)}</span><span>${new Date(m.ts).toLocaleTimeString('es-CR',{hour:'2-digit',minute:'2-digit'})}</span></div>${escapeHtml(m.text)}</div>`).join('');
+  }catch(e){
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--coral);">No se pudo cargar (revisá la conexión a la hoja de datos).</div>';
+  }
+}
+
+async function checkDebateParticipation(){
+  if(!studentName || !sheetsReady()) return;
+  let ownCount = 0;
+  try{
+    const rows = await sheetGet('Casos');
+    DEBATE_TEMAS.forEach(t=>{
+      ownCount += rows.filter(r => r.CasoId === t.id && r.Nombre === studentName).length;
+    });
+  }catch(e){}
+  if(ownCount >= 2 && !isStepDone('casos')){
+    saveProgress('casos', 1, 1);
+    renderPage();
+  }
+}
+
+/* ============================================================
+   MÓDULO: LLUVIA DE IDEAS (Miro, compartido con toda la clase)
+   ============================================================ */
+const MIRO_BOARD_URL = "https://miro.com/app/board/uXjVHtdmGSI=/";
+
+function renderMiro(){
+  if(isLocked('miro')){
+    renderLockedNotice('miro', 'la Lluvia de Ideas');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'content-card';
+  card.innerHTML = `
+    <h2>🧠 Lluvia de Ideas — Tablero Colaborativo</h2>
+    <p><strong>Pregunta:</strong> si fueras jefe de proveeduría de tu colegio y tuvieras que redactar un cartel de licitación, ¿qué principio de la Ley 9986 cuidarías más para que nadie pueda objetarlo — igualdad, publicidad, o planificación — y por qué?</p>
+    <p>Toda la clase comparte el mismo tablero (busca el recuadro que dice "Contratación Administrativa"). Agregá tu nota adhesiva con tu nombre, y comentá al menos dos respuestas de tus compañeros.</p>
+  `;
+  pageEl.appendChild(card);
+
+  const btnCard = document.createElement('div');
+  btnCard.className = 'actcard';
+  btnCard.style.textAlign = 'center';
+  btnCard.innerHTML = `
+    <h3 style="text-align:left;">Abrir el tablero de Miro</h3>
+    <a class="btn" href="${MIRO_BOARD_URL}" target="_blank" style="text-decoration:none;display:inline-block;">🧠 Abrir tablero y agregar mi nota</a>
+    <p style="font-size:11px;color:var(--muted);margin-top:12px;">Se abre en una pestaña nueva. Cuando ya hayas agregado tu nota, regresá aquí y confirmá abajo.</p>
+    <button class="btn" id="confirmMiroBtn" style="margin-top:10px;background:var(--teal);">✅ Ya agregué mi nota en Miro, continuar</button>
+  `;
+  pageEl.appendChild(btnCard);
+
+  document.getElementById('confirmMiroBtn').addEventListener('click', ()=>{
+    saveProgress('miro', 1, 1);
+    renderPage();
+  });
+}
+
+/* ============================================================
+   CERTIFICADO
+   ============================================================ */
+const COMPETENCIAS = [
+  { ra:"RAa", unidad:"Gestión pública", modules:["concepto"],
+    text:"Reconocer los principios rectores y la evolución de la normativa de contratación pública (Ley 9986)." },
+  { ra:"RAb", unidad:"Gestión pública", modules:["procedimientos","principios","vf","tipos"],
+    text:"Clasificar los procedimientos de contratación pública según su naturaleza y los umbrales de la Ley 9986." },
+  { ra:"RAc", unidad:"Gestión pública", modules:["trabajo"],
+    text:"Aplicar los criterios de la Ley 9986 para determinar el procedimiento correcto en casos reales de compra pública." },
+];
+
+function competencyScore(comp){
+  let sum=0, total=0, anyData=false;
+  comp.modules.forEach(mid=>{
+    const p = localProgress[mid];
+    if(p){ sum+=p.score; total+=p.total; anyData=true; }
+  });
+  return { sum, total, pct: anyData && total>0 ? Math.round((sum/total)*100) : null };
+}
+
+function competencyLevel(pctVal){
+  if(pctVal===null) return { label:"Sin evidencia", cls:"status-pending" };
+  if(pctVal<=50) return { label:"No logrado", cls:"status-bad" };
+  if(pctVal<=80) return { label:"En proceso", cls:"status-mid" };
+  return { label:"Logrado", cls:"status-ok" };
+}
+
+function renderCertificado(){
+  const card = document.createElement('div');
+  card.className = 'actcard';
+
+  let rows = '';
+  let allLogrado = true;
+  COMPETENCIAS.forEach(comp=>{
+    const s = competencyScore(comp);
+    const lvl = competencyLevel(s.pct);
+    if(lvl.label !== "Logrado") allLogrado = false;
+    rows += `<tr>
+      <td><span class="ra-tag">${comp.ra}</span><span class="competency-desc">${comp.text}</span></td>
+      <td class="center">${s.total>0 ? s.sum+' / '+s.total : '—'}</td>
+      <td class="center">${s.pct!==null ? s.pct+'%' : '—'}</td>
+      <td class="center"><span class="${lvl.cls}">${lvl.label}</span></td>
+    </tr>`;
+  });
+  const antologiaOk = localProgress['antologia'] && localProgress['antologia'].score>0;
+  rows += `<tr><td><span class="ra-tag">Lectura</span><span class="competency-desc">Antología del tema (lectura previa obligatoria)</span></td><td class="center">—</td><td class="center">—</td><td class="center">${antologiaOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
+  const casosOk = localProgress['casos'] && localProgress['casos'].score>0;
+  rows += `<tr><td><span class="ra-tag">Participación</span><span class="competency-desc">Módulo compartido de Casos y Debate</span></td><td class="center">—</td><td class="center">—</td><td class="center">${casosOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
+  const miroOk = localProgress['miro'] && localProgress['miro'].score>0;
+  rows += `<tr><td><span class="ra-tag">Colaboración</span><span class="competency-desc">Lluvia de Ideas en Miro</span></td><td class="center">—</td><td class="center">—</td><td class="center">${miroOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
+  const finalOk = allLogrado && antologiaOk && casosOk && miroOk;
+
+  card.innerHTML = `
+    <h3>Evaluación por competencias</h3>
+    <p style="font-size:11px;color:var(--muted);margin:-4px 0 10px;">Escala: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado. Basada en el Resultado de Aprendizaje de la unidad "Gestión pública" (Programa de Estudio DETCE-MEP, Undécimo año).</p>
+    <table class="progress-table">
+      <tr><th>Indicador</th><th>Puntaje</th><th>%</th><th>Nivel</th></tr>
+      ${rows}
+    </table>
+    ${finalOk ? `
+      <div class="certificate show" id="certBlock">
+        <div class="kicker">Contable CR · Undécimo Año</div>
+        <h2>Certificado de Aprobación</h2>
+        <p>Se otorga el presente certificado a</p>
+        <div class="name">${escapeHtml(studentName || '____________________')}</div>
+        <p>por haber alcanzado el nivel <strong>Logrado</strong> en todos los indicadores evaluados sobre <strong>Contratación Administrativa y SICOP</strong> (principios rectores, procedimientos de contratación pública, verdadero/falso, asocie, y su aplicación en el trabajo en clase "El aula como Proveeduría"), con base en la Ley General de Contratación Pública N.° 9986, incluyendo la participación en Casos y Debate y en la Lluvia de Ideas colaborativa.</p>
+        <div class="seal">MEP<br>11°</div>
+        <p style="margin-top:14px;font-size:10.5px;">Contabilidad · Gestión Empresarial para Contadores · Prof. Gerardo Gonzalez Gonzalez</p>
+      </div>
+      <button class="btn" style="margin-top:12px;" onclick="window.print()">Imprimir / Guardar como PDF</button>
+    ` : `<div class="locked-msg">🔒 El certificado se desbloquea cuando los tres indicadores alcanzan el nivel <strong>Logrado</strong> (81% o más) y se registró la lectura de la Antología.</div>`}
+  `;
+  pageEl.appendChild(card);
+}
+
+/* ============================================================
+   PANEL DOCENTE (protegido con PIN)
+   ============================================================ */
+document.getElementById('teacherBtnOpen').addEventListener('click', ()=>{
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinError').style.display = 'none';
+  document.getElementById('pinModalBg').classList.add('show');
+  document.getElementById('pinInput').focus();
+});
+document.getElementById('pinModalClose').addEventListener('click', ()=>{
+  document.getElementById('pinModalBg').classList.remove('show');
+});
+document.getElementById('pinSubmit').addEventListener('click', checkPin);
+document.getElementById('pinInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkPin(); });
+
+async function checkPin(){
+  const val = document.getElementById('pinInput').value.trim();
+  if(val !== TEACHER_PIN){
+    document.getElementById('pinError').style.display = 'block';
+    return;
+  }
+  document.getElementById('pinModalBg').classList.remove('show');
+  await openTeacherPanel();
+}
+
+async function openTeacherPanel(){
+  document.getElementById('teacherModalBg').classList.add('show');
+  const content = document.getElementById('teacherContent');
+  content.innerHTML = 'Cargando...';
+  if(!sheetsReady()){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">⚠️ Falta configurar la conexión a la hoja de datos (SHEET_API_URL) en este archivo.</p>';
+    return;
+  }
+  try{
+    const progRows = await sheetGet('Progreso');
+    const byStudent = {};
+    progRows.forEach(r=>{
+      const name = r.Estudiante, mod = r.Modulo;
+      if(!name || !mod) return;
+      byStudent[name] = byStudent[name] || {};
+      byStudent[name][mod] = { score:Number(r.Score), total:Number(r.Total) };
+    });
+
+    const names = Object.keys(byStudent).sort();
+    if(names.length===0){ content.innerHTML = '<p style="font-size:12.5px;color:var(--muted);">Todavía no hay estudiantes con progreso guardado.</p>'; return; }
+    const levelAbbrev = (pctVal)=>{
+      if(pctVal===null) return '—';
+      const lvl = competencyLevel(pctVal);
+      const short = {"Logrado":"✓ Logrado","En proceso":"◐ En proceso","No logrado":"✕ No logrado"}[lvl.label] || lvl.label;
+      return `<span class="${lvl.cls}">${short}</span>`;
+    };
+    let html = '<p style="font-size:10.5px;color:var(--muted);margin-top:0;">Nivel por indicador: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado.</p>';
+    html += '<table class="progress-table"><tr><th>Estudiante</th><th>Antología</th><th>RAa</th><th>RAb</th><th>RAc Trabajo</th><th>Casos</th><th>Miro</th><th>Salidas</th></tr>';
+    names.forEach(n=>{
+      const d = byStudent[n];
+      const compPct = (mods)=>{
+        let sum=0,total=0,any=false;
+        mods.forEach(mid=>{ const x=d[mid]; if(x){ sum+=x.score; total+=x.total; any=true; } });
+        return any && total>0 ? Math.round((sum/total)*100) : null;
+      };
+      const okCell = (obj)=> obj ? (obj.score>0 ? '<span class="status-ok">✓ Logrado</span>' : '<span class="status-pending">Sin evidencia</span>') : '—';
+      const salidas = d.incidente_salida_pantalla ? d.incidente_salida_pantalla.score : 0;
+      const salidasCell = salidas > 0 ? `<span class="status-bad">⚠️ ${salidas}</span>` : '<span class="status-pending">0</span>';
+      html += `<tr>
+        <td>${escapeHtml(n)}</td>
+        <td class="center">${okCell(d.antologia)}</td>
+        <td class="center">${levelAbbrev(compPct(['concepto']))}</td>
+        <td class="center">${levelAbbrev(compPct(['procedimientos','principios','vf','tipos']))}</td>
+        <td class="center">${levelAbbrev(compPct(['trabajo']))}</td>
+        <td class="center">${okCell(d.casos)}</td>
+        <td class="center">${okCell(d.miro)}</td>
+        <td class="center">${salidasCell}</td>
+      </tr>`;
+    });
+    html += '</table>';
+    content.innerHTML = html;
+  }catch(e){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">No se pudo cargar el panel (revisá la conexión a la hoja de datos).</p>';
+  }
+}
+document.getElementById('teacherModalClose').addEventListener('click', ()=>{
+  document.getElementById('teacherModalBg').classList.remove('show');
+});
+
+/* ============================================================
+   NOMBRE DEL ESTUDIANTE
+   ============================================================ */
+document.getElementById('studentName').addEventListener('input', function(){
+  studentName = this.value.trim();
+  document.getElementById('nameStatus').textContent = studentName ? '● identificado' : '';
+});
+document.getElementById('studentName').addEventListener('change', function(){
+  if(studentName) loadExistingProgress();
+});
+
+/* ============================================================
+   PRELLENADO DESDE UN ENLACE (?nombre=...)
+   ============================================================ */
+(function prefillFromLink(){
+  const params = new URLSearchParams(window.location.search);
+  const nombreParam = params.get('nombre');
+  if(nombreParam){
+    studentName = nombreParam;
+    document.getElementById('studentName').value = nombreParam;
+    document.getElementById('nameStatus').textContent = '● identificado';
+    loadExistingProgress();
+  }
+})();
+
+/* ============================================================
+   MODO ENFOQUE: pantalla completa + detección de salidas
+   ============================================================ */
+let salidaCount = 0;
+document.getElementById('focusModeBtn').addEventListener('click', ()=>{
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  if(req) req.call(el).catch(()=>{});
+});
+
+function showWarnBanner(msg){
+  let banner = document.getElementById('warnBanner');
+  if(!banner){
+    banner = document.createElement('div');
+    banner.id = 'warnBanner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:200;background:#EF6A5B;color:#fff;text-align:center;padding:8px 12px;font-size:12.5px;font-family:monospace;';
+    document.body.prepend(banner);
+  }
+  banner.textContent = msg;
+  banner.style.display = 'block';
+  clearTimeout(window._warnTimeout);
+  window._warnTimeout = setTimeout(()=>{ banner.style.display='none'; }, 6000);
+}
+
+function logSalida(){
+  salidaCount++;
+  showWarnBanner('⚠️ Se detectó que saliste de esta pestaña o ventana (van: ' + salidaCount + ').');
+  if(studentName && sheetsReady()){
+    sheetPost('Progreso', [new Date().toISOString(), studentName, 'incidente_salida_pantalla', salidaCount, salidaCount]).catch(()=>{});
+  }
+}
+
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) logSalida(); });
+
+window.addEventListener('beforeunload', function(e){
+  e.preventDefault();
+  e.returnValue = '';
+});
+
+document.addEventListener('contextmenu', e=> e.preventDefault());
+document.addEventListener('copy', e=> e.preventDefault());
+
+/* ============================================================
+   INICIO
+   ============================================================ */
+renderTabs();
+renderPage();
+</script>
+</body>
+</html>
