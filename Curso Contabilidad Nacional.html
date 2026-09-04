@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso · Contabilidad Nacional</title>
+<style>
+:root{
+  --navy:#0E1B3D; --navy-deep:#0A1230;
+  --gold:#B8863C; --gold-light:#F4DD7A;
+  --teal:#2FC2AD; --coral:#EF6A5B;
+  --ink:#20242B; --paper:#F3F5F4; --muted:#5B6470; --line:#D8DCDD;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);padding-bottom:60px;}
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;padding:12px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.topbar h1{font-size:15.5px;margin:0 0 2px;}
+.topbar p{margin:0;font-size:10px;color:rgba(255,255,255,.65);font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;}
+.teacherBtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:10.5px;padding:5px 10px;border-radius:14px;cursor:pointer;}
+
+.namebar{background:#fff;border-bottom:1px solid var(--line);padding:9px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.namebar input{padding:7px 9px;border:1px solid var(--line);border-radius:6px;font-size:13px;flex:1;min-width:160px;}
+.namebar label{font-size:11px;color:var(--muted);font-family:var(--mono);}
+
+.tabs{display:flex;gap:4px;overflow-x:auto;background:#fff;border-bottom:1px solid var(--line);padding:8px 10px;}
+.tab{flex:0 0 auto;padding:7px 12px;border-radius:16px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid var(--line);color:var(--muted);white-space:nowrap;background:#f7f8f6;}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab.done::after{content:" ✓";color:var(--teal);}
+.tab.cert{border-color:var(--gold);}
+.tab.cert.active{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);}
+.tab.tab-locked{opacity:.45;}
+.tab.tab-locked::before{content:"🔒 ";}
+
+.info-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;border-radius:12px;padding:22px 20px;margin-bottom:16px;text-align:center;}
+.info-hero .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:2px;color:var(--gold-light);text-transform:uppercase;}
+.info-hero h2{margin:8px 0 4px;font-size:19px;}
+.info-hero p{margin:0;font-size:12px;color:rgba(255,255,255,.75);}
+.info-block{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden;}
+.info-block::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--block-color,var(--gold));}
+.info-block .ib-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.info-block .ib-icon{font-size:22px;flex-shrink:0;}
+.info-block h3{margin:0;font-size:14.5px;color:var(--navy);}
+.info-block p{font-size:12.5px;line-height:1.6;margin:0 0 8px;color:var(--ink);}
+.info-block ul{margin:6px 0 0;padding-left:18px;font-size:12px;line-height:1.7;color:var(--ink);}
+.info-block .ib-tag{display:inline-block;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.5px;background:#f7f8f6;color:var(--muted);padding:2px 8px;border-radius:10px;margin-top:6px;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;}
+@media (max-width:480px){.info-grid{grid-template-columns:1fr;}}
+.info-mini{background:#f7f8f6;border:1px solid var(--line);border-radius:8px;padding:10px 12px;}
+.info-mini b{display:block;font-size:12px;color:var(--navy);margin-bottom:3px;}
+.info-mini span{font-size:11px;color:var(--muted);line-height:1.4;}
+.read-confirm{text-align:center;margin:20px 0 6px;}
+.read-confirm .btn{padding:12px 26px;font-size:13.5px;}
+.read-confirm p{font-size:11.5px;color:var(--muted);margin-top:8px;}
+
+.page{max-width:760px;margin:0 auto;padding:16px;}
+.content-card{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:13.5px;line-height:1.55;color:var(--ink);}
+.content-card h2{font-size:16px;margin:0 0 8px;color:var(--navy);}
+
+.actcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;}
+.actcard h3{font-size:13.5px;margin:0 0 10px;color:var(--navy);}
+.btn{display:inline-block;padding:8px 16px;background:var(--navy);color:#fff;border:none;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.btn:hover{background:var(--navy-deep);}
+.btn:disabled{opacity:.45;cursor:default;}
+.scorepill{display:inline-block;font-family:var(--mono);font-size:11px;background:var(--teal);color:#fff;padding:3px 10px;border-radius:12px;margin-left:8px;}
+
+.qcard{border:1px solid var(--line);border-radius:8px;padding:12px 13px;margin-bottom:10px;}
+.qcard.correct{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset;}
+.qcard.incorrect{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral) inset;}
+.qtext{font-size:13px;font-weight:600;margin-bottom:8px;}
+.opt{display:flex;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;margin-top:6px;cursor:pointer;font-size:12.5px;}
+.opt:hover{background:#f7f8f6;}
+.opt .letter{font-family:var(--mono);font-weight:700;color:var(--navy);}
+.opt.locked{cursor:default;}
+.opt.chosen-correct{background:#e7f1ec;border-color:var(--teal);}
+.opt.chosen-incorrect{background:#f7e9e8;border-color:var(--coral);}
+.opt.reveal-correct{background:#e7f1ec;border-color:var(--teal);}
+.justif{margin-top:8px;padding:8px 10px;border-radius:6px;font-size:11.5px;display:none;}
+.justif.show{display:block;}
+.justif.ok{background:#e7f1ec;color:#1e4a37;}
+.justif.bad{background:#f7e9e8;color:#6f2626;}
+
+.match-table{width:100%;border-collapse:collapse;margin-top:6px;}
+.match-table td{padding:6px 4px;font-size:12.5px;vertical-align:middle;}
+.match-table select{width:100%;font-size:12.5px;padding:6px;border-radius:5px;border:1px solid var(--line);}
+.match-row.ok select{border-color:var(--teal);background:#e7f1ec;}
+.match-row.bad select{border-color:var(--coral);background:#f7e9e8;}
+.bank{font-size:11px;color:var(--muted);background:#f7f8f6;border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-top:8px;}
+
+.ws-wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center;}
+.ws-grid{display:grid;gap:1px;background:#dfe3e6;border:2px solid var(--navy);border-radius:6px;padding:3px;touch-action:none;}
+.ws-cell{width:19px;height:19px;display:flex;align-items:center;justify-content:center;background:#fff;font-family:var(--mono);font-weight:700;font-size:9.5px;border-radius:2px;cursor:pointer;-webkit-user-select:none;user-select:none;}
+.ws-cell.selected{background:var(--gold-light);}
+.ws-cell.found{background:var(--teal);color:#fff;}
+.ws-list{flex:0 0 170px;}
+.ws-list ul{list-style:none;margin:0;padding:0;}
+.ws-list li{font-family:var(--mono);font-size:11px;padding:4px 7px;border-radius:5px;margin-bottom:3px;background:#f7f8f6;border:1px solid var(--line);}
+.ws-list li.found{background:var(--teal);color:#fff;border-color:var(--teal);text-decoration:line-through;}
+
+.cw-wrap{display:flex;gap:18px;flex-wrap:wrap;}
+.cw-grid{display:grid;gap:1px;background:#1c1f24;border:2px solid var(--navy);border-radius:4px;padding:2px;}
+.cw-cell{width:22px;height:22px;position:relative;background:#fff;}
+.cw-cell.blocked{background:#1c1f24;}
+.cw-cell input{width:100%;height:100%;border:none;text-align:center;font-family:var(--mono);font-weight:700;font-size:11.5px;text-transform:uppercase;background:transparent;padding:0;}
+.cw-cell input.ok{background:#e7f1ec;color:#1e4a37;}
+.cw-cell input.bad{background:#f7e9e8;color:#6f2626;}
+.cw-num{position:absolute;top:0px;left:1px;font-size:6.5px;color:var(--gold);font-family:var(--mono);}
+.cw-clues{flex:1;min-width:200px;font-size:11.5px;}
+.cw-clues b{color:var(--navy);display:block;margin:8px 0 3px;font-size:11px;}
+.cw-clues li{margin-bottom:4px;}
+
+.caso-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:16px;}
+.caso-card.correct{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset;}
+.caso-card.incorrect{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral) inset;}
+.caso-card .caso-tag{font-family:var(--mono);font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;}
+.caso-card p.enunciado{font-size:13px;margin:8px 0 4px;color:var(--ink);}
+textarea.caso-input{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-family:var(--sans);font-size:12.5px;min-height:60px;margin-top:10px;}
+.caso-opts{margin-top:10px;}
+
+.progress-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+.progress-table th,.progress-table td{border:1px solid var(--line);padding:7px 9px;font-size:12px;text-align:left;}
+.progress-table th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;}
+.progress-table td.center{text-align:center;}
+.status-ok{color:var(--teal);font-weight:700;}
+.status-mid{color:#c98a2c;font-weight:700;}
+.status-bad{color:var(--coral);font-weight:700;}
+.status-pending{color:var(--muted);}
+.competency-desc{font-size:10.5px;color:var(--muted);display:block;margin-top:2px;}
+.ra-tag{font-family:var(--mono);font-size:9.5px;color:var(--gold);font-weight:700;}
+
+.certificate{display:none;border:8px double var(--gold);border-radius:10px;padding:34px 24px;text-align:center;background:#fffdf7;margin-top:10px;}
+.certificate.show{display:block;}
+.certificate .kicker{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;}
+.certificate h2{font-size:22px;color:var(--navy);margin:10px 0 4px;font-family:Georgia,serif;}
+.certificate .name{font-size:26px;font-weight:700;color:var(--navy-deep);margin:14px 0;font-family:Georgia,serif;border-bottom:2px solid var(--gold);display:inline-block;padding-bottom:6px;}
+.certificate p{font-size:12.5px;color:var(--muted);max-width:440px;margin:6px auto;}
+.certificate .seal{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d488,#a97c29);margin:14px auto 0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#3a2a06;font-weight:700;}
+
+.locked-msg{text-align:center;color:var(--muted);font-size:12.5px;padding:30px 20px;background:#fff;border:1px dashed var(--line);border-radius:8px;}
+
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,18,48,.6);z-index:50;align-items:flex-start;justify-content:center;padding:30px 14px;overflow-y:auto;}
+.modal-bg.show{display:flex;}
+.modal{background:#fff;border-radius:10px;max-width:700px;width:100%;padding:20px;}
+.modal h3{margin:0 0 12px;color:var(--navy);}
+.modal .close{float:right;cursor:pointer;font-size:18px;color:var(--muted);}
+.pin-row{display:flex;gap:8px;margin-top:10px;}
+.pin-row input{flex:1;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-size:14px;font-family:var(--mono);letter-spacing:3px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div>
+      <h1>📊 Curso: Contabilidad Nacional</h1>
+      <p>Contabilidad · Undécimo año · Gestión pública</p>
+    </div>
+    <button class="teacherBtn" id="teacherBtnOpen">👩‍🏫 Panel docente</button>
+    <button class="teacherBtn" id="focusModeBtn" style="margin-left:6px;">🔒 Modo enfoque</button>
+  </div>
+</div>
+
+<div class="namebar">
+  <label>Tu nombre:</label>
+  <input type="text" id="studentName" placeholder="Nombre completo" maxlength="45">
+  <span id="nameStatus" style="font-size:11px;color:var(--muted);font-family:var(--mono);"></span>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="page" id="page"></div>
+
+<div class="modal-bg" id="pinModalBg">
+  <div class="modal">
+    <span class="close" id="pinModalClose">✕</span>
+    <h3>Panel docente</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin:0;">Ingrese el PIN para ver el progreso del grupo.</p>
+    <div class="pin-row">
+      <input type="password" id="pinInput" maxlength="6" placeholder="PIN">
+      <button class="btn" id="pinSubmit">Entrar</button>
+    </div>
+    <div id="pinError" style="color:var(--coral);font-size:11.5px;margin-top:6px;display:none;">PIN incorrecto.</div>
+  </div>
+</div>
+
+<div class="modal-bg" id="teacherModalBg">
+  <div class="modal">
+    <span class="close" id="teacherModalClose">✕</span>
+    <h3>Panel docente — progreso del curso</h3>
+    <div id="teacherContent">Cargando...</div>
+  </div>
+</div>
+
+<script>
+const TEACHER_PIN = "9986";
+
+/* ============================================================
+   CONFIGURACIÓN DE MÓDULOS
+   ============================================================ */
+const MODULES = [
+  { id:"antologia", label:"📘 Antología", title:"Antología — Contabilidad Nacional", activityType:"antologia" },
+  { id:"concepto", label:"🔤 Sopa de letras", title:"Vocabulario de la Contabilidad Nacional",
+    content:"La Dirección General de Contabilidad Nacional (DGCN) es el órgano del Ministerio de Hacienda que emite, aplica y fiscaliza los principios y normas contables que deben seguir las instituciones del sector público costarricense.",
+    activityType:"wordsearch" },
+  { id:"normativa", label:"🗂️ Crucigrama", title:"Marco Normativo",
+    content:"La adopción de las Normas Internacionales de Contabilidad para el Sector Público (NICSP) en Costa Rica se ha dado mediante una serie de decretos del Ministerio de Hacienda, cada uno con un propósito específico dentro de ese proceso.",
+    activityType:"crossword" },
+  { id:"principios", label:"⚖️ Cuestionario", title:"Objetivos y Funciones",
+    content:"La Contabilidad Nacional busca unificar y estandarizar el registro contable del sector público bajo normas internacionales, dando transparencia y comparabilidad a las finanzas del Estado — y consolidando la información financiera de todas las instituciones públicas.",
+    activityType:"quiz" },
+  { id:"vf", label:"✅ Verdadero/Falso", title:"Verdadero o Falso",
+    content:"Repasemos con afirmaciones que pueden ser ciertas o falsas — prestá atención a los detalles.",
+    activityType:"vf" },
+  { id:"tipos", label:"🔗 Asocie", title:"Asocie — Decretos y su Propósito", activityType:"matching" },
+  { id:"trabajo", label:"📝 Trabajo en clase", title:"Trabajo en clase — ¿Qué norma aplica?", activityType:"trabajo" },
+  { id:"casos", label:"💬 Casos y Debate", title:"Casos y Debate (módulo compartido)", activityType:"casos" },
+  { id:"miro", label:"🧠 Lluvia de Ideas", title:"Lluvia de Ideas — Tablero Colaborativo", activityType:"miro" },
+  { id:"certificado", label:"🏆 Certificado", title:"Certificado", activityType:"certificado" },
+];
+
+const ORDER = ["antologia","concepto","normativa","principios","vf","tipos","trabajo","casos","miro"];
+
+function isStepDone(id){
+  if(id==='antologia') return antologiaLeida;
+  if(id==='casos') return !!(localProgress['casos'] && localProgress['casos'].score>0);
+  if(id==='miro') return !!(localProgress['miro'] && localProgress['miro'].score>0);
+  return !!(localProgress[id] && localProgress[id].total>0);
+}
+
+function currentStepIndex(){
+  for(let i=0;i<ORDER.length;i++){ if(!isStepDone(ORDER[i])) return i; }
+  return ORDER.length;
+}
+
+let activeModule = MODULES[0].id;
+let studentName = "";
+let antologiaLeida = false;
+
+/* ============================================================
+   CONEXIÓN A GOOGLE SHEETS (vía Apps Script Web App)
+   ============================================================ */
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbzMGf_Gpf6UWswFPSqEBMdq-93GxGkrURsT4jtO9Jaz8yT5gyMMtp1btlcDZjRCeuAb/exec";
+
+function sheetsReady(){ return SHEET_API_URL && !SHEET_API_URL.startsWith('REEMPLAZAR'); }
+
+let jsonpCounter = 0;
+function jsonpRequest(url){
+  return new Promise((resolve, reject)=>{
+    const cbName = 'jsonp_cb_' + (jsonpCounter++) + '_' + Date.now();
+    const script = document.createElement('script');
+    let settled = false;
+    const cleanup = ()=>{ delete window[cbName]; if(script.parentNode) script.parentNode.removeChild(script); };
+    window[cbName] = (data)=>{ settled = true; cleanup(); resolve(data); };
+    script.onerror = ()=>{ if(!settled){ cleanup(); reject(new Error('Error de red (JSONP)')); } };
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    document.body.appendChild(script);
+    setTimeout(()=>{ if(!settled){ cleanup(); reject(new Error('Tiempo de espera agotado')); } }, 10000);
+  });
+}
+
+async function sheetGet(sheetName){
+  const data = await jsonpRequest(SHEET_API_URL + '?sheet=' + encodeURIComponent(sheetName));
+  return data.rows || [];
+}
+
+async function sheetPost(sheetName, row){
+  await fetch(SHEET_API_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify({ sheet: sheetName, row })
+  });
+  return { ok:true };
+}
+
+/* ============================================================
+   PROGRESO (en memoria + Google Sheets compartido)
+   ============================================================ */
+const localProgress = {};
+
+async function saveProgress(moduleId, score, total){
+  localProgress[moduleId] = {score, total, ts:Date.now()};
+  renderTabs();
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const nowIso = new Date().toISOString();
+    await sheetPost('Progreso', [nowIso, studentName, moduleId, score, total]);
+  }catch(e){ /* falla silenciosa: el progreso local sigue funcionando */ }
+}
+
+/* ============================================================
+   ANTI-REINTENTO: bloquear actividades ya completadas
+   ============================================================ */
+function isLocked(moduleId){
+  return !!(localProgress[moduleId] && localProgress[moduleId].total > 0);
+}
+
+function renderLockedNotice(moduleId, activityLabel){
+  const p = localProgress[moduleId];
+  const pctVal = p.total>0 ? Math.round((p.score/p.total)*100) : 0;
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>✅ Actividad completada</h3>
+    <p style="font-size:13px;">Ya completaste <strong>${activityLabel}</strong>. Tu resultado fue <strong>${p.score} / ${p.total}</strong> (${pctVal}%).</p>
+    <p style="font-size:11px;color:var(--muted);">Esta actividad ya quedó registrada y no se puede repetir.</p>`;
+  pageEl.appendChild(card);
+}
+
+async function loadExistingProgress(){
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const rows = await sheetGet('Progreso');
+    rows.filter(r => r.Estudiante === studentName).forEach(r=>{
+      const mod = r.Modulo;
+      if(!mod) return;
+      localProgress[mod] = { score:Number(r.Score), total:Number(r.Total), ts:new Date(r.Timestamp).getTime() };
+    });
+    if(localProgress['antologia']) antologiaLeida = true;
+    renderTabs();
+    renderPage();
+  }catch(e){ /* si falla, las actividades siguen interactivas por seguridad */ }
+}
+
+/* ============================================================
+   TABS (navegación secuencial por etapas)
+   ============================================================ */
+const tabsEl = document.getElementById('tabs');
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  const curIdx = currentStepIndex();
+  MODULES.forEach(m=>{
+    const t = document.createElement('div');
+    const done = isStepDone(m.id);
+    const orderIdx = ORDER.indexOf(m.id);
+    let clickable;
+    if(m.id==='certificado' || m.id==='antologia') clickable = true;
+    else clickable = (orderIdx === curIdx);
+    t.className = 'tab' + (m.id===activeModule?' active':'') + (done?' done':'') + (m.id==='certificado'?' cert':'') + (!clickable?' tab-locked':'');
+    t.textContent = m.label;
+    t.addEventListener('click', ()=>{
+      if(!clickable){
+        if(orderIdx > curIdx) alert('Primero debés completar la actividad actual antes de avanzar a esta.');
+        else alert('Ya completaste esta actividad — solo podés regresar a la Antología, no a etapas anteriores.');
+        return;
+      }
+      activeModule = m.id;
+      renderTabs(); renderPage();
+    });
+    tabsEl.appendChild(t);
+  });
+}
+
+/* ============================================================
+   RENDER PAGE ROUTER
+   ============================================================ */
+const pageEl = document.getElementById('page');
+function renderPage(){
+  const m = MODULES.find(x=>x.id===activeModule);
+  pageEl.innerHTML = '';
+  if(m.content){
+    const c = document.createElement('div');
+    c.className = 'content-card';
+    c.innerHTML = `<h2>${m.title}</h2><p>${m.content}</p>`;
+    pageEl.appendChild(c);
+  }
+  if(m.activityType==='antologia') renderAntologia();
+  else if(m.activityType==='wordsearch') renderWordSearch();
+  else if(m.activityType==='crossword') renderCrossword();
+  else if(m.activityType==='quiz') renderQuiz();
+  else if(m.activityType==='vf') renderVF();
+  else if(m.activityType==='matching') renderMatching();
+  else if(m.activityType==='trabajo') renderTrabajo();
+  else if(m.activityType==='casos') renderCasos();
+  else if(m.activityType==='miro') renderMiro();
+  else if(m.activityType==='certificado') renderCertificado();
+  maybeShowContinue();
+}
+
+function maybeShowContinue(){
+  if(activeModule==='certificado') return;
+  if(!isStepDone(activeModule)) return;
+  const idx = ORDER.indexOf(activeModule);
+  if(idx===-1) return;
+  const nextId = (idx+1<ORDER.length) ? ORDER[idx+1] : 'certificado';
+  const nextMod = MODULES.find(x=>x.id===nextId);
+  const bar = document.createElement('div');
+  bar.className = 'read-confirm';
+  bar.innerHTML = `<button class="btn" id="continueBtn">➡️ Continuar a: ${nextMod.label}</button>`;
+  pageEl.appendChild(bar);
+  document.getElementById('continueBtn').addEventListener('click', ()=>{
+    activeModule = nextId; renderTabs(); renderPage();
+  });
+}
+
+function escapeHtml(s){ return (s+"").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ============================================================
+   MÓDULO 0: ANTOLOGÍA
+   ============================================================ */
+function renderAntologia(){
+  const card = document.createElement('div');
+  card.innerHTML = `
+    <div class="info-hero">
+      <div class="kicker">Antología · Undécimo Año · Gestión Pública</div>
+      <h2>📊 Contabilidad Nacional</h2>
+      <p>Leé con calma cada bloque antes de pasar a las actividades — todas se desbloquean en orden, una por una.</p>
+    </div>
+
+    <div class="info-block" style="--block-color:#B8863C;">
+      <div class="ib-head"><span class="ib-icon">🏛️</span><h3>1. ¿Qué es la Contabilidad Nacional?</h3></div>
+      <p>La <strong>Dirección General de Contabilidad Nacional (DGCN)</strong> es el órgano rector, dentro del <strong>Ministerio de Hacienda</strong>, encargado de la contabilidad del sector público costarricense: define, aplica y fiscaliza los principios y normas contables que deben seguir todas las instituciones públicas para registrar y reportar su información financiera.</p>
+      <p>Su normativa aplica a todas las instituciones del <strong>sector público</strong> — Gobierno Central, instituciones autónomas, municipalidades y empresas públicas — y se actualiza y publica a través del sitio oficial del Ministerio de Hacienda.</p>
+      <span class="ib-tag">RA1</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#2FC2AD;">
+      <div class="ib-head"><span class="ib-icon">🎯</span><h3>2. Objetivos y funciones</h3></div>
+      <div class="info-grid">
+        <div class="info-mini"><b>Objetivo principal</b><span>Unificar y estandarizar el registro contable del sector público bajo normas internacionales, dando transparencia y comparabilidad a las finanzas del Estado.</span></div>
+        <div class="info-mini"><b>Emitir normativa</b><span>Establece los principios y decretos que deben seguir las instituciones al registrar sus operaciones financieras.</span></div>
+        <div class="info-mini"><b>Consolidar información</b><span>Reúne la información financiera de todas las instituciones públicas bajo un mismo lenguaje contable, para poder compararlas y sumarlas.</span></div>
+        <div class="info-mini"><b>Fiscalizar su aplicación</b><span>Verifica que las instituciones apliquen correctamente la normativa vigente.</span></div>
+      </div>
+      <span class="ib-tag">RA1</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#0E1B3D;">
+      <div class="ib-head"><span class="ib-icon">📜</span><h3>3. El camino hacia las NICSP</h3></div>
+      <p>Costa Rica adoptó las <strong>Normas Internacionales de Contabilidad para el Sector Público (NICSP)</strong> mediante una serie de decretos del Ministerio de Hacienda, cada uno con un propósito específico dentro de ese proceso:</p>
+      <ul>
+        <li><strong>Decreto 34460-H</strong> — establece los principios de contabilidad para el sector público.</li>
+        <li><strong>Decreto 34918-H</strong> — adopta e implementa formalmente las NICSP en Costa Rica.</li>
+        <li><strong>Decreto 35535-H</strong> — reglamenta la organización de la Dirección General de Contabilidad Nacional.</li>
+        <li><strong>Decreto 35616-H</strong> — adopta las NIIF (Normas Internacionales de Información Financiera) para las empresas públicas.</li>
+        <li><strong>Decreto 39665-H</strong> — reforma el proceso de adopción de la normativa contable internacional.</li>
+        <li><strong>Decreto 41039-H</strong> — establece el cierre de brechas entre la normativa nacional y las NICSP.</li>
+      </ul>
+      <span class="ib-tag">RA2</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#EF6A5B;">
+      <div class="ib-head"><span class="ib-icon">🗓️</span><h3>4. Directrices vigentes</h3></div>
+      <p>Además de los decretos, cada año la Contabilidad Nacional publica <strong>directrices actualizadas</strong> en el sitio web del Ministerio de Hacienda. Estas precisan cómo aplicar la normativa en la práctica durante ese periodo.</p>
+      <p>Por eso es clave consultar siempre la <strong>versión vigente</strong> — la normativa contable del sector público no es estática: se actualiza y ajusta con el tiempo, y una institución que aplique una versión desactualizada puede incurrir en errores de reporte.</p>
+      <span class="ib-tag">RA2</span>
+    </div>
+
+    <div class="read-confirm">
+      <button class="btn" id="confirmReadBtn">✅ Ya leí la antología, continuar</button>
+      <p>Al confirmar, empieza el recorrido por las actividades — cada una desbloquea la siguiente.</p>
+    </div>
+  `;
+  pageEl.appendChild(card);
+
+  document.getElementById('confirmReadBtn').addEventListener('click', ()=>{
+    antologiaLeida = true;
+    saveProgress('antologia', 1, 1);
+    activeModule = 'concepto';
+    renderTabs(); renderPage();
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 1: SOPA DE LETRAS
+   ============================================================ */
+const WS_DATA = {"size": 17, "grid": ["EPFZGQHMFKKDCRYIR", "PSGHGCCARGWRODTWR", "CDTZWXSECTORIGXKC", "PDFASOGDCIZRZRDIO", "UUYINIRDELEQBYMYS", "BTQHSDHSPCMNORMAS", "LXETYCAZTMRADBBPU", "IBRXLYARNDIEQASWP", "CONTABILIDADTBUPW", "OUDEJCQCIZAPLOYNS", "ABZPEEYYAZAWAHCVO", "DMPSDEHIGNACIONAL", "YTRANSPARENCIACFF", "EABIHPRINCIPIOSVQ", "YMCONSOLIDACIONSW", "XSTNPQIREGLAMENTO", "PTDPTNJRIJOGASPCB"], "words": {"ESTANDARIZACION": [[0, 0], [1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6], [7, 7], [8, 8], [9, 9], [10, 10], [11, 11], [12, 12], [13, 13], [14, 14]], "TRANSPARENCIA": [[12, 1], [12, 2], [12, 3], [12, 4], [12, 5], [12, 6], [12, 7], [12, 8], [12, 9], [12, 10], [12, 11], [12, 12], [12, 13]], "CONSOLIDACION": [[14, 2], [14, 3], [14, 4], [14, 5], [14, 6], [14, 7], [14, 8], [14, 9], [14, 10], [14, 11], [14, 12], [14, 13], [14, 14]], "FISCALIZACION": [[3, 2], [4, 3], [5, 4], [6, 5], [7, 6], [8, 7], [9, 8], [10, 9], [11, 10], [12, 11], [13, 12], [14, 13], [15, 14]], "CONTABILIDAD": [[8, 0], [8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [8, 6], [8, 7], [8, 8], [8, 9], [8, 10], [8, 11]], "DIRECTRICES": [[1, 13], [2, 12], [3, 11], [4, 10], [5, 9], [6, 8], [7, 7], [8, 6], [9, 5], [10, 4], [11, 3]], "PRINCIPIOS": [[13, 5], [13, 6], [13, 7], [13, 8], [13, 9], [13, 10], [13, 11], [13, 12], [13, 13], [13, 14]], "REGLAMENTO": [[15, 7], [15, 8], [15, 9], [15, 10], [15, 11], [15, 12], [15, 13], [15, 14], [15, 15], [15, 16]], "NACIONAL": [[11, 9], [11, 10], [11, 11], [11, 12], [11, 13], [11, 14], [11, 15], [11, 16]], "HACIENDA": [[0, 6], [1, 7], [2, 8], [3, 9], [4, 10], [5, 11], [6, 12], [7, 13]], "REGISTRO": [[1, 8], [2, 7], [3, 6], [4, 5], [5, 4], [6, 3], [7, 2], [8, 1]], "PUBLICO": [[3, 0], [4, 0], [5, 0], [6, 0], [7, 0], [8, 0], [9, 0]], "DECRETO": [[3, 7], [4, 8], [5, 9], [6, 10], [7, 11], [8, 12], [9, 13]], "NORMAS": [[5, 11], [5, 12], [5, 13], [5, 14], [5, 15], [5, 16]], "SECTOR": [[2, 6], [2, 7], [2, 8], [2, 9], [2, 10], [2, 11]], "NICSP": [[12, 4], [13, 3], [14, 2], [15, 1], [16, 0]]}};
+
+function renderWordSearch(){
+  if(isLocked('concepto')){
+    renderLockedNotice('concepto', 'la sopa de letras');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const total = Object.keys(WS_DATA.words).length;
+  const cellPx = WS_DATA.size > 16 ? 15 : 19;
+  card.innerHTML = `<h3>Sopa de letras — encontrá los ${total} términos <span class="scorepill" id="wsScorePill">0 / ${total}</span></h3>
+    <div class="ws-wrap">
+      <div class="ws-grid" id="wsGrid" style="grid-template-columns:repeat(${WS_DATA.size},${cellPx}px);"></div>
+      <div class="ws-list"><ul id="wsList"></ul></div>
+    </div>`;
+  pageEl.appendChild(card);
+
+  const gridEl = document.getElementById('wsGrid');
+  const cells = [];
+  for(let r=0;r<WS_DATA.size;r++){
+    const row=[];
+    for(let c=0;c<WS_DATA.size;c++){
+      const div = document.createElement('div');
+      div.className='ws-cell';
+      div.style.width = cellPx+'px';
+      div.style.height = cellPx+'px';
+      div.style.fontSize = (WS_DATA.size>16 ? '7.5px' : '9.5px');
+      div.textContent = WS_DATA.grid[r][c];
+      div.dataset.r=r; div.dataset.c=c;
+      gridEl.appendChild(div);
+      row.push(div);
+    }
+    cells.push(row);
+  }
+  const wordKeys = Object.keys(WS_DATA.words);
+  const wordCellSet = {};
+  wordKeys.forEach(w=>{ wordCellSet[w] = new Set(WS_DATA.words[w].map(([r,c])=>r+','+c)); });
+  const listEl = document.getElementById('wsList');
+  const liByWord = {};
+  wordKeys.slice().sort().forEach(w=>{
+    const li = document.createElement('li');
+    li.textContent = w;
+    listEl.appendChild(li);
+    liByWord[w]=li;
+  });
+
+  let found=0;
+  let selecting=false, path=[];
+  function keyOf(r,c){return r+','+c;}
+  function clearSel(){ path.forEach(([r,c])=>{ if(!cells[r][c].classList.contains('found')) cells[r][c].classList.remove('selected'); }); }
+  function tryMatch(){
+    const selSet = new Set(path.map(([r,c])=>keyOf(r,c)));
+    for(const w of wordKeys){
+      if(liByWord[w].classList.contains('found')) continue;
+      const wSet = wordCellSet[w];
+      if(wSet.size!==selSet.size) continue;
+      let match=true;
+      for(const k of wSet){ if(!selSet.has(k)){match=false;break;} }
+      if(match){
+        WS_DATA.words[w].forEach(([r,c])=>{ cells[r][c].classList.add('found'); cells[r][c].classList.remove('selected'); });
+        liByWord[w].classList.add('found');
+        found++;
+        document.getElementById('wsScorePill').textContent = found+' / '+total;
+        if(found===total) saveProgress('concepto', found, total);
+        return true;
+      }
+    }
+    return false;
+  }
+  function startSel(r,c){ selecting=true; path=[[r,c]]; cells[r][c].classList.add('selected'); }
+  function moveSel(r,c){
+    if(!selecting) return;
+    const [r0,c0]=path[0];
+    const dr=r-r0, dc=c-c0;
+    if(dr!==0 && dc!==0 && Math.abs(dr)!==Math.abs(dc)) return;
+    const steps=Math.max(Math.abs(dr),Math.abs(dc));
+    const sdr=steps===0?0:Math.sign(dr), sdc=steps===0?0:Math.sign(dc);
+    clearSel(); path=[];
+    for(let i=0;i<=steps;i++){
+      const rr=r0+sdr*i, cc=c0+sdc*i;
+      if(rr<0||rr>=WS_DATA.size||cc<0||cc>=WS_DATA.size) break;
+      path.push([rr,cc]);
+      cells[rr][cc].classList.add('selected');
+    }
+  }
+  function endSel(){ if(!selecting) return; selecting=false; if(!tryMatch()) clearSel(); path=[]; }
+  gridEl.addEventListener('mousedown', e=>{ const t=e.target.closest('.ws-cell'); if(t) startSel(+t.dataset.r,+t.dataset.c); });
+  gridEl.addEventListener('mouseover', e=>{ const t=e.target.closest('.ws-cell'); if(t) moveSel(+t.dataset.r,+t.dataset.c); });
+  document.addEventListener('mouseup', endSel);
+  gridEl.addEventListener('touchstart', e=>{ const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); const c=t&&t.closest('.ws-cell'); if(c) startSel(+c.dataset.r,+c.dataset.c); }, {passive:true});
+  gridEl.addEventListener('touchmove', e=>{ const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); const c=t&&t.closest('.ws-cell'); if(c) moveSel(+c.dataset.r,+c.dataset.c); }, {passive:true});
+  document.addEventListener('touchend', endSel);
+}
+
+/* ============================================================
+   ACTIVIDAD 2: CRUCIGRAMA
+   ============================================================ */
+const CW_DATA = {"size": {"rows": 15, "cols": 13}, "grid": [".............", ".....NICSP...", ".........U...", ".........B...", "...N.H...L...", "...O.A...I.E.", ".DIRECTRICES.", ".E.M.I.E.O.T.", ".C.A.E.G...A.", ".R.S.N.I...D.", ".E...D.S...O.", ".T...A.T.....", ".O.....R.....", ".......O.....", "............."], "words": [{"word": "DIRECTRICES", "clue": "Lineamientos que la Contabilidad Nacional actualiza cada ano en el sitio de Hacienda", "row": 6, "col": 1, "dir": "H", "num": 6}, {"word": "HACIENDA", "clue": "Ministerio del cual depende la Direccion General de Contabilidad Nacional", "row": 4, "col": 5, "dir": "V", "num": 4}, {"word": "REGISTRO", "clue": "Accion de anotar de forma ordenada las transacciones financieras del Estado", "row": 6, "col": 7, "dir": "V", "num": 7}, {"word": "DECRETO", "clue": "Instrumento legal mediante el cual se adopta cada norma contable del sector publico", "row": 6, "col": 1, "dir": "V", "num": 6}, {"word": "PUBLICO", "clue": "Sector al que aplican las normas emitidas por la Contabilidad Nacional", "row": 1, "col": 9, "dir": "V", "num": 2}, {"word": "NORMAS", "clue": "Reglas contables que unifican el registro financiero de las instituciones publicas", "row": 4, "col": 3, "dir": "V", "num": 3}, {"word": "ESTADO", "clue": "Conjunto de instituciones cuya informacion financiera consolida la Contabilidad Nacional", "row": 5, "col": 11, "dir": "V", "num": 5}, {"word": "NICSP", "clue": "Siglas de las normas internacionales de contabilidad para el sector publico", "row": 1, "col": 5, "dir": "H", "num": 1}]};
+
+function renderCrossword(){
+  if(isLocked('normativa')){
+    renderLockedNotice('normativa', 'el crucigrama');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const across = CW_DATA.words.filter(w=>w.dir==='H').sort((a,b)=>a.num-b.num);
+  const down = CW_DATA.words.filter(w=>w.dir==='V').sort((a,b)=>a.num-b.num);
+  card.innerHTML = `<h3>Crucigrama — completá según las pistas <span class="scorepill" id="cwScorePill">0%</span></h3>
+    <div class="cw-wrap">
+      <div class="cw-grid" id="cwGrid" style="grid-template-columns:repeat(${CW_DATA.size.cols},22px);"></div>
+      <div class="cw-clues">
+        <b>Horizontales</b><ul id="cwAcross"></ul>
+        <b>Verticales</b><ul id="cwDown"></ul>
+      </div>
+    </div>
+    <button class="btn" id="cwCheckBtn" style="margin-top:12px;">Comprobar crucigrama</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('cwAcross').innerHTML = across.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+  document.getElementById('cwDown').innerHTML = down.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+
+  const R = CW_DATA.size.rows, C = CW_DATA.size.cols;
+  const gridEl = document.getElementById('cwGrid');
+  const numAt = {};
+  CW_DATA.words.forEach(w=>{ numAt[w.row+','+w.col] = w.num; });
+  const inputs = {};
+  for(let r=0;r<R;r++){
+    for(let c=0;c<C;c++){
+      const ch = CW_DATA.grid[r][c];
+      const cell = document.createElement('div');
+      if(ch==='.'){
+        cell.className='cw-cell blocked';
+      } else {
+        cell.className='cw-cell';
+        const key = numAt[r+','+c];
+        if(key) cell.innerHTML = `<span class="cw-num">${key}</span>`;
+        const inp = document.createElement('input');
+        inp.maxLength=1;
+        inp.dataset.r=r; inp.dataset.c=c;
+        inp.addEventListener('input', function(){
+          this.value = this.value.toUpperCase().replace(/[^A-ZÑ]/g,'');
+          if(this.value){
+            const next = findNextInput(r,c);
+            if(next) next.focus();
+          }
+        });
+        cell.appendChild(inp);
+        inputs[r+','+c] = inp;
+      }
+      gridEl.appendChild(cell);
+    }
+  }
+  function findNextInput(r,c){
+    if(inputs[r+','+(c+1)]) return inputs[r+','+(c+1)];
+    if(inputs[(r+1)+','+c]) return inputs[(r+1)+','+c];
+    return null;
+  }
+
+  document.getElementById('cwCheckBtn').addEventListener('click', ()=>{
+    let correct=0, total=0;
+    for(const key in inputs){
+      const [r,c] = key.split(',').map(Number);
+      const expected = CW_DATA.grid[r][c];
+      const inp = inputs[key];
+      total++;
+      if(inp.value === expected){ inp.classList.add('ok'); inp.classList.remove('bad'); correct++; }
+      else{ inp.classList.add('bad'); inp.classList.remove('ok'); }
+    }
+    document.getElementById('cwScorePill').textContent = Math.round((correct/total)*100)+'%';
+    saveProgress('normativa', correct, total);
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 3: CUESTIONARIO
+   ============================================================ */
+const QUIZ_BANK = [
+  { q:"¿Qué institución es el órgano rector de la Contabilidad Nacional en Costa Rica?", opts:["La Contraloría General de la República","La Dirección General de Contabilidad Nacional (Ministerio de Hacienda)","El Banco Central de Costa Rica"], correct:1,
+    just:"La DGCN, dentro del Ministerio de Hacienda, es el órgano rector de la contabilidad del sector público." },
+  { q:"¿Qué significan las siglas NICSP?", opts:["Normas Internacionales de Contabilidad para el Sector Público","Normas Internas de Control del Sector Privado","Nuevo Instructivo de Cierre del Sector Público"], correct:0,
+    just:"NICSP: Normas Internacionales de Contabilidad para el Sector Público." },
+  { q:"¿Cuál es uno de los objetivos principales de la Contabilidad Nacional?", opts:["Fijar el tipo de cambio del colón","Unificar y estandarizar el registro contable del sector público","Administrar el presupuesto de cada municipalidad"], correct:1,
+    just:"Busca dar transparencia y comparabilidad a las finanzas del Estado bajo normas comunes." },
+  { q:"¿Por qué es importante consultar las directrices del año en curso, y no solo el decreto original?", opts:["Porque la normativa se actualiza periódicamente y debe aplicarse la versión vigente","Porque los decretos originales ya no tienen validez legal","Porque las directrices reemplazan por completo a los decretos"], correct:0,
+    just:"La normativa contable del sector público se ajusta con el tiempo; hay que usar siempre la versión vigente." },
+  { q:"¿A qué tipo de instituciones aplican las normas de la Contabilidad Nacional?", opts:["Solo a empresas privadas que venden al Estado","A las instituciones del sector público (Gobierno, autónomas, municipalidades, empresas públicas)","Únicamente a los bancos comerciales privados"], correct:1,
+    just:"Su normativa aplica a las instituciones del sector público en general." },
+  { q:"Cuando la DGCN consolida la información financiera de varias instituciones públicas, ¿qué logra?", opts:["Elimina la necesidad de que cada institución lleve su propia contabilidad","Permite comparar y sumar las finanzas de distintas instituciones bajo un mismo lenguaje contable","Aumenta automáticamente el presupuesto de cada institución"], correct:1,
+    just:"La consolidación permite comparar y sumar cifras de instituciones distintas porque todas usan el mismo lenguaje contable." },
+];
+
+function renderQuiz(){
+  if(isLocked('principios')){
+    renderLockedNotice('principios', 'el cuestionario');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Cuestionario <span class="scorepill" id="qzScorePill">0 / ${QUIZ_BANK.length}</span></h3><div id="qzWrap"></div>`;
+  pageEl.appendChild(card);
+  const wrap = document.getElementById('qzWrap');
+  let score=0, answered=0;
+  QUIZ_BANK.forEach((item,qi)=>{
+    const qcard = document.createElement('div');
+    qcard.className='qcard';
+    qcard.innerHTML = `<div class="qtext">${qi+1}. ${item.q}</div><div class="opts"></div><div class="justif"></div>`;
+    const optsDiv = qcard.querySelector('.opts');
+    const letters=['A','B','C'];
+    item.opts.forEach((optText,oi)=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(qcard.classList.contains('answered')) return;
+        qcard.classList.add('answered');
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = oi===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect) optsDiv.querySelectorAll('.opt')[item.correct].classList.add('reveal-correct');
+        qcard.classList.add(isCorrect?'correct':'incorrect');
+        const j = qcard.querySelector('.justif');
+        j.classList.add('show', isCorrect?'ok':'bad');
+        j.textContent = (isCorrect?'✓ ':'✕ ') + item.just;
+        if(isCorrect) score++;
+        answered++;
+        document.getElementById('qzScorePill').textContent = score+' / '+QUIZ_BANK.length;
+        if(answered===QUIZ_BANK.length) saveProgress('principios', score, QUIZ_BANK.length);
+      });
+      optsDiv.appendChild(opt);
+    });
+    wrap.appendChild(qcard);
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD: VERDADERO O FALSO
+   ============================================================ */
+const VF_BANK = [
+  { s:"La Dirección General de Contabilidad Nacional pertenece al Ministerio de Hacienda.", correct:true,
+    just:"Correcto: la DGCN es un órgano del Ministerio de Hacienda." },
+  { s:"Cada institución pública puede diseñar sus propias normas contables sin seguir un estándar común.", correct:false,
+    just:"Falso: todas deben seguir la normativa unificada que emite la Contabilidad Nacional." },
+  { s:"Las NICSP buscan unificar el lenguaje contable del sector público a nivel internacional.", correct:true,
+    just:"Correcto." },
+  { s:"Las directrices de la Contabilidad Nacional nunca cambian una vez publicadas.", correct:false,
+    just:"Falso: se actualizan periódicamente, por eso hay que consultar siempre la versión vigente." },
+  { s:"La adopción de las NICSP en Costa Rica se ha dado mediante una serie de decretos del Ministerio de Hacienda.", correct:true,
+    just:"Correcto." },
+  { s:"La Contabilidad Nacional solo aplica al Gobierno Central, no a las municipalidades ni empresas públicas.", correct:false,
+    just:"Falso: aplica a todo el sector público, incluyendo municipalidades y empresas públicas." },
+];
+
+function renderVF(){
+  if(isLocked('vf')){
+    renderLockedNotice('vf', 'el ejercicio de Verdadero/Falso');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Verdadero o Falso <span class="scorepill" id="vfScorePill">0 / ${VF_BANK.length}</span></h3><div id="vfWrap"></div>`;
+  pageEl.appendChild(card);
+  const wrap = document.getElementById('vfWrap');
+  let score=0, answered=0;
+  VF_BANK.forEach((item,qi)=>{
+    const qcard = document.createElement('div');
+    qcard.className='qcard';
+    qcard.innerHTML = `<div class="qtext">${qi+1}. ${item.s}</div><div class="opts"></div><div class="justif"></div>`;
+    const optsDiv = qcard.querySelector('.opts');
+    [["Verdadero",true],["Falso",false]].forEach(([label,val])=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML = `<span class="letter">${val?'V':'F'}</span><span>${label}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(qcard.classList.contains('answered')) return;
+        qcard.classList.add('answered');
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = val===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect){
+          const correctOpt = [...optsDiv.querySelectorAll('.opt')].find((o,i)=> (i===0)===item.correct);
+          if(correctOpt) correctOpt.classList.add('reveal-correct');
+        }
+        qcard.classList.add(isCorrect?'correct':'incorrect');
+        const j = qcard.querySelector('.justif');
+        j.classList.add('show', isCorrect?'ok':'bad');
+        j.textContent = (isCorrect?'✓ ':'✕ ') + item.just;
+        if(isCorrect) score++;
+        answered++;
+        document.getElementById('vfScorePill').textContent = score+' / '+VF_BANK.length;
+        if(answered===VF_BANK.length) saveProgress('vf', score, VF_BANK.length);
+      });
+      optsDiv.appendChild(opt);
+    });
+    wrap.appendChild(qcard);
+  });
+}
+
+/* ============================================================
+   ACTIVIDAD 4: ASOCIE
+   ============================================================ */
+const MATCH_DATA = {
+  terms:["Decreto 34460-H","Decreto 34918-H","Decreto 35535-H","Decreto 35616-H","Decreto 41039-H"],
+  defs:[
+    "Adopta las NIIF para las empresas públicas",
+    "Establece los principios de contabilidad para el sector público",
+    "Reglamenta la organización de la Dirección General de Contabilidad Nacional",
+    "Establece el cierre de brechas entre la normativa nacional y las NICSP",
+    "Adopta e implementa formalmente las NICSP en Costa Rica"
+  ],
+  correct:[1,4,2,0,3]
+};
+
+function renderMatching(){
+  if(isLocked('tipos')){
+    renderLockedNotice('tipos', 'el asocie');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const letters=['A','B','C','D','E'];
+  let rows='';
+  MATCH_DATA.terms.forEach((t,i)=>{
+    rows += `<tr class="match-row" data-i="${i}"><td>${i+1}. ${t}</td><td><select data-i="${i}"><option value="">— Seleccione —</option>${MATCH_DATA.defs.map((d,j)=>`<option value="${j}">${letters[j]}</option>`).join('')}</select></td></tr>`;
+  });
+  card.innerHTML = `<h3>Asocie — relacione ambas columnas <span class="scorepill" id="mtScorePill">0 / 5</span></h3>
+    <table class="match-table"><tbody>${rows}</tbody></table>
+    <div class="bank"><b>Columna B</b><br>${MATCH_DATA.defs.map((d,j)=>`${letters[j]}. ${d}`).join('<br>')}</div>
+    <button class="btn" id="mtCheckBtn" style="margin-top:10px;">Comprobar</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('mtCheckBtn').addEventListener('click', function(){
+    if(this.disabled) return;
+    const selects = document.querySelectorAll('.match-table select');
+    let correct=0, allAnswered=true;
+    selects.forEach(sel=>{
+      const i = parseInt(sel.dataset.i,10);
+      if(sel.value===""){ allAnswered=false; return; }
+      const row = sel.closest('.match-row');
+      if(parseInt(sel.value,10)===MATCH_DATA.correct[i]){ row.classList.add('ok'); correct++; }
+      else row.classList.add('bad');
+    });
+    if(!allAnswered){ alert('Completá las 5 relaciones antes de comprobar.'); return; }
+    selects.forEach(s=>s.disabled=true);
+    this.disabled=true;
+    document.getElementById('mtScorePill').textContent = correct+' / 5';
+    saveProgress('tipos', correct, 5);
+  });
+}
+
+/* ============================================================
+   MÓDULO: TRABAJO EN CLASE — ¿Qué norma aplica?
+   ============================================================ */
+const CASOS_TRABAJO = [
+  { id:"cncaso1", tag:"Caso 1", inst:"Institución pública de nueva creación",
+    text:"Una institución pública recién creada necesita saber qué principios contables generales debe seguir para registrar sus primeras transacciones financieras.",
+    opts:["Decreto 34460-H (Principios de contabilidad para el sector público)","Decreto 35616-H (NIIF empresas públicas)","Decreto 41039-H (Cierre de brechas)"], correct:0,
+    just:"El Decreto 34460-H establece justamente los principios generales de contabilidad para el sector público." },
+  { id:"cncaso2", tag:"Caso 2", inst:"Empresa pública",
+    text:"Una empresa pública (no una institución típica de gobierno central) necesita saber qué normativa contable específica debe aplicar para sus estados financieros.",
+    opts:["Decreto 34918-H (Adopción de las NICSP)","Decreto 35616-H (NIIF empresas públicas)","Decreto 35535-H (Reglamento de organización de la DGCN)"], correct:1,
+    just:"El Decreto 35616-H adopta específicamente las NIIF para las empresas públicas." },
+  { id:"cncaso3", tag:"Caso 3", inst:"Ministerio de Hacienda",
+    text:"El Ministerio de Hacienda publica, a inicios de año, un nuevo documento que indica exactamente qué pasos debe seguir cada institución este año para reportar su información financiera.",
+    opts:["Un decreto ejecutivo nuevo","Una directriz del año en curso","Una reforma a la Ley 9986"], correct:1,
+    just:"Las directrices anuales son el instrumento que precisa la aplicación práctica de la normativa cada año." },
+  { id:"cncaso4", tag:"Caso 4", inst:"Dirección General de Contabilidad Nacional",
+    text:"La propia Dirección General de Contabilidad Nacional necesita saber cómo debe organizarse internamente y cuáles son sus competencias formales.",
+    opts:["Decreto 35535-H (Reglamento de organización de la DGCN)","Decreto 34460-H (Principios de contabilidad)","Decreto 39665-H (Reforma a la adopción de normativa internacional)"], correct:0,
+    just:"El Decreto 35535-H es justamente el que reglamenta la organización interna de la DGCN." },
+];
+
+function renderTrabajo(){
+  if(isLocked('trabajo')){
+    const info = document.createElement('div');
+    info.className = 'content-card';
+    info.innerHTML = `<h2>Trabajo en clase — ¿Qué norma aplica?</h2>`;
+    pageEl.appendChild(info);
+    renderLockedNotice('trabajo', 'el trabajo en clase');
+    return;
+  }
+
+  const info = document.createElement('div');
+  info.className = 'content-card';
+  info.innerHTML = `<h2>Trabajo en clase — ¿Qué norma aplica?</h2>
+    <p>Para cada situación, determiná qué decreto o instrumento de la Contabilidad Nacional corresponde aplicar, y justificá tu decisión en un par de líneas.</p>`;
+  if(!sheetsReady()){
+    info.innerHTML += `<p style="color:var(--coral);font-size:12px;">⚠️ Falta configurar la conexión a la hoja de datos. Avisale a tu docente.</p>`;
+  }
+  pageEl.appendChild(info);
+
+  let correctCount = 0, answeredCount = 0;
+
+  CASOS_TRABAJO.forEach(caso=>{
+    const card = document.createElement('div');
+    card.className = 'caso-card';
+    const letters = ['A','B','C'];
+    card.innerHTML = `
+      <div class="caso-tag">${caso.tag}</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${escapeHtml(caso.inst)}</div>
+      <p class="enunciado">${caso.text}</p>
+      <div class="caso-opts"></div>
+      <div class="justif"></div>
+      <textarea class="caso-input" id="just-${caso.id}" placeholder="Justificá brevemente tu respuesta (2-3 líneas)..."></textarea>
+      <button class="btn" data-caso="${caso.id}" style="margin-top:8px;">Publicar respuesta</button>
+    `;
+    const optsDiv = card.querySelector('.caso-opts');
+    caso.opts.forEach((optText, oi)=>{
+      const opt = document.createElement('div');
+      opt.className = 'opt';
+      opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(card.dataset.answered) return;
+        card.dataset.chosen = oi;
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.style.outline='');
+        opt.style.outline = '2px solid var(--navy)';
+      });
+      optsDiv.appendChild(opt);
+    });
+    pageEl.appendChild(card);
+
+    card.querySelector('[data-caso]').addEventListener('click', async ()=>{
+      if(card.dataset.answered) return;
+      if(card.dataset.chosen === undefined){ alert('Elegí una opción antes de publicar.'); return; }
+      if(!studentName){ alert('Escribí tu nombre arriba antes de participar.'); return; }
+      const oi = Number(card.dataset.chosen);
+      const isCorrect = oi === caso.correct;
+      const textoJust = document.getElementById('just-'+caso.id).value.trim();
+
+      card.dataset.answered = '1';
+      optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+      optsDiv.querySelectorAll('.opt')[oi].classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+      if(!isCorrect) optsDiv.querySelectorAll('.opt')[caso.correct].classList.add('reveal-correct');
+      card.classList.add(isCorrect?'correct':'incorrect');
+      const j = card.querySelector('.justif');
+      j.classList.add('show', isCorrect?'ok':'bad');
+      j.textContent = (isCorrect?'✓ ':'✕ ') + caso.just;
+
+      if(isCorrect) correctCount++;
+      answeredCount++;
+
+      try{
+        const nowIso = new Date().toISOString();
+        await sheetPost('Casos', [nowIso, caso.id, studentName, (isCorrect?'[CORRECTO] ':'[INCORRECTO] ') + (textoJust||'(sin justificación escrita)')]);
+      }catch(e){}
+
+      if(answeredCount === CASOS_TRABAJO.length){
+        saveProgress('trabajo', correctCount, CASOS_TRABAJO.length);
+      }
+    });
+  });
+}
+
+/* ============================================================
+   MÓDULO: CASOS Y DEBATE (comentarios abiertos, compartido)
+   ============================================================ */
+const DEBATE_TEMAS = [
+  { id:"cndebate1", tag:"¿Por qué depender de Hacienda?", text:"¿Por qué creés que es importante que la Contabilidad Nacional dependa del Ministerio de Hacienda y no de cada institución por separado?" },
+  { id:"cndebate2", tag:"Ignorar una directriz", text:"Si una institución pública decide ignorar una directriz nueva de la Contabilidad Nacional, ¿qué consecuencias podría tener para la transparencia de sus finanzas?" },
+  { id:"cndebate3", tag:"Normas propias vs. internacionales", text:"¿Qué diferencia creés que hay entre que Costa Rica adopte normas internacionales (NICSP) en vez de crear sus propias reglas contables desde cero?" },
+];
+
+function renderCasos(){
+  if(isLocked('casos')){
+    renderLockedNotice('casos', 'Casos y Debate');
+    return;
+  }
+  const info = document.createElement('div');
+  info.className = 'content-card';
+  info.innerHTML = `<h2>Casos y Debate</h2><p>Este módulo se comparte con toda la clase. Elegí al menos <strong>un tema</strong>, escribí tu opinión, y luego respondé (con respeto) al aporte de <strong>al menos un compañero</strong>. Necesitás escribir tu nombre arriba para participar.</p>`;
+  if(!sheetsReady()){
+    info.innerHTML += `<p style="color:var(--coral);font-size:12px;">⚠️ Falta configurar la conexión a la hoja de datos. Avisale a tu docente.</p>`;
+  }
+  pageEl.appendChild(info);
+
+  DEBATE_TEMAS.forEach(tema=>{
+    const card = document.createElement('div');
+    card.className = 'caso-card';
+    card.innerHTML = `
+      <div class="caso-tag">${tema.tag}</div>
+      <p class="enunciado">${tema.text}</p>
+      <div class="caso-msgs" id="msgs-${tema.id}"><div style="font-size:11px;color:var(--muted);">Cargando respuestas...</div></div>
+      <textarea class="caso-input" id="input-${tema.id}" placeholder="Escribí tu opinión o tu comentario a un compañero..."></textarea>
+      <button class="btn" data-tema="${tema.id}" style="margin-top:8px;">Publicar</button>
+    `;
+    pageEl.appendChild(card);
+  });
+
+  document.querySelectorAll('[data-tema]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const temaId = btn.dataset.tema;
+      if(!studentName){ alert('Escribí tu nombre arriba antes de participar.'); return; }
+      const text = document.getElementById('input-'+temaId).value.trim();
+      if(!text) return;
+      try{
+        const nowIso = new Date().toISOString();
+        await sheetPost('Casos', [nowIso, temaId, studentName, text]);
+        document.getElementById('input-'+temaId).value='';
+        await loadDebateMessages(temaId);
+        checkDebateParticipation();
+      }catch(e){
+        alert('No se pudo publicar. Revisá la conexión a la hoja de datos.');
+      }
+    });
+  });
+
+  DEBATE_TEMAS.forEach(t=>loadDebateMessages(t.id));
+}
+
+async function loadDebateMessages(temaId){
+  const wrap = document.getElementById('msgs-'+temaId);
+  if(!wrap) return;
+  if(!sheetsReady()){
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--coral);">Hoja de datos no configurada todavía.</div>';
+    return;
+  }
+  try{
+    const rows = await sheetGet('Casos');
+    const items = rows
+      .filter(r => r.CasoId === temaId)
+      .map(r => ({ name: r.Nombre, text: r.Texto, ts: new Date(r.Timestamp).getTime() }));
+    if(items.length===0){ wrap.innerHTML = '<div style="font-size:11px;color:var(--muted);">Nadie ha respondido todavía.</div>'; return; }
+    items.sort((a,b)=>a.ts-b.ts);
+    wrap.innerHTML = items.map(m=>`<div class="caso-msg" style="background:#f7f8f6;border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:12.5px;"><div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-bottom:3px;"><span style="font-weight:700;color:var(--navy);">${escapeHtml(m.name)}</span><span>${new Date(m.ts).toLocaleTimeString('es-CR',{hour:'2-digit',minute:'2-digit'})}</span></div>${escapeHtml(m.text)}</div>`).join('');
+  }catch(e){
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--coral);">No se pudo cargar (revisá la conexión a la hoja de datos).</div>';
+  }
+}
+
+async function checkDebateParticipation(){
+  if(!studentName || !sheetsReady()) return;
+  let ownCount = 0;
+  try{
+    const rows = await sheetGet('Casos');
+    DEBATE_TEMAS.forEach(t=>{
+      ownCount += rows.filter(r => r.CasoId === t.id && r.Nombre === studentName).length;
+    });
+  }catch(e){}
+  if(ownCount >= 2 && !isStepDone('casos')){
+    saveProgress('casos', 1, 1);
+    renderPage();
+  }
+}
+
+/* ============================================================
+   MÓDULO: LLUVIA DE IDEAS (Miro, compartido con toda la clase)
+   ============================================================ */
+const MIRO_BOARD_URL = "https://miro.com/app/board/uXjVHtdmGSI=/";
+
+function renderMiro(){
+  if(isLocked('miro')){
+    renderLockedNotice('miro', 'la Lluvia de Ideas');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'content-card';
+  card.innerHTML = `
+    <h2>🧠 Lluvia de Ideas — Tablero Colaborativo</h2>
+    <p><strong>Pregunta:</strong> ¿por qué creés que es importante que TODAS las instituciones públicas de Costa Rica usen las mismas normas contables (NICSP), en vez de que cada una registre sus finanzas a su manera?</p>
+    <p>Toda la clase comparte el mismo tablero (busca el recuadro que dice "Contabilidad Nacional"). Agregá tu nota adhesiva con tu nombre, y comentá al menos dos respuestas de tus compañeros.</p>
+  `;
+  pageEl.appendChild(card);
+
+  const btnCard = document.createElement('div');
+  btnCard.className = 'actcard';
+  btnCard.style.textAlign = 'center';
+  btnCard.innerHTML = `
+    <h3 style="text-align:left;">Abrir el tablero de Miro</h3>
+    <a class="btn" href="${MIRO_BOARD_URL}" target="_blank" style="text-decoration:none;display:inline-block;">🧠 Abrir tablero y agregar mi nota</a>
+    <p style="font-size:11px;color:var(--muted);margin-top:12px;">Se abre en una pestaña nueva. Cuando ya hayas agregado tu nota, regresá aquí y confirmá abajo.</p>
+    <button class="btn" id="confirmMiroBtn" style="margin-top:10px;background:var(--teal);">✅ Ya agregué mi nota en Miro, continuar</button>
+  `;
+  pageEl.appendChild(btnCard);
+
+  document.getElementById('confirmMiroBtn').addEventListener('click', ()=>{
+    saveProgress('miro', 1, 1);
+    renderPage();
+  });
+}
+
+/* ============================================================
+   CERTIFICADO
+   ============================================================ */
+const COMPETENCIAS = [
+  { ra:"RA1", unidad:"Gestión pública", modules:["concepto"],
+    text:"Reconocer la importancia de la Contabilidad Nacional para el país." },
+  { ra:"RA2", unidad:"Gestión pública", modules:["normativa","principios","vf","tipos"],
+    text:"Distinguir los lineamientos y decretos emitidos por la Contabilidad Nacional aplicados al sector público." },
+  { ra:"RA3", unidad:"Gestión pública", modules:["trabajo"],
+    text:"Aplicar el marco normativo de la Contabilidad Nacional para identificar la norma correcta en situaciones concretas." },
+];
+
+function competencyScore(comp){
+  let sum=0, total=0, anyData=false;
+  comp.modules.forEach(mid=>{
+    const p = localProgress[mid];
+    if(p){ sum+=p.score; total+=p.total; anyData=true; }
+  });
+  return { sum, total, pct: anyData && total>0 ? Math.round((sum/total)*100) : null };
+}
+
+function competencyLevel(pctVal){
+  if(pctVal===null) return { label:"Sin evidencia", cls:"status-pending" };
+  if(pctVal<=50) return { label:"No logrado", cls:"status-bad" };
+  if(pctVal<=80) return { label:"En proceso", cls:"status-mid" };
+  return { label:"Logrado", cls:"status-ok" };
+}
+
+function renderCertificado(){
+  const card = document.createElement('div');
+  card.className = 'actcard';
+
+  let rows = '';
+  let allLogrado = true;
+  COMPETENCIAS.forEach(comp=>{
+    const s = competencyScore(comp);
+    const lvl = competencyLevel(s.pct);
+    if(lvl.label !== "Logrado") allLogrado = false;
+    rows += `<tr>
+      <td><span class="ra-tag">${comp.ra}</span><span class="competency-desc">${comp.text}</span></td>
+      <td class="center">${s.total>0 ? s.sum+' / '+s.total : '—'}</td>
+      <td class="center">${s.pct!==null ? s.pct+'%' : '—'}</td>
+      <td class="center"><span class="${lvl.cls}">${lvl.label}</span></td>
+    </tr>`;
+  });
+  const antologiaOk = localProgress['antologia'] && localProgress['antologia'].score>0;
+  rows += `<tr><td><span class="ra-tag">Lectura</span><span class="competency-desc">Antología del tema (lectura previa obligatoria)</span></td><td class="center">—</td><td class="center">—</td><td class="center">${antologiaOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
+  const casosOk = localProgress['casos'] && localProgress['casos'].score>0;
+  rows += `<tr><td><span class="ra-tag">Participación</span><span class="competency-desc">Módulo compartido de Casos y Debate</span></td><td class="center">—</td><td class="center">—</td><td class="center">${casosOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
+  const miroOk = localProgress['miro'] && localProgress['miro'].score>0;
+  rows += `<tr><td><span class="ra-tag">Colaboración</span><span class="competency-desc">Lluvia de Ideas en Miro</span></td><td class="center">—</td><td class="center">—</td><td class="center">${miroOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
+  const finalOk = allLogrado && antologiaOk && casosOk && miroOk;
+
+  card.innerHTML = `
+    <h3>Evaluación por competencias</h3>
+    <p style="font-size:11px;color:var(--muted);margin:-4px 0 10px;">Escala: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado. Basada en el Resultado de Aprendizaje de la unidad "Gestión pública" (Programa de Estudio DETCE-MEP, Undécimo año).</p>
+    <table class="progress-table">
+      <tr><th>Indicador</th><th>Puntaje</th><th>%</th><th>Nivel</th></tr>
+      ${rows}
+    </table>
+    ${finalOk ? `
+      <div class="certificate show" id="certBlock">
+        <div class="kicker">Contable CR · Undécimo Año</div>
+        <h2>Certificado de Aprobación</h2>
+        <p>Se otorga el presente certificado a</p>
+        <div class="name">${escapeHtml(studentName || '____________________')}</div>
+        <p>por haber alcanzado el nivel <strong>Logrado</strong> en todos los indicadores evaluados sobre <strong>Contabilidad Nacional</strong> (objetivos y funciones, marco normativo, decretos de adopción de las NICSP, y su aplicación en el trabajo en clase), incluyendo la participación en Casos y Debate y en la Lluvia de Ideas colaborativa.</p>
+        <div class="seal">MEP<br>11°</div>
+        <p style="margin-top:14px;font-size:10.5px;">Contabilidad · Gestión Empresarial para Contadores · Prof. Gerardo Gonzalez Gonzalez</p>
+      </div>
+      <button class="btn" style="margin-top:12px;" onclick="window.print()">Imprimir / Guardar como PDF</button>
+    ` : `<div class="locked-msg">🔒 El certificado se desbloquea cuando los tres indicadores alcanzan el nivel <strong>Logrado</strong> (81% o más) y se registró la lectura de la Antología, la participación en Casos y Debate, y en la Lluvia de Ideas.</div>`}
+  `;
+  pageEl.appendChild(card);
+}
+
+/* ============================================================
+   PANEL DOCENTE (protegido con PIN)
+   ============================================================ */
+document.getElementById('teacherBtnOpen').addEventListener('click', ()=>{
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinError').style.display = 'none';
+  document.getElementById('pinModalBg').classList.add('show');
+  document.getElementById('pinInput').focus();
+});
+document.getElementById('pinModalClose').addEventListener('click', ()=>{
+  document.getElementById('pinModalBg').classList.remove('show');
+});
+document.getElementById('pinSubmit').addEventListener('click', checkPin);
+document.getElementById('pinInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkPin(); });
+
+async function checkPin(){
+  const val = document.getElementById('pinInput').value.trim();
+  if(val !== TEACHER_PIN){
+    document.getElementById('pinError').style.display = 'block';
+    return;
+  }
+  document.getElementById('pinModalBg').classList.remove('show');
+  await openTeacherPanel();
+}
+
+async function openTeacherPanel(){
+  document.getElementById('teacherModalBg').classList.add('show');
+  const content = document.getElementById('teacherContent');
+  content.innerHTML = 'Cargando...';
+  if(!sheetsReady()){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">⚠️ Falta configurar la conexión a la hoja de datos (SHEET_API_URL) en este archivo.</p>';
+    return;
+  }
+  try{
+    const progRows = await sheetGet('Progreso');
+    const byStudent = {};
+    progRows.forEach(r=>{
+      const name = r.Estudiante, mod = r.Modulo;
+      if(!name || !mod) return;
+      byStudent[name] = byStudent[name] || {};
+      byStudent[name][mod] = { score:Number(r.Score), total:Number(r.Total) };
+    });
+
+    const names = Object.keys(byStudent).sort();
+    if(names.length===0){ content.innerHTML = '<p style="font-size:12.5px;color:var(--muted);">Todavía no hay estudiantes con progreso guardado.</p>'; return; }
+    const levelAbbrev = (pctVal)=>{
+      if(pctVal===null) return '—';
+      const lvl = competencyLevel(pctVal);
+      const short = {"Logrado":"✓ Logrado","En proceso":"◐ En proceso","No logrado":"✕ No logrado"}[lvl.label] || lvl.label;
+      return `<span class="${lvl.cls}">${short}</span>`;
+    };
+    let html = '<p style="font-size:10.5px;color:var(--muted);margin-top:0;">Nivel por indicador: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado.</p>';
+    html += '<table class="progress-table"><tr><th>Estudiante</th><th>Antología</th><th>RA1</th><th>RA2</th><th>RA3 Trabajo</th><th>Casos</th><th>Miro</th><th>Salidas</th></tr>';
+    names.forEach(n=>{
+      const d = byStudent[n];
+      const compPct = (mods)=>{
+        let sum=0,total=0,any=false;
+        mods.forEach(mid=>{ const x=d[mid]; if(x){ sum+=x.score; total+=x.total; any=true; } });
+        return any && total>0 ? Math.round((sum/total)*100) : null;
+      };
+      const okCell = (obj)=> obj ? (obj.score>0 ? '<span class="status-ok">✓ Logrado</span>' : '<span class="status-pending">Sin evidencia</span>') : '—';
+      const salidas = d.incidente_salida_pantalla ? d.incidente_salida_pantalla.score : 0;
+      const salidasCell = salidas > 0 ? `<span class="status-bad">⚠️ ${salidas}</span>` : '<span class="status-pending">0</span>';
+      html += `<tr>
+        <td>${escapeHtml(n)}</td>
+        <td class="center">${okCell(d.antologia)}</td>
+        <td class="center">${levelAbbrev(compPct(['concepto']))}</td>
+        <td class="center">${levelAbbrev(compPct(['normativa','principios','vf','tipos']))}</td>
+        <td class="center">${levelAbbrev(compPct(['trabajo']))}</td>
+        <td class="center">${okCell(d.casos)}</td>
+        <td class="center">${okCell(d.miro)}</td>
+        <td class="center">${salidasCell}</td>
+      </tr>`;
+    });
+    html += '</table>';
+    content.innerHTML = html;
+  }catch(e){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">No se pudo cargar el panel (revisá la conexión a la hoja de datos).</p>';
+  }
+}
+document.getElementById('teacherModalClose').addEventListener('click', ()=>{
+  document.getElementById('teacherModalBg').classList.remove('show');
+});
+
+/* ============================================================
+   NOMBRE DEL ESTUDIANTE
+   ============================================================ */
+document.getElementById('studentName').addEventListener('input', function(){
+  studentName = this.value.trim();
+  document.getElementById('nameStatus').textContent = studentName ? '● identificado' : '';
+});
+document.getElementById('studentName').addEventListener('change', function(){
+  if(studentName) loadExistingProgress();
+});
+
+/* ============================================================
+   PRELLENADO DESDE UN ENLACE (?nombre=...)
+   ============================================================ */
+(function prefillFromLink(){
+  const params = new URLSearchParams(window.location.search);
+  const nombreParam = params.get('nombre');
+  if(nombreParam){
+    studentName = nombreParam;
+    document.getElementById('studentName').value = nombreParam;
+    document.getElementById('nameStatus').textContent = '● identificado';
+    loadExistingProgress();
+  }
+})();
+
+/* ============================================================
+   MODO ENFOQUE: pantalla completa + detección de salidas
+   ============================================================ */
+let salidaCount = 0;
+document.getElementById('focusModeBtn').addEventListener('click', ()=>{
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  if(req) req.call(el).catch(()=>{});
+});
+
+function showWarnBanner(msg){
+  let banner = document.getElementById('warnBanner');
+  if(!banner){
+    banner = document.createElement('div');
+    banner.id = 'warnBanner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:200;background:#EF6A5B;color:#fff;text-align:center;padding:8px 12px;font-size:12.5px;font-family:monospace;';
+    document.body.prepend(banner);
+  }
+  banner.textContent = msg;
+  banner.style.display = 'block';
+  clearTimeout(window._warnTimeout);
+  window._warnTimeout = setTimeout(()=>{ banner.style.display='none'; }, 6000);
+}
+
+function logSalida(){
+  salidaCount++;
+  showWarnBanner('⚠️ Se detectó que saliste de esta pestaña o ventana (van: ' + salidaCount + ').');
+  if(studentName && sheetsReady()){
+    sheetPost('Progreso', [new Date().toISOString(), studentName, 'incidente_salida_pantalla', salidaCount, salidaCount]).catch(()=>{});
+  }
+}
+
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) logSalida(); });
+
+window.addEventListener('beforeunload', function(e){
+  e.preventDefault();
+  e.returnValue = '';
+});
+
+document.addEventListener('contextmenu', e=> e.preventDefault());
+document.addEventListener('copy', e=> e.preventDefault());
+
+/* ============================================================
+   INICIO
+   ============================================================ */
+renderTabs();
+renderPage();
+</script>
+</body>
+</html>
