@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Antología de Consulta · Duodécimo Año</title>
+<style>
+:root{
+  --navy:#0E1B3D; --navy-deep:#0A1230;
+  --gold:#B8863C; --gold-light:#F4DD7A;
+  --teal:#2FC2AD; --coral:#EF6A5B;
+  --ink:#20242B; --paper:#F3F5F4; --muted:#5B6470; --line:#D8DCDD;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);padding-bottom:60px;}
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.topbar h1{font-size:16px;margin:0 0 2px;}
+.topbar p{margin:0;font-size:10px;color:rgba(255,255,255,.65);font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;}
+.teacherBtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:10.5px;padding:6px 12px;border-radius:14px;cursor:pointer;}
+.teacherBtn.on{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);font-weight:700;}
+
+.page{max-width:800px;margin:0 auto;padding:16px;}
+.intro{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:14px 16px;margin-bottom:18px;font-size:13px;line-height:1.55;color:var(--muted);}
+
+.subarea-title{font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin:26px 0 6px;padding-bottom:6px;border-bottom:2px solid var(--gold-light);}
+.subarea-title:first-of-type{margin-top:0;}
+.unidad-group{margin-bottom:6px;}
+.unidad-label{font-size:12.5px;font-weight:700;color:var(--navy);margin:14px 0 8px;}
+
+.topic-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;}
+.topic-card.clickable{cursor:pointer;}
+.topic-card.clickable:hover{border-color:var(--navy);}
+.topic-card.pending{opacity:.6;}
+.topic-icon{font-size:22px;flex-shrink:0;width:34px;text-align:center;}
+.topic-body{flex:1;min-width:0;}
+.topic-title{font-size:13.5px;font-weight:700;color:var(--navy);margin-bottom:2px;}
+.topic-desc{font-size:11.5px;color:var(--muted);line-height:1.4;}
+.topic-tag{font-family:var(--mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.4px;background:#f7f8f6;color:var(--muted);padding:2px 7px;border-radius:8px;display:inline-block;margin-top:5px;}
+.topic-tag.presentacion{background:#fdf3e0;color:var(--gold);}
+.topic-tag.curso{background:#e7f1ec;color:#1e7a63;}
+.hidden-badge{font-family:var(--mono);font-size:8.5px;background:var(--coral);color:#fff;padding:2px 7px;border-radius:8px;margin-left:6px;}
+.chevron{color:var(--muted);font-size:16px;flex-shrink:0;}
+
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,18,48,.6);z-index:50;align-items:flex-start;justify-content:center;padding:30px 14px;overflow-y:auto;}
+.modal-bg.show{display:flex;}
+.modal{background:#fff;border-radius:10px;max-width:400px;width:100%;padding:20px;}
+.modal h3{margin:0 0 12px;color:var(--navy);}
+.modal .close{float:right;cursor:pointer;font-size:18px;color:var(--muted);}
+.pin-row{display:flex;gap:8px;margin-top:10px;}
+.pin-row input{flex:1;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-size:14px;font-family:var(--mono);letter-spacing:3px;text-align:center;}
+.btn{display:inline-block;padding:8px 16px;background:var(--navy);color:#fff;border:none;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.empty-msg{text-align:center;color:var(--muted);font-size:13px;padding:40px 20px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div>
+      <h1>📚 Antología de Consulta</h1>
+      <p>Contabilidad · Duodécimo año · Material de apoyo por tema</p>
+    </div>
+    <button class="teacherBtn" id="teacherBtnOpen">👩‍🏫 Modo docente</button>
+  </div>
+</div>
+
+<div class="page" id="page">
+  <div class="intro">Este espacio reúne material de consulta (presentaciones, resúmenes e infografías) organizado por tema, para repasar en cualquier momento del curso. No es una actividad calificada.</div>
+  <div id="topicsWrap"><p style="text-align:center;color:var(--muted);font-size:13px;">Cargando temas...</p></div>
+</div>
+
+<div class="modal-bg" id="pinModalBg">
+  <div class="modal">
+    <span class="close" id="pinModalClose">✕</span>
+    <h3>Modo docente</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin:0;">Ingresá el PIN para ver también los temas que aún no están publicados para los estudiantes.</p>
+    <div class="pin-row">
+      <input type="password" id="pinInput" maxlength="6" placeholder="PIN">
+      <button class="btn" id="pinSubmit">Entrar</button>
+    </div>
+    <div id="pinError" style="color:var(--coral);font-size:11.5px;margin-top:6px;display:none;">PIN incorrecto.</div>
+  </div>
+</div>
+
+<script>
+const TEACHER_PIN = "9986";
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbzMGf_Gpf6UWswFPSqEBMdq-93GxGkrURsT4jtO9Jaz8yT5gyMMtp1btlcDZjRCeuAb/exec";
+
+let jsonpCounter = 0;
+function jsonpRequest(url){
+  return new Promise((resolve, reject)=>{
+    const cbName = 'jsonp_cb_' + (jsonpCounter++) + '_' + Date.now();
+    const script = document.createElement('script');
+    let settled = false;
+    const cleanup = ()=>{ delete window[cbName]; if(script.parentNode) script.parentNode.removeChild(script); };
+    window[cbName] = (data)=>{ settled = true; cleanup(); resolve(data); };
+    script.onerror = ()=>{ if(!settled){ cleanup(); reject(new Error('Error de red')); } };
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    document.body.appendChild(script);
+    setTimeout(()=>{ if(!settled){ cleanup(); reject(new Error('Tiempo de espera agotado')); } }, 10000);
+  });
+}
+async function sheetGet(sheetName){
+  const data = await jsonpRequest(SHEET_API_URL + '?sheet=' + encodeURIComponent(sheetName));
+  return data.rows || [];
+}
+
+let teacherMode = false;
+let allRows = [];
+
+function escapeHtml(s){ return (s+"").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+const ICONS = { "Curso interactivo":"🖥️", "Presentacion":"📊", "Presentación":"📊", "Proximamente":"⏳", "Próximamente":"⏳" };
+const TAGCLASS = { "Curso interactivo":"curso", "Presentacion":"presentacion", "Presentación":"presentacion" };
+
+function renderTopics(){
+  const wrap = document.getElementById('topicsWrap');
+  const visibleRows = teacherMode ? allRows : allRows.filter(r => String(r.Activo).toUpperCase() === 'SI');
+  if(visibleRows.length===0){ wrap.innerHTML = '<p class="empty-msg">Todavía no hay temas publicados.</p>'; return; }
+
+  const bySubarea = {};
+  visibleRows.forEach(r=>{
+    bySubarea[r.Subarea] = bySubarea[r.Subarea] || {};
+    bySubarea[r.Subarea][r.Unidad] = bySubarea[r.Subarea][r.Unidad] || [];
+    bySubarea[r.Subarea][r.Unidad].push(r);
+  });
+
+  let html = '';
+  Object.keys(bySubarea).forEach(subarea=>{
+    html += `<div class="subarea-title">${escapeHtml(subarea)}</div>`;
+    const unidades = bySubarea[subarea];
+    Object.keys(unidades).forEach(unidad=>{
+      const items = unidades[unidad].sort((a,b)=> Number(a.Orden||0) - Number(b.Orden||0));
+      html += `<div class="unidad-group"><div class="unidad-label">${escapeHtml(unidad)}</div>`;
+      items.forEach(r=>{
+        const tipo = r.TipoRecurso || '';
+        const isPending = tipo.toLowerCase().startsWith('prox');
+        const isActive = String(r.Activo).toUpperCase() === 'SI';
+        const icon = ICONS[tipo] || '📄';
+        const tagClass = TAGCLASS[tipo] || '';
+        const hiddenBadge = (!isActive && teacherMode) ? '<span class="hidden-badge">🔒 Oculto para estudiantes</span>' : '';
+        if(isPending){
+          html += `<div class="topic-card pending">
+            <div class="topic-icon">${icon}</div>
+            <div class="topic-body">
+              <div class="topic-title">${escapeHtml(r.Titulo)}</div>
+              <div class="topic-desc">${escapeHtml(r.Descripcion||'')}</div>
+              <span class="topic-tag">Próximamente</span>${hiddenBadge}
+            </div>
+          </div>`;
+        } else {
+          html += `<a class="topic-card clickable" href="${escapeHtml(r.URL)}" target="_blank">
+            <div class="topic-icon">${icon}</div>
+            <div class="topic-body">
+              <div class="topic-title">${escapeHtml(r.Titulo)}</div>
+              <div class="topic-desc">${escapeHtml(r.Descripcion||'')}</div>
+              <span class="topic-tag ${tagClass}">${escapeHtml(tipo)}</span>${hiddenBadge}
+            </div>
+            <div class="chevron">›</div>
+          </a>`;
+        }
+      });
+      html += `</div>`;
+    });
+  });
+  wrap.innerHTML = html;
+}
+
+async function loadTopics(){
+  try{
+    allRows = await sheetGet('Antologia12');
+    renderTopics();
+  }catch(e){
+    document.getElementById('topicsWrap').innerHTML = '<p class="empty-msg" style="color:var(--coral);">No se pudo cargar la antología (revisá la conexión a la hoja de datos).</p>';
+  }
+}
+
+document.getElementById('teacherBtnOpen').addEventListener('click', ()=>{
+  if(teacherMode){
+    teacherMode = false;
+    document.getElementById('teacherBtnOpen').classList.remove('on');
+    document.getElementById('teacherBtnOpen').textContent = '👩‍🏫 Modo docente';
+    renderTopics();
+    return;
+  }
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinError').style.display = 'none';
+  document.getElementById('pinModalBg').classList.add('show');
+  document.getElementById('pinInput').focus();
+});
+document.getElementById('pinModalClose').addEventListener('click', ()=>{
+  document.getElementById('pinModalBg').classList.remove('show');
+});
+document.getElementById('pinSubmit').addEventListener('click', checkPin);
+document.getElementById('pinInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkPin(); });
+function checkPin(){
+  const val = document.getElementById('pinInput').value.trim();
+  if(val !== TEACHER_PIN){
+    document.getElementById('pinError').style.display = 'block';
+    return;
+  }
+  teacherMode = true;
+  document.getElementById('teacherBtnOpen').classList.add('on');
+  document.getElementById('teacherBtnOpen').textContent = '👩‍🏫 Modo docente ✓';
+  document.getElementById('pinModalBg').classList.remove('show');
+  renderTopics();
+}
+
+loadTopics();
+</script>
+</body>
+</html>
