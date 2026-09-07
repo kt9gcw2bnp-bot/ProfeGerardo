@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso · Repaso Avanzado: Bonos y Acciones</title>
+<style>
+:root{
+  --navy:#0E1B3D; --navy-deep:#0A1230;
+  --gold:#B8863C; --gold-light:#F4DD7A;
+  --teal:#2FC2AD; --coral:#EF6A5B;
+  --ink:#20242B; --paper:#F3F5F4; --muted:#5B6470; --line:#D8DCDD;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);padding-bottom:60px;}
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;padding:12px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.topbar h1{font-size:15px;margin:0 0 2px;}
+.topbar p{margin:0;font-size:10px;color:rgba(255,255,255,.65);font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;}
+.teacherBtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:10.5px;padding:5px 10px;border-radius:14px;cursor:pointer;}
+.badge-adv{background:var(--gold);color:var(--navy-deep);font-size:9.5px;font-family:var(--mono);font-weight:700;padding:3px 9px;border-radius:10px;text-transform:uppercase;letter-spacing:.4px;}
+
+.namebar{background:#fff;border-bottom:1px solid var(--line);padding:9px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.namebar input{padding:7px 9px;border:1px solid var(--line);border-radius:6px;font-size:13px;flex:1;min-width:160px;}
+.namebar label{font-size:11px;color:var(--muted);font-family:var(--mono);}
+
+.tabs{display:flex;gap:4px;overflow-x:auto;background:#fff;border-bottom:1px solid var(--line);padding:8px 10px;}
+.tab{flex:0 0 auto;padding:7px 12px;border-radius:16px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid var(--line);color:var(--muted);white-space:nowrap;background:#f7f8f6;}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab.done::after{content:" ✓";color:var(--teal);}
+.tab.cert{border-color:var(--gold);}
+.tab.cert.active{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);}
+.tab.tab-locked{opacity:.45;}
+.tab.tab-locked::before{content:"🔒 ";}
+
+.info-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;border-radius:12px;padding:22px 20px;margin-bottom:16px;text-align:center;}
+.info-hero .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:2px;color:var(--gold-light);text-transform:uppercase;}
+.info-hero h2{margin:8px 0 4px;font-size:19px;}
+.info-hero p{margin:0;font-size:12px;color:rgba(255,255,255,.75);}
+.info-block{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden;}
+.info-block::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--block-color,var(--gold));}
+.info-block .ib-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.info-block .ib-icon{font-size:22px;flex-shrink:0;}
+.info-block h3{margin:0;font-size:14.5px;color:var(--navy);}
+.info-block p{font-size:12.5px;line-height:1.6;margin:0 0 8px;color:var(--ink);}
+.info-block .ib-tag{display:inline-block;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.5px;background:#f7f8f6;color:var(--muted);padding:2px 8px;border-radius:10px;margin-top:6px;}
+.journal-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:11.5px;}
+.journal-table th,.journal-table td{border:1px solid var(--line);padding:6px 8px;text-align:left;}
+.journal-table th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;}
+.journal-table td.num{text-align:right;font-family:var(--mono);}
+.journal-table td.debe{padding-left:18px;}
+.read-confirm{text-align:center;margin:20px 0 6px;}
+.read-confirm .btn{padding:12px 26px;font-size:13.5px;}
+.read-confirm p{font-size:11.5px;color:var(--muted);margin-top:8px;}
+
+.page{max-width:760px;margin:0 auto;padding:16px;}
+.content-card{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:13.5px;line-height:1.55;color:var(--ink);}
+.content-card h2{font-size:16px;margin:0 0 8px;color:var(--navy);}
+
+.actcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;}
+.actcard h3{font-size:13.5px;margin:0 0 10px;color:var(--navy);}
+.btn{display:inline-block;padding:8px 16px;background:var(--navy);color:#fff;border:none;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.btn:hover{background:var(--navy-deep);}
+.btn:disabled{opacity:.45;cursor:default;}
+.scorepill{display:inline-block;font-family:var(--mono);font-size:11px;background:var(--teal);color:#fff;padding:3px 10px;border-radius:12px;margin-left:8px;}
+
+.qcard{border:1px solid var(--line);border-radius:8px;padding:12px 13px;margin-bottom:10px;}
+.qcard.correct{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset;}
+.qcard.incorrect{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral) inset;}
+.qtext{font-size:13px;font-weight:600;margin-bottom:8px;}
+.opt{display:flex;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;margin-top:6px;cursor:pointer;font-size:12.5px;}
+.opt:hover{background:#f7f8f6;}
+.opt .letter{font-family:var(--mono);font-weight:700;color:var(--navy);}
+.opt.locked{cursor:default;}
+.opt.chosen-correct{background:#e7f1ec;border-color:var(--teal);}
+.opt.chosen-incorrect{background:#f7e9e8;border-color:var(--coral);}
+.opt.reveal-correct{background:#e7f1ec;border-color:var(--teal);}
+.justif{margin-top:8px;padding:8px 10px;border-radius:6px;font-size:11.5px;display:none;}
+.justif.show{display:block;}
+.justif.ok{background:#e7f1ec;color:#1e4a37;}
+.justif.bad{background:#f7e9e8;color:#6f2626;}
+
+.match-table{width:100%;border-collapse:collapse;margin-top:6px;}
+.match-table td{padding:6px 4px;font-size:12.5px;vertical-align:middle;}
+.match-table select{width:100%;font-size:12.5px;padding:6px;border-radius:5px;border:1px solid var(--line);}
+.match-row.ok select{border-color:var(--teal);background:#e7f1ec;}
+.match-row.bad select{border-color:var(--coral);background:#f7e9e8;}
+.bank{font-size:11px;color:var(--muted);background:#f7f8f6;border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-top:8px;}
+
+.ws-wrap{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;justify-content:center;}
+.ws-grid{display:grid;gap:1px;background:#dfe3e6;border:2px solid var(--navy);border-radius:6px;padding:3px;touch-action:none;}
+.ws-cell{width:19px;height:19px;display:flex;align-items:center;justify-content:center;background:#fff;font-family:var(--mono);font-weight:700;font-size:9.5px;border-radius:2px;cursor:pointer;-webkit-user-select:none;user-select:none;}
+.ws-cell.selected{background:var(--gold-light);}
+.ws-cell.found{background:var(--teal);color:#fff;}
+.ws-list{flex:0 0 170px;}
+.ws-list ul{list-style:none;margin:0;padding:0;}
+.ws-list li{font-family:var(--mono);font-size:11px;padding:4px 7px;border-radius:5px;margin-bottom:3px;background:#f7f8f6;border:1px solid var(--line);}
+.ws-list li.found{background:var(--teal);color:#fff;border-color:var(--teal);text-decoration:line-through;}
+
+.cw-wrap{display:flex;gap:18px;flex-wrap:wrap;}
+.cw-grid{display:grid;gap:1px;background:#1c1f24;border:2px solid var(--navy);border-radius:4px;padding:2px;}
+.cw-cell{width:22px;height:22px;position:relative;background:#fff;}
+.cw-cell.blocked{background:#1c1f24;}
+.cw-cell input{width:100%;height:100%;border:none;text-align:center;font-family:var(--mono);font-weight:700;font-size:11.5px;text-transform:uppercase;background:transparent;padding:0;}
+.cw-cell input.ok{background:#e7f1ec;color:#1e4a37;}
+.cw-cell input.bad{background:#f7e9e8;color:#6f2626;}
+.cw-num{position:absolute;top:0px;left:1px;font-size:6.5px;color:var(--gold);font-family:var(--mono);}
+.cw-clues{flex:1;min-width:200px;font-size:11.5px;}
+.cw-clues b{color:var(--navy);display:block;margin:8px 0 3px;font-size:11px;}
+.cw-clues li{margin-bottom:4px;}
+
+.caso-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:16px;}
+.caso-card.correct{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset;}
+.caso-card.incorrect{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral) inset;}
+.caso-card .caso-tag{font-family:var(--mono);font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;}
+.caso-card p.enunciado{font-size:13px;margin:8px 0 4px;color:var(--ink);}
+textarea.caso-input, input.re-input{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-family:var(--sans);font-size:12.5px;margin-top:10px;}
+textarea.caso-input{min-height:60px;}
+input.re-input{font-family:var(--mono);}
+.caso-opts{margin-top:10px;}
+
+.progress-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+.progress-table th,.progress-table td{border:1px solid var(--line);padding:7px 9px;font-size:12px;text-align:left;}
+.progress-table th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;}
+.progress-table td.center{text-align:center;}
+.status-ok{color:var(--teal);font-weight:700;}
+.status-mid{color:#c98a2c;font-weight:700;}
+.status-bad{color:var(--coral);font-weight:700;}
+.status-pending{color:var(--muted);}
+.competency-desc{font-size:10.5px;color:var(--muted);display:block;margin-top:2px;}
+.ra-tag{font-family:var(--mono);font-size:9.5px;color:var(--gold);font-weight:700;}
+
+.certificate{display:none;border:8px double var(--gold);border-radius:10px;padding:34px 24px;text-align:center;background:#fffdf7;margin-top:10px;}
+.certificate.show{display:block;}
+.certificate .kicker{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;}
+.certificate h2{font-size:22px;color:var(--navy);margin:10px 0 4px;font-family:Georgia,serif;}
+.certificate .name{font-size:26px;font-weight:700;color:var(--navy-deep);margin:14px 0;font-family:Georgia,serif;border-bottom:2px solid var(--gold);display:inline-block;padding-bottom:6px;}
+.certificate p{font-size:12.5px;color:var(--muted);max-width:440px;margin:6px auto;}
+.certificate .seal{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d488,#a97c29);margin:14px auto 0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#3a2a06;font-weight:700;}
+
+.locked-msg{text-align:center;color:var(--muted);font-size:12.5px;padding:30px 20px;background:#fff;border:1px dashed var(--line);border-radius:8px;}
+
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,18,48,.6);z-index:50;align-items:flex-start;justify-content:center;padding:30px 14px;overflow-y:auto;}
+.modal-bg.show{display:flex;}
+.modal{background:#fff;border-radius:10px;max-width:700px;width:100%;padding:20px;}
+.modal h3{margin:0 0 12px;color:var(--navy);}
+.modal .close{float:right;cursor:pointer;font-size:18px;color:var(--muted);}
+.pin-row{display:flex;gap:8px;margin-top:10px;}
+.pin-row input{flex:1;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-size:14px;font-family:var(--mono);letter-spacing:3px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div>
+      <h1>📈 Repaso Avanzado: Bonos y Acciones</h1>
+      <p>Contabilidad · Duodécimo año · Asientos de diario</p>
+    </div>
+    <span class="badge-adv">🎓 Avanzado</span>
+    <button class="teacherBtn" id="teacherBtnOpen">👩‍🏫 Panel docente</button>
+    <button class="teacherBtn" id="focusModeBtn" style="margin-left:6px;">🔒 Modo enfoque</button>
+  </div>
+</div>
+
+<div class="namebar">
+  <label>Tu nombre:</label>
+  <input type="text" id="studentName" placeholder="Nombre completo" maxlength="45">
+  <span id="nameStatus" style="font-size:11px;color:var(--muted);font-family:var(--mono);"></span>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="page" id="page"></div>
+
+<div class="modal-bg" id="pinModalBg">
+  <div class="modal">
+    <span class="close" id="pinModalClose">✕</span>
+    <h3>Panel docente</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin:0;">Ingrese el PIN para ver el progreso del grupo.</p>
+    <div class="pin-row">
+      <input type="password" id="pinInput" maxlength="6" placeholder="PIN">
+      <button class="btn" id="pinSubmit">Entrar</button>
+    </div>
+    <div id="pinError" style="color:var(--coral);font-size:11.5px;margin-top:6px;display:none;">PIN incorrecto.</div>
+  </div>
+</div>
+
+<div class="modal-bg" id="teacherModalBg">
+  <div class="modal">
+    <span class="close" id="teacherModalClose">✕</span>
+    <h3>Panel docente — progreso del curso</h3>
+    <div id="teacherContent">Cargando...</div>
+  </div>
+</div>
+
+<script>
+const TEACHER_PIN = "9986";
+
+/* ============================================================
+   CONFIGURACIÓN DE MÓDULOS
+   ============================================================ */
+const MODULES = [
+  { id:"repasobonos_antologia", label:"📘 Antología", title:"Antología — Bonos y Acciones (Avanzado)", activityType:"antologia" },
+  { id:"repasobonos_calculo", label:"⚖️ Cuestionario", title:"Conceptos y Asientos de Diario",
+    content:"Repasemos los conceptos clave y su registro contable: emisión de bonos a la par, con descuento y con prima; pago de cupón; emisión de acciones; y declaración de dividendos.",
+    activityType:"quiz" },
+  { id:"repasobonos_tipos", label:"🔗 Asocie", title:"Asocie — Cuentas y su Naturaleza", activityType:"matching" },
+  { id:"repasobonos_concepto", label:"🔤 Sopa de letras", title:"Vocabulario de Bonos y Acciones",
+    content:"Cada bono o acción se registra con cuentas específicas de deuda o patrimonio, según corresponda, con la partida doble como principio inquebrantable.",
+    activityType:"wordsearch" },
+  { id:"repasobonos_trabajo", label:"📝 Trabajo en clase", title:"Trabajo en clase — Elabore el Asiento", activityType:"trabajo" },
+  { id:"repasobonos_re", label:"🧮 Ejercicio numérico", title:"Resolución de Ejercicio", activityType:"numeric" },
+  { id:"repasobonos_metodos", label:"🗂️ Crucigrama", title:"Términos Clave",
+    content:"El descuento y la prima en la emisión de bonos se amortizan gradualmente durante la vida del título, ajustando el gasto por intereses reconocido cada período.",
+    activityType:"crossword" },
+  { id:"repasobonos_vf", label:"✅ Verdadero/Falso", title:"Verdadero o Falso",
+    content:"Repasemos con afirmaciones que pueden ser ciertas o falsas — prestá atención a los detalles.",
+    activityType:"vf" },
+  { id:"repasobonos_casos", label:"💬 Casos y Debate", title:"Casos y Debate (módulo compartido)", activityType:"casos" },
+  { id:"certificado", label:"🏆 Certificado", title:"Certificado", activityType:"certificado" },
+];
+
+const ORDER = ["repasobonos_antologia","repasobonos_calculo","repasobonos_tipos","repasobonos_concepto","repasobonos_trabajo","repasobonos_re","repasobonos_metodos","repasobonos_vf","repasobonos_casos"];
+
+function isStepDone(id){
+  if(id==='repasobonos_antologia') return antologiaLeida;
+  if(id==='repasobonos_casos') return !!(localProgress['repasobonos_casos'] && localProgress['repasobonos_casos'].score>0);
+  return !!(localProgress[id] && localProgress[id].total > 0);
+}
+
+function currentStepIndex(){
+  for(let i=0;i<ORDER.length;i++){ if(!isStepDone(ORDER[i])) return i; }
+  return ORDER.length;
+}
+
+let activeModule = MODULES[0].id;
+let studentName = "";
+let antologiaLeida = false;
+
+/* ============================================================
+   CONEXIÓN A GOOGLE SHEETS
+   ============================================================ */
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbzMGf_Gpf6UWswFPSqEBMdq-93GxGkrURsT4jtO9Jaz8yT5gyMMtp1btlcDZjRCeuAb/exec";
+function sheetsReady(){ return SHEET_API_URL && !SHEET_API_URL.startsWith('REEMPLAZAR'); }
+
+let jsonpCounter = 0;
+function jsonpRequest(url){
+  return new Promise((resolve, reject)=>{
+    const cbName = 'jsonp_cb_' + (jsonpCounter++) + '_' + Date.now();
+    const script = document.createElement('script');
+    let settled = false;
+    const cleanup = ()=>{ delete window[cbName]; if(script.parentNode) script.parentNode.removeChild(script); };
+    window[cbName] = (data)=>{ settled = true; cleanup(); resolve(data); };
+    script.onerror = ()=>{ if(!settled){ cleanup(); reject(new Error('Error de red (JSONP)')); } };
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    document.body.appendChild(script);
+    setTimeout(()=>{ if(!settled){ cleanup(); reject(new Error('Tiempo de espera agotado')); } }, 10000);
+  });
+}
+async function sheetGet(sheetName){
+  const data = await jsonpRequest(SHEET_API_URL + '?sheet=' + encodeURIComponent(sheetName));
+  return data.rows || [];
+}
+async function sheetPost(sheetName, row){
+  await fetch(SHEET_API_URL, { method:'POST', mode:'no-cors', body: JSON.stringify({ sheet: sheetName, row }) });
+  return { ok:true };
+}
+
+/* ============================================================
+   PROGRESO
+   ============================================================ */
+const localProgress = {};
+
+async function saveProgress(moduleId, score, total){
+  localProgress[moduleId] = {score, total, ts:Date.now()};
+  renderTabs();
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const nowIso = new Date().toISOString();
+    await sheetPost('Progreso', [nowIso, studentName, moduleId, score, total]);
+  }catch(e){}
+}
+
+function isLocked(moduleId){
+  return !!(localProgress[moduleId] && localProgress[moduleId].total > 0);
+}
+
+function renderLockedNotice(moduleId, activityLabel){
+  const p = localProgress[moduleId];
+  const pctVal = p.total>0 ? Math.round((p.score/p.total)*100) : 0;
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>✅ Actividad completada</h3>
+    <p style="font-size:13px;">Ya completaste <strong>${activityLabel}</strong>. Tu resultado fue <strong>${p.score} / ${p.total}</strong> (${pctVal}%).</p>
+    <p style="font-size:11px;color:var(--muted);">Esta actividad ya quedó registrada y no se puede repetir.</p>`;
+  pageEl.appendChild(card);
+}
+
+async function loadExistingProgress(){
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const rows = await sheetGet('Progreso');
+    rows.filter(r => r.Estudiante === studentName).forEach(r=>{
+      const mod = r.Modulo;
+      if(!mod) return;
+      localProgress[mod] = { score:Number(r.Score), total:Number(r.Total), ts:new Date(r.Timestamp).getTime() };
+    });
+    if(localProgress['repasobonos_antologia']) antologiaLeida = true;
+    renderTabs();
+    renderPage();
+  }catch(e){}
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+const tabsEl = document.getElementById('tabs');
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  const curIdx = currentStepIndex();
+  MODULES.forEach(m=>{
+    const t = document.createElement('div');
+    const done = isStepDone(m.id);
+    const orderIdx = ORDER.indexOf(m.id);
+    let clickable;
+    if(m.id==='certificado' || m.id==='repasobonos_antologia') clickable = true;
+    else clickable = (orderIdx === curIdx);
+    t.className = 'tab' + (m.id===activeModule?' active':'') + (done?' done':'') + (m.id==='certificado'?' cert':'') + (!clickable?' tab-locked':'');
+    t.textContent = m.label;
+    t.addEventListener('click', ()=>{
+      if(!clickable){
+        if(orderIdx > curIdx) alert('Primero debés completar la actividad actual antes de avanzar a esta.');
+        else alert('Ya completaste esta actividad — solo podés regresar a la Antología, no a etapas anteriores.');
+        return;
+      }
+      activeModule = m.id;
+      renderTabs(); renderPage();
+    });
+    tabsEl.appendChild(t);
+  });
+}
+
+/* ============================================================
+   RENDER PAGE ROUTER
+   ============================================================ */
+const pageEl = document.getElementById('page');
+function renderPage(){
+  const m = MODULES.find(x=>x.id===activeModule);
+  pageEl.innerHTML = '';
+  if(m.content){
+    const c = document.createElement('div');
+    c.className = 'content-card';
+    c.innerHTML = `<h2>${m.title}</h2><p>${m.content}</p>`;
+    pageEl.appendChild(c);
+  }
+  if(m.activityType==='antologia') renderAntologia();
+  else if(m.activityType==='wordsearch') renderWordSearch();
+  else if(m.activityType==='crossword') renderCrossword();
+  else if(m.activityType==='quiz') renderQuiz();
+  else if(m.activityType==='vf') renderVF();
+  else if(m.activityType==='matching') renderMatching();
+  else if(m.activityType==='trabajo') renderTrabajo();
+  else if(m.activityType==='numeric') renderNumeric();
+  else if(m.activityType==='casos') renderCasos();
+  else if(m.activityType==='certificado') renderCertificado();
+  maybeShowContinue();
+}
+
+function maybeShowContinue(){
+  if(activeModule==='certificado') return;
+  if(!isStepDone(activeModule)) return;
+  const idx = ORDER.indexOf(activeModule);
+  if(idx===-1) return;
+  const nextId = (idx+1<ORDER.length) ? ORDER[idx+1] : 'certificado';
+  const nextMod = MODULES.find(x=>x.id===nextId);
+  const bar = document.createElement('div');
+  bar.className = 'read-confirm';
+  bar.innerHTML = `<button class="btn" id="continueBtn">➡️ Continuar a: ${nextMod.label}</button>`;
+  pageEl.appendChild(bar);
+  document.getElementById('continueBtn').addEventListener('click', ()=>{
+    activeModule = nextId; renderTabs(); renderPage();
+  });
+}
+
+function escapeHtml(s){ return (s+"").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ============================================================
+   MÓDULO: ANTOLOGÍA
+   ============================================================ */
+function renderAntologia(){
+  const card = document.createElement('div');
+  card.innerHTML = `
+    <div class="info-hero">
+      <div class="kicker">Antología · Duodécimo Año · Repaso Avanzado</div>
+      <h2>📈 Bonos y Acciones — Contabilidad Avanzada</h2>
+      <p>Este repaso va más allá del nivel básico: nos enfocamos en cómo se <strong>registran contablemente</strong> las emisiones de bonos y acciones. Leé cada bloque con calma.</p>
+    </div>
+
+    <div class="info-block" style="--block-color:#B8863C;">
+      <div class="ib-head"><span class="ib-icon">📄</span><h3>1. Bonos: concepto y elementos</h3></div>
+      <p>Un <strong>bono</strong> es un título de deuda: quien lo emite se compromete a devolver el <strong>valor nominal</strong> en una fecha futura (el <strong>vencimiento</strong>), y a pagar intereses periódicos —el <strong>cupón</strong>— mientras tanto. El precio de colocación puede ser a la par, con prima, o con descuento, según cómo se compare la tasa cupón con la tasa de mercado del momento.</p>
+      <span class="ib-tag">RA · Instrumentos financieros</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#2FC2AD;">
+      <div class="ib-head"><span class="ib-icon">🧾</span><h3>2. Emisión de bonos: a la par, con descuento, con prima</h3></div>
+      <p>Cuando la tasa cupón coincide con la tasa de mercado, el bono se coloca <strong>a la par</strong>. Si la tasa cupón es <strong>menor</strong>, se vende con <strong>descuento</strong> (por debajo del valor nominal). Si es <strong>mayor</strong>, se vende con <strong>prima</strong> (por encima del valor nominal).</p>
+      <p><strong>Ejemplo — Bono con descuento:</strong> valor nominal ₡10.000.000, vendido en ₡9.400.000.</p>
+      <table class="journal-table">
+        <tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr>
+        <tr><td class="debe">Efectivo</td><td class="num">9.400.000</td><td class="num"></td></tr>
+        <tr><td class="debe">Descuento en Emisión de Bonos</td><td class="num">600.000</td><td class="num"></td></tr>
+        <tr><td>&nbsp;&nbsp;Bonos por Pagar</td><td class="num"></td><td class="num">10.000.000</td></tr>
+      </table>
+      <p><strong>Ejemplo — Bono con prima:</strong> valor nominal ₡8.000.000, vendido en ₡8.480.000.</p>
+      <table class="journal-table">
+        <tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr>
+        <tr><td class="debe">Efectivo</td><td class="num">8.480.000</td><td class="num"></td></tr>
+        <tr><td>&nbsp;&nbsp;Bonos por Pagar</td><td class="num"></td><td class="num">8.000.000</td></tr>
+        <tr><td>&nbsp;&nbsp;Prima en Emisión de Bonos</td><td class="num"></td><td class="num">480.000</td></tr>
+      </table>
+      <span class="ib-tag">RA · Instrumentos financieros</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#0E1B3D;">
+      <div class="ib-head"><span class="ib-icon">💵</span><h3>3. Pago del cupón y amortización</h3></div>
+      <p>En cada fecha de pago se reconoce el gasto por intereses. Si hubo descuento o prima en la emisión, también se <strong>amortiza</strong> —por el método de línea recta— una porción de esa diferencia cada período, ajustando el gasto reconocido.</p>
+      <p><strong>Ejemplo:</strong> bono de ₡12.000.000, tasa cupón anual 9% con pagos semestrales. Cupón semestral = 12.000.000 × 9% ÷ 2 = <strong>₡540.000</strong>.</p>
+      <table class="journal-table">
+        <tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr>
+        <tr><td class="debe">Gasto por Intereses</td><td class="num">540.000</td><td class="num"></td></tr>
+        <tr><td>&nbsp;&nbsp;Efectivo</td><td class="num"></td><td class="num">540.000</td></tr>
+      </table>
+      <p>Si ese mismo bono se hubiera vendido con un descuento de ₡600.000 a amortizar en 10 pagos semestrales, cada período se sumarían ₡60.000 adicionales al gasto por intereses (600.000 ÷ 10), sin afectar el efectivo pagado.</p>
+      <span class="ib-tag">RA · Instrumentos financieros</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#EF6A5B;">
+      <div class="ib-head"><span class="ib-icon">📊</span><h3>4. Acciones comunes y preferentes</h3></div>
+      <p>Las acciones representan una porción de <strong>propiedad</strong> (patrimonio), no una deuda. Las <strong>comunes</strong> dan derecho a voto y a dividendos variables; las <strong>preferentes</strong> priorizan el cobro de dividendos —a menudo a una tasa fija— pero generalmente no otorgan voto.</p>
+      <p><strong>Ejemplo — Emisión con prima:</strong> 5.000 acciones comunes, valor nominal ₡1.000, colocadas en el mercado a ₡1.350 cada una.</p>
+      <table class="journal-table">
+        <tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr>
+        <tr><td class="debe">Efectivo</td><td class="num">6.750.000</td><td class="num"></td></tr>
+        <tr><td>&nbsp;&nbsp;Capital Social — Acciones Comunes</td><td class="num"></td><td class="num">5.000.000</td></tr>
+        <tr><td>&nbsp;&nbsp;Prima en Colocación de Acciones</td><td class="num"></td><td class="num">1.750.000</td></tr>
+      </table>
+      <p>La prima en colocación de acciones es una cuenta de <strong>patrimonio</strong> —no una utilidad ni un ingreso— porque representa un aporte adicional de los accionistas.</p>
+      <span class="ib-tag">RA · Instrumentos financieros</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#B8863C;">
+      <div class="ib-head"><span class="ib-icon">💰</span><h3>5. Declaración y pago de dividendos</h3></div>
+      <p>La declaración de dividendos ocurre en dos momentos contables distintos:</p>
+      <p><strong>Al declararlos</strong> (se crea la obligación):</p>
+      <table class="journal-table">
+        <tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr>
+        <tr><td class="debe">Utilidades Retenidas (o Dividendos)</td><td class="num">3.000.000</td><td class="num"></td></tr>
+        <tr><td>&nbsp;&nbsp;Dividendos por Pagar</td><td class="num"></td><td class="num">3.000.000</td></tr>
+      </table>
+      <p><strong>Al pagarlos</strong> (se liquida la obligación):</p>
+      <table class="journal-table">
+        <tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr>
+        <tr><td class="debe">Dividendos por Pagar</td><td class="num">3.000.000</td><td class="num"></td></tr>
+        <tr><td>&nbsp;&nbsp;Efectivo</td><td class="num"></td><td class="num">3.000.000</td></tr>
+      </table>
+      <span class="ib-tag">RA · Instrumentos financieros</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#2FC2AD;">
+      <div class="ib-head"><span class="ib-icon">📊</span><h3>Material de consulta adicional</h3></div>
+      <p>Presentación de apoyo con todos estos asientos explicados paso a paso:</p>
+      <a class="btn" href="https://profe-gerardo.vercel.app/Bonos-y-Acciones-Repaso-Avanzado.pdf" target="_blank" style="text-decoration:none;display:inline-block;margin-top:6px;">📊 Ver presentación: Bonos y Acciones</a>
+      <span class="ib-tag" style="margin-left:8px;">Material de apoyo</span>
+    </div>
+
+    <div class="read-confirm">
+      <button class="btn" id="confirmReadBtn">✅ Ya leí la antología, continuar</button>
+      <p>Al confirmar, empieza el recorrido por las actividades — cada una desbloquea la siguiente.</p>
+    </div>
+  `;
+  pageEl.appendChild(card);
+
+  document.getElementById('confirmReadBtn').addEventListener('click', ()=>{
+    antologiaLeida = true;
+    saveProgress('repasobonos_antologia', 1, 1);
+    activeModule = 'repasobonos_calculo';
+    renderTabs(); renderPage();
+  });
+}
+
+/* ============================================================
+   MÓDULO: CUESTIONARIO
+   ============================================================ */
+const QUIZ_BANK = [
+  { q:"Una empresa emite un bono cuya tasa cupón es menor que la tasa de mercado vigente. ¿Cómo se colocará ese bono?",
+    opts:["A la par, exactamente por su valor nominal","Con descuento, por debajo de su valor nominal","Con prima, por encima de su valor nominal"], correct:1,
+    just:"Una tasa cupón menor a la de mercado obliga a vender el bono con descuento, compensando al inversionista." },
+  { q:"Al emitir un bono con descuento, ¿qué cuenta se debita además de Efectivo?",
+    opts:["Prima en Emisión de Bonos","Descuento en Emisión de Bonos","Bonos por Pagar"], correct:1,
+    just:"El descuento se debita, representando el menor efectivo recibido frente al valor nominal comprometido." },
+  { q:"¿Qué ocurre con la amortización del descuento en emisión de bonos a lo largo del tiempo?",
+    opts:["Aumenta el gasto por intereses reconocido cada período","Disminuye el gasto por intereses reconocido cada período","No tiene ningún efecto sobre el gasto por intereses"], correct:0,
+    just:"El descuento se suma gradualmente al gasto por intereses, ya que representa un costo adicional del financiamiento." },
+  { q:"En la emisión de acciones con prima, ¿en qué categoría del balance se clasifica la Prima en Colocación de Acciones?",
+    opts:["Patrimonio","Pasivo","Utilidad del período"], correct:0,
+    just:"La prima en colocación de acciones es un aporte adicional de los accionistas, clasificado dentro del patrimonio." },
+  { q:"¿Cuál es la diferencia principal entre una acción común y una preferente?",
+    opts:["La preferente prioriza el cobro de dividendos, pero generalmente no otorga voto","La común siempre paga un dividendo fijo garantizado","Ambas otorgan exactamente los mismos derechos"], correct:0,
+    just:"La preferente da prioridad en dividendos a cambio de renunciar, por lo general, al derecho a voto." },
+  { q:"Al declarar dividendos (antes de pagarlos), ¿qué cuenta se acredita?",
+    opts:["Efectivo","Dividendos por Pagar","Capital Social"], correct:1,
+    just:"La declaración crea una obligación (pasivo): se acredita Dividendos por Pagar hasta el momento del pago real." },
+];
+
+function renderQuiz(){
+  if(isLocked('repasobonos_calculo')){
+    renderLockedNotice('repasobonos_calculo', 'el cuestionario');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Cuestionario <span class="scorepill" id="qzScorePill">0 / ${QUIZ_BANK.length}</span></h3><div id="qzWrap"></div>`;
+  pageEl.appendChild(card);
+  const wrap = document.getElementById('qzWrap');
+  let score=0, answered=0;
+  QUIZ_BANK.forEach((item,qi)=>{
+    const qcard = document.createElement('div');
+    qcard.className='qcard';
+    qcard.innerHTML = `<div class="qtext">${qi+1}. ${item.q}</div><div class="opts"></div><div class="justif"></div>`;
+    const optsDiv = qcard.querySelector('.opts');
+    const letters=['A','B','C'];
+    item.opts.forEach((optText,oi)=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(qcard.classList.contains('answered')) return;
+        qcard.classList.add('answered');
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = oi===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect) optsDiv.querySelectorAll('.opt')[item.correct].classList.add('reveal-correct');
+        qcard.classList.add(isCorrect?'correct':'incorrect');
+        const j = qcard.querySelector('.justif');
+        j.classList.add('show', isCorrect?'ok':'bad');
+        j.textContent = (isCorrect?'✓ ':'✕ ') + item.just;
+        if(isCorrect) score++;
+        answered++;
+        document.getElementById('qzScorePill').textContent = score+' / '+QUIZ_BANK.length;
+        if(answered===QUIZ_BANK.length){ saveProgress('repasobonos_calculo', score, QUIZ_BANK.length); maybeShowContinue(); }
+      });
+      optsDiv.appendChild(opt);
+    });
+    wrap.appendChild(qcard);
+  });
+}
+
+/* ============================================================
+   MÓDULO: ASOCIE
+   ============================================================ */
+const MATCH_DATA = {
+  terms:["Bonos por Pagar","Descuento en Emisión de Bonos","Prima en Colocación de Acciones","Capital Social","Dividendos por Pagar"],
+  defs:[
+    "Cuenta de pasivo que representa el valor nominal de la deuda emitida",
+    "Cuenta que reduce el pasivo por bonos, y se amortiza aumentando el gasto por intereses",
+    "Cuenta de patrimonio que representa un aporte adicional de los accionistas",
+    "Cuenta de patrimonio que registra el valor nominal de las acciones emitidas",
+    "Cuenta de pasivo que representa dividendos ya declarados pero aún no pagados"
+  ],
+  correct:[0,1,2,3,4]
+};
+
+function renderMatching(){
+  if(isLocked('repasobonos_tipos')){
+    renderLockedNotice('repasobonos_tipos', 'el asocie');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const letters=['A','B','C','D','E'];
+  let rows='';
+  MATCH_DATA.terms.forEach((t,i)=>{
+    rows += `<tr class="match-row" data-i="${i}"><td>${i+1}. ${t}</td><td><select data-i="${i}"><option value="">— Seleccione —</option>${MATCH_DATA.defs.map((d,j)=>`<option value="${j}">${letters[j]}</option>`).join('')}</select></td></tr>`;
+  });
+  card.innerHTML = `<h3>Asocie — relacione cada cuenta con su naturaleza <span class="scorepill" id="mtScorePill">0 / 5</span></h3>
+    <table class="match-table"><tbody>${rows}</tbody></table>
+    <div class="bank"><b>Columna B</b><br>${MATCH_DATA.defs.map((d,j)=>`${letters[j]}. ${d}`).join('<br>')}</div>
+    <button class="btn" id="mtCheckBtn" style="margin-top:10px;">Comprobar</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('mtCheckBtn').addEventListener('click', function(){
+    if(this.disabled) return;
+    const selects = document.querySelectorAll('.match-table select');
+    let correct=0, allAnswered=true;
+    selects.forEach(sel=>{
+      const i = parseInt(sel.dataset.i,10);
+      if(sel.value===""){ allAnswered=false; return; }
+      const row = sel.closest('.match-row');
+      if(parseInt(sel.value,10)===MATCH_DATA.correct[i]){ row.classList.add('ok'); correct++; }
+      else row.classList.add('bad');
+    });
+    if(!allAnswered){ alert('Completá las 5 relaciones antes de comprobar.'); return; }
+    selects.forEach(s=>s.disabled=true);
+    this.disabled=true;
+    document.getElementById('mtScorePill').textContent = correct+' / 5';
+    saveProgress('repasobonos_tipos', correct, 5);
+    maybeShowContinue();
+  });
+}
+
+/* ============================================================
+   MÓDULO: SOPA DE LETRAS
+   ============================================================ */
+const WS_DATA = {"size": 17, "grid": ["ZYHHDWBNXYNTOBKRP", "IWNOMINALDULAEXCD", "ZNAOFPVRXKMPEFVBP", "HCTYGRMIGVZVDYYSX", "CDPEREPRDMGEVKERN", "JLOARFQMKESEBPMIA", "CCFCTEPWWCNOPAPCR", "TXAUQRSRUCNDHSTKR", "TDDPFEIEIOVFOULKL", "OYTOINNMSMJAHSDFC", "FYNNLTIFOUACVBVQV", "HNFXOEASANLCPQMVH", "HFRCNSOLZEIINYXPB", "JBITVJEMISIONBNHF", "AMORTIZACIONMCKUE", "EXXPBIEUQXPEAGLZE", "LTYNPSPJERSSIEYXA"], "words": {"AMORTIZACION": [[14, 0], [14, 1], [14, 2], [14, 3], [14, 4], [14, 5], [14, 6], [14, 7], [14, 8], [14, 9], [14, 10], [14, 11]], "VENCIMIENTO": [[4, 12], [5, 11], [6, 10], [7, 9], [8, 8], [9, 7], [10, 6], [11, 5], [12, 4], [13, 3], [14, 2]], "PREFERENTES": [[2, 5], [3, 5], [4, 5], [5, 5], [6, 5], [7, 5], [8, 5], [9, 5], [10, 5], [11, 5], [12, 5]], "DIVIDENDOS": [[0, 4], [1, 5], [2, 6], [3, 7], [4, 8], [5, 9], [6, 10], [7, 11], [8, 12], [9, 13]], "PATRIMONIO": [[4, 2], [5, 3], [6, 4], [7, 5], [8, 6], [9, 7], [10, 8], [11, 9], [12, 10], [13, 11]], "DESCUENTO": [[3, 12], [4, 11], [5, 10], [6, 9], [7, 8], [8, 7], [9, 6], [10, 5], [11, 4]], "INTERESES": [[1, 0], [2, 1], [3, 2], [4, 3], [5, 4], [6, 5], [7, 6], [8, 7], [9, 8]], "ACCIONES": [[9, 11], [10, 11], [11, 11], [12, 11], [13, 11], [14, 11], [15, 11], [16, 11]], "MERCADO": [[3, 6], [4, 5], [5, 4], [6, 3], [7, 2], [8, 1], [9, 0]], "COMUNES": [[7, 9], [8, 9], [9, 9], [10, 9], [11, 9], [12, 9], [13, 9]], "EMISION": [[13, 6], [13, 7], [13, 8], [13, 9], [13, 10], [13, 11], [13, 12]], "NOMINAL": [[1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [1, 7], [1, 8]], "CAPITAL": [[6, 1], [7, 2], [8, 3], [9, 4], [10, 5], [11, 6], [12, 7]], "CUPON": [[6, 3], [7, 3], [8, 3], [9, 3], [10, 3]], "PRIMA": [[6, 6], [7, 7], [8, 8], [9, 9], [10, 10]], "BONOS": [[5, 12], [6, 11], [7, 10], [8, 9], [9, 8]]}};
+
+function renderWordSearch(){
+  if(isLocked('repasobonos_concepto')){
+    renderLockedNotice('repasobonos_concepto', 'la sopa de letras');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const total = Object.keys(WS_DATA.words).length;
+  const cellPx = WS_DATA.size > 16 ? 15 : 19;
+  card.innerHTML = `<h3>Sopa de letras — encontrá los ${total} términos <span class="scorepill" id="wsScorePill">0 / ${total}</span></h3>
+    <div class="ws-wrap">
+      <div class="ws-grid" id="wsGrid" style="grid-template-columns:repeat(${WS_DATA.size},${cellPx}px);"></div>
+      <div class="ws-list"><ul id="wsList"></ul></div>
+    </div>`;
+  pageEl.appendChild(card);
+
+  const gridEl = document.getElementById('wsGrid');
+  const cells = [];
+  for(let r=0;r<WS_DATA.size;r++){
+    const row=[];
+    for(let c=0;c<WS_DATA.size;c++){
+      const div = document.createElement('div');
+      div.className='ws-cell';
+      div.style.width = cellPx+'px';
+      div.style.height = cellPx+'px';
+      div.style.fontSize = (WS_DATA.size>16 ? '7.5px' : '9.5px');
+      div.textContent = WS_DATA.grid[r][c];
+      div.dataset.r=r; div.dataset.c=c;
+      gridEl.appendChild(div);
+      row.push(div);
+    }
+    cells.push(row);
+  }
+  const wordKeys = Object.keys(WS_DATA.words);
+  const wordCellSet = {};
+  wordKeys.forEach(w=>{ wordCellSet[w] = new Set(WS_DATA.words[w].map(([r,c])=>r+','+c)); });
+  const listEl = document.getElementById('wsList');
+  const liByWord = {};
+  wordKeys.slice().sort().forEach(w=>{
+    const li = document.createElement('li');
+    li.textContent = w;
+    listEl.appendChild(li);
+    liByWord[w]=li;
+  });
+
+  let found=0;
+  let selecting=false, path=[];
+  function keyOf(r,c){return r+','+c;}
+  function clearSel(){ path.forEach(([r,c])=>{ if(!cells[r][c].classList.contains('found')) cells[r][c].classList.remove('selected'); }); }
+  function tryMatch(){
+    const selSet = new Set(path.map(([r,c])=>keyOf(r,c)));
+    for(const w of wordKeys){
+      if(liByWord[w].classList.contains('found')) continue;
+      const wSet = wordCellSet[w];
+      if(wSet.size!==selSet.size) continue;
+      let match=true;
+      for(const k of wSet){ if(!selSet.has(k)){match=false;break;} }
+      if(match){
+        WS_DATA.words[w].forEach(([r,c])=>{ cells[r][c].classList.add('found'); cells[r][c].classList.remove('selected'); });
+        liByWord[w].classList.add('found');
+        found++;
+        document.getElementById('wsScorePill').textContent = found+' / '+total;
+        if(found===total){ saveProgress('repasobonos_concepto', found, total); maybeShowContinue(); }
+        return true;
+      }
+    }
+    return false;
+  }
+  function startSel(r,c){ selecting=true; path=[[r,c]]; cells[r][c].classList.add('selected'); }
+  function moveSel(r,c){
+    if(!selecting) return;
+    const [r0,c0]=path[0];
+    const dr=r-r0, dc=c-c0;
+    if(dr!==0 && dc!==0 && Math.abs(dr)!==Math.abs(dc)) return;
+    const steps=Math.max(Math.abs(dr),Math.abs(dc));
+    const sdr=steps===0?0:Math.sign(dr), sdc=steps===0?0:Math.sign(dc);
+    clearSel(); path=[];
+    for(let i=0;i<=steps;i++){
+      const rr=r0+sdr*i, cc=c0+sdc*i;
+      if(rr<0||rr>=WS_DATA.size||cc<0||cc>=WS_DATA.size) break;
+      path.push([rr,cc]);
+      cells[rr][cc].classList.add('selected');
+    }
+  }
+  function endSel(){ if(!selecting) return; selecting=false; if(!tryMatch()) clearSel(); path=[]; }
+  gridEl.addEventListener('mousedown', e=>{ const t=e.target.closest('.ws-cell'); if(t) startSel(+t.dataset.r,+t.dataset.c); });
+  gridEl.addEventListener('mouseover', e=>{ const t=e.target.closest('.ws-cell'); if(t) moveSel(+t.dataset.r,+t.dataset.c); });
+  document.addEventListener('mouseup', endSel);
+  gridEl.addEventListener('touchstart', e=>{ const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); const c=t&&t.closest('.ws-cell'); if(c) startSel(+c.dataset.r,+c.dataset.c); }, {passive:true});
+  gridEl.addEventListener('touchmove', e=>{ const t=document.elementFromPoint(e.touches[0].clientX,e.touches[0].clientY); const c=t&&t.closest('.ws-cell'); if(c) moveSel(+c.dataset.r,+c.dataset.c); }, {passive:true});
+  document.addEventListener('touchend', endSel);
+}
+
+/* ============================================================
+   MÓDULO: TRABAJO EN CLASE — Elabore el Asiento
+   ============================================================ */
+const CASOS_TRABAJO = [
+  { id:"bonocaso1", tag:"Caso 1", inst:"Emisión de bono a la par",
+    text:"Una empresa emite un bono con valor nominal de ₡6.000.000, y la tasa cupón coincide exactamente con la tasa de mercado. ¿Cómo se registra el efectivo recibido en la emisión?",
+    opts:["Se debita Efectivo y se acredita Bonos por Pagar, ambos por ₡6.000.000","Se debita Efectivo por más de ₡6.000.000 y se acredita una Prima","Se debita Descuento en Emisión de Bonos por la diferencia"], correct:0,
+    just:"Cuando la tasa cupón coincide con la de mercado, el bono se coloca exactamente a su valor nominal (a la par)." },
+  { id:"bonocaso2", tag:"Caso 2", inst:"Bono con descuento",
+    text:"Un bono con valor nominal de ₡9.000.000 se coloca en el mercado en ₡8.550.000, por debajo de su valor nominal. ¿Qué cuenta se debita, además de Efectivo, para registrar esta emisión?",
+    opts:["Prima en Emisión de Bonos","Descuento en Emisión de Bonos","Bonos por Pagar"], correct:1,
+    just:"La diferencia por debajo del valor nominal se registra como Descuento en Emisión de Bonos, una cuenta que se debita." },
+  { id:"bonocaso3", tag:"Caso 3", inst:"Emisión de acciones con prima",
+    text:"Una empresa emite 2.000 acciones comunes con valor nominal de ₡2.000 cada una, colocadas en el mercado a ₡2.600 cada una. ¿Qué cuenta se acredita por la diferencia entre el precio de mercado y el valor nominal?",
+    opts:["Prima en Colocación de Acciones","Descuento en Emisión de Bonos","Dividendos por Pagar"], correct:0,
+    just:"La diferencia por encima del valor nominal en la venta de acciones se registra como Prima en Colocación de Acciones." },
+  { id:"bonocaso4", tag:"Caso 4", inst:"Declaración de dividendos",
+    text:"La junta directiva de una empresa declara dividendos por ₡4.500.000, pagaderos el próximo mes. ¿Qué cuenta se acredita en el momento de la declaración (antes del pago)?",
+    opts:["Efectivo","Capital Social","Dividendos por Pagar"], correct:2,
+    just:"Al declarar los dividendos se crea una obligación: se acredita Dividendos por Pagar hasta que se realice el pago." },
+];
+
+function renderTrabajo(){
+  if(isLocked('repasobonos_trabajo')){
+    const info = document.createElement('div');
+    info.className = 'content-card';
+    info.innerHTML = `<h2>Trabajo en clase — Elabore el Asiento</h2>`;
+    pageEl.appendChild(info);
+    renderLockedNotice('repasobonos_trabajo', 'el trabajo en clase');
+    return;
+  }
+
+  const info = document.createElement('div');
+  info.className = 'content-card';
+  info.innerHTML = `<h2>Trabajo en clase — Elabore el Asiento</h2>
+    <p>Para cada situación, determiná qué cuenta corresponde registrar, y justificá tu decisión en un par de líneas.</p>`;
+  if(!sheetsReady()){
+    info.innerHTML += `<p style="color:var(--coral);font-size:12px;">⚠️ Falta configurar la conexión a la hoja de datos. Avisale a tu docente.</p>`;
+  }
+  pageEl.appendChild(info);
+
+  let correctCount = 0, answeredCount = 0;
+
+  CASOS_TRABAJO.forEach(caso=>{
+    const card = document.createElement('div');
+    card.className = 'caso-card';
+    const letters = ['A','B','C'];
+    card.innerHTML = `
+      <div class="caso-tag">${caso.tag}</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${escapeHtml(caso.inst)}</div>
+      <p class="enunciado">${caso.text}</p>
+      <div class="caso-opts"></div>
+      <div class="justif"></div>
+      <textarea class="caso-input" id="just-${caso.id}" placeholder="Justificá brevemente tu respuesta (2-3 líneas)..."></textarea>
+      <button class="btn" data-caso="${caso.id}" style="margin-top:8px;">Publicar respuesta</button>
+    `;
+    const optsDiv = card.querySelector('.caso-opts');
+    caso.opts.forEach((optText, oi)=>{
+      const opt = document.createElement('div');
+      opt.className = 'opt';
+      opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(card.dataset.answered) return;
+        card.dataset.chosen = oi;
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.style.outline='');
+        opt.style.outline = '2px solid var(--navy)';
+      });
+      optsDiv.appendChild(opt);
+    });
+    pageEl.appendChild(card);
+
+    card.querySelector('[data-caso]').addEventListener('click', async ()=>{
+      if(card.dataset.answered) return;
+      if(card.dataset.chosen === undefined){ alert('Elegí una opción antes de publicar.'); return; }
+      if(!studentName){ alert('Escribí tu nombre arriba antes de participar.'); return; }
+      const oi = Number(card.dataset.chosen);
+      const isCorrect = oi === caso.correct;
+      const textoJust = document.getElementById('just-'+caso.id).value.trim();
+
+      card.dataset.answered = '1';
+      optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+      optsDiv.querySelectorAll('.opt')[oi].classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+      if(!isCorrect) optsDiv.querySelectorAll('.opt')[caso.correct].classList.add('reveal-correct');
+      card.classList.add(isCorrect?'correct':'incorrect');
+      const j = card.querySelector('.justif');
+      j.classList.add('show', isCorrect?'ok':'bad');
+      j.textContent = (isCorrect?'✓ ':'✕ ') + caso.just;
+
+      if(isCorrect) correctCount++;
+      answeredCount++;
+
+      try{
+        const nowIso = new Date().toISOString();
+        await sheetPost('Casos', [nowIso, caso.id, studentName, (isCorrect?'[CORRECTO] ':'[INCORRECTO] ') + (textoJust||'(sin justificación escrita)')]);
+      }catch(e){}
+
+      if(answeredCount === CASOS_TRABAJO.length){
+        saveProgress('repasobonos_trabajo', correctCount, CASOS_TRABAJO.length);
+        maybeShowContinue();
+      }
+    });
+  });
+}
+
+/* ============================================================
+   MÓDULO: EJERCICIO NUMÉRICO (auto-gradable)
+   ============================================================ */
+function renderNumeric(){
+  if(isLocked('repasobonos_re')){
+    renderLockedNotice('repasobonos_re', 'el ejercicio numérico');
+    return;
+  }
+  const SALDO = 15_000_000, TASA = 0.08;
+  const EXPECTED = SALDO * TASA / 2;
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Resolución de ejercicio (6 pts)</h3>
+    <p style="font-size:13px;">Una empresa emite un bono con valor nominal de ₡15.000.000 y tasa cupón del 8% anual, con pagos semestrales. ¿Cuál es el monto de cada pago de cupón? (Escribí solo el número, sin colones ni puntos de miles).</p>
+    <input type="text" class="re-input" id="reInput" placeholder="Ej: 600000">
+    <button class="btn" id="reBtn" style="margin-top:8px;">Comprobar</button>
+    <div class="justif" id="reMsg"></div>`;
+  pageEl.appendChild(card);
+  document.getElementById('reBtn').addEventListener('click', ()=>{
+    const raw = document.getElementById('reInput').value.replace(/[^0-9.]/g,'');
+    const val = parseFloat(raw);
+    if(isNaN(val)){ alert('Escribí un número válido.'); return; }
+    document.getElementById('reInput').disabled = true;
+    document.getElementById('reBtn').disabled = true;
+    const isCorrect = Math.abs(val - EXPECTED) < 1;
+    const msg = document.getElementById('reMsg');
+    msg.classList.add('show', isCorrect?'ok':'bad');
+    msg.textContent = (isCorrect ? '✓ ¡Correcto! ' : '✕ ') + `Cupón semestral = 15.000.000 × 8% ÷ 2 = ₡600.000.`;
+    const score = isCorrect ? 6 : 0;
+    saveProgress('repasobonos_re', score, 6);
+    maybeShowContinue();
+  });
+}
+
+/* ============================================================
+   MÓDULO: CRUCIGRAMA
+   ============================================================ */
+const CW_DATA = {"size": {"rows": 14, "cols": 15}, "grid": [".............", ".P....V........", ".R...DESCUENTO.", ".I....N........", ".M.N..C.C.D....", ".AMORTIZACION..", "...M..M.P.V....", "...I..I.I.I....", "...N..E.T.D....", "...A..N.A.E....", "...L..T.L.N....", "......O...D....", ".......CUPON...", "..........S...."], "words": [{"word": "AMORTIZACION", "clue": "Proceso de distribuir gradualmente el descuento o la prima durante la vida del bono", "row": 5, "col": 1, "dir": "H", "num": 7}, {"word": "VENCIMIENTO", "clue": "Fecha en la que el emisor de un bono debe devolver el valor nominal", "row": 1, "col": 6, "dir": "V", "num": 2}, {"word": "DIVIDENDOS", "clue": "Distribucion de utilidades que la empresa reparte entre sus accionistas", "row": 4, "col": 10, "dir": "V", "num": 6}, {"word": "DESCUENTO", "clue": "Diferencia cuando un bono se vende por debajo de su valor nominal", "row": 2, "col": 5, "dir": "H", "num": 3}, {"word": "NOMINAL", "clue": "Valor de referencia impreso en un bono o una accion, base para calcular sus pagos", "row": 4, "col": 3, "dir": "V", "num": 4}, {"word": "CAPITAL", "clue": "Cuenta de patrimonio que registra el valor nominal de las acciones emitidas", "row": 4, "col": 8, "dir": "V", "num": 5}, {"word": "PRIMA", "clue": "Diferencia cuando un bono o una accion se vende por encima de su valor nominal", "row": 1, "col": 1, "dir": "V", "num": 1}, {"word": "CUPON", "clue": "Pago periodico de intereses que promete un bono", "row": 12, "col": 7, "dir": "H", "num": 8}]};
+
+function renderCrossword(){
+  if(isLocked('repasobonos_metodos')){
+    renderLockedNotice('repasobonos_metodos', 'el crucigrama');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const across = CW_DATA.words.filter(w=>w.dir==='H').sort((a,b)=>a.num-b.num);
+  const down = CW_DATA.words.filter(w=>w.dir==='V').sort((a,b)=>a.num-b.num);
+  card.innerHTML = `<h3>Crucigrama — completá según las pistas <span class="scorepill" id="cwScorePill">0%</span></h3>
+    <div class="cw-wrap">
+      <div class="cw-grid" id="cwGrid" style="grid-template-columns:repeat(${CW_DATA.size.cols},22px);"></div>
+      <div class="cw-clues">
+        <b>Horizontales</b><ul id="cwAcross"></ul>
+        <b>Verticales</b><ul id="cwDown"></ul>
+      </div>
+    </div>
+    <button class="btn" id="cwCheckBtn" style="margin-top:12px;">Comprobar crucigrama</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('cwAcross').innerHTML = across.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+  document.getElementById('cwDown').innerHTML = down.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+
+  const R = CW_DATA.size.rows, C = CW_DATA.size.cols;
+  const gridEl = document.getElementById('cwGrid');
+  const numAt = {};
+  CW_DATA.words.forEach(w=>{ numAt[w.row+','+w.col] = w.num; });
+  const inputs = {};
+  for(let r=0;r<R;r++){
+    for(let c=0;c<C;c++){
+      const ch = CW_DATA.grid[r][c];
+      const cell = document.createElement('div');
+      if(ch==='.'){
+        cell.className='cw-cell blocked';
+      } else {
+        cell.className='cw-cell';
+        const key = numAt[r+','+c];
+        if(key) cell.innerHTML = `<span class="cw-num">${key}</span>`;
+        const inp = document.createElement('input');
+        inp.maxLength=1;
+        inp.dataset.r=r; inp.dataset.c=c;
+        inp.addEventListener('input', function(){
+          this.value = this.value.toUpperCase().replace(/[^A-ZÑ]/g,'');
+          if(this.value){
+            const next = findNextInput(r,c);
+            if(next) next.focus();
+          }
+        });
+        cell.appendChild(inp);
+        inputs[r+','+c] = inp;
+      }
+      gridEl.appendChild(cell);
+    }
+  }
+  function findNextInput(r,c){
+    if(inputs[r+','+(c+1)]) return inputs[r+','+(c+1)];
+    if(inputs[(r+1)+','+c]) return inputs[(r+1)+','+c];
+    return null;
+  }
+
+  document.getElementById('cwCheckBtn').addEventListener('click', ()=>{
+    let correct=0, total=0;
+    for(const key in inputs){
+      const [r,c] = key.split(',').map(Number);
+      const expected = CW_DATA.grid[r][c];
+      const inp = inputs[key];
+      total++;
+      if(inp.value === expected){ inp.classList.add('ok'); inp.classList.remove('bad'); correct++; }
+      else{ inp.classList.add('bad'); inp.classList.remove('ok'); }
+    }
+    document.getElementById('cwScorePill').textContent = Math.round((correct/total)*100)+'%';
+    saveProgress('repasobonos_metodos', correct, total);
+    maybeShowContinue();
+  });
+}
+
+/* ============================================================
+   MÓDULO: VERDADERO O FALSO
+   ============================================================ */
+const VF_BANK = [
+  { s:"Cuando la tasa cupón de un bono es mayor que la tasa de mercado, el bono se vende con prima.", correct:true,
+    just:"Correcto: una tasa cupón más atractiva que la del mercado permite venderlo por encima del valor nominal." },
+  { s:"El descuento en emisión de bonos es una cuenta de patrimonio.", correct:false,
+    just:"Falso: el descuento reduce el valor en libros del pasivo por bonos, no es una cuenta de patrimonio." },
+  { s:"La prima en colocación de acciones se clasifica como utilidad del período.", correct:false,
+    just:"Falso: es un aporte adicional de los accionistas, clasificado dentro del patrimonio, no como utilidad." },
+  { s:"Al declarar dividendos, se acredita la cuenta Dividendos por Pagar.", correct:true,
+    just:"Correcto: la declaración crea una obligación (pasivo) hasta el momento del pago." },
+  { s:"El descuento en emisión de bonos se amortiza reduciendo el gasto por intereses con el tiempo.", correct:false,
+    just:"Falso: el descuento se amortiza aumentando el gasto por intereses, no reduciéndolo." },
+  { s:"Las acciones preferentes generalmente no otorgan derecho a voto.", correct:true,
+    just:"Correcto: suelen priorizar el cobro de dividendos a cambio de renunciar al voto." },
+];
+
+function renderVF(){
+  if(isLocked('repasobonos_vf')){
+    renderLockedNotice('repasobonos_vf', 'el ejercicio de Verdadero/Falso');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Verdadero o Falso <span class="scorepill" id="vfScorePill">0 / ${VF_BANK.length}</span></h3><div id="vfWrap"></div>`;
+  pageEl.appendChild(card);
+  const wrap = document.getElementById('vfWrap');
+  let score=0, answered=0;
+  VF_BANK.forEach((item,qi)=>{
+    const qcard = document.createElement('div');
+    qcard.className='qcard';
+    qcard.innerHTML = `<div class="qtext">${qi+1}. ${item.s}</div><div class="opts"></div><div class="justif"></div>`;
+    const optsDiv = qcard.querySelector('.opts');
+    [["Verdadero",true],["Falso",false]].forEach(([label,val])=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML = `<span class="letter">${val?'V':'F'}</span><span>${label}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(qcard.classList.contains('answered')) return;
+        qcard.classList.add('answered');
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = val===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect){
+          const correctOpt = [...optsDiv.querySelectorAll('.opt')].find((o,i)=> (i===0)===item.correct);
+          if(correctOpt) correctOpt.classList.add('reveal-correct');
+        }
+        qcard.classList.add(isCorrect?'correct':'incorrect');
+        const j = qcard.querySelector('.justif');
+        j.classList.add('show', isCorrect?'ok':'bad');
+        j.textContent = (isCorrect?'✓ ':'✕ ') + item.just;
+        if(isCorrect) score++;
+        answered++;
+        document.getElementById('vfScorePill').textContent = score+' / '+VF_BANK.length;
+        if(answered===VF_BANK.length){ saveProgress('repasobonos_vf', score, VF_BANK.length); maybeShowContinue(); }
+      });
+      optsDiv.appendChild(opt);
+    });
+    wrap.appendChild(qcard);
+  });
+}
+
+/* ============================================================
+   MÓDULO: CASOS Y DEBATE
+   ============================================================ */
+const DEBATE_TEMAS = [
+  { id:"bonodebate1", tag:"Deuda vs. propiedad", text:"¿Por qué creés que es importante para una empresa distinguir entre financiarse con bonos (deuda) y con acciones (propiedad)? ¿Qué riesgos distintos implica cada opción?" },
+  { id:"bonodebate2", tag:"Descuento y prima", text:"¿Por qué creés que el mercado exige un descuento cuando la tasa cupón de un bono es menor a la tasa de mercado, en lugar de simplemente no comprarlo?" },
+  { id:"bonodebate3", tag:"Prima como patrimonio", text:"¿Por qué creés que la prima en colocación de acciones se clasifica como patrimonio y no como una utilidad para la empresa?" },
+];
+
+function renderCasos(){
+  if(isLocked('repasobonos_casos')){
+    renderLockedNotice('repasobonos_casos', 'Casos y Debate');
+    return;
+  }
+  const info = document.createElement('div');
+  info.className = 'content-card';
+  info.innerHTML = `<h2>Casos y Debate</h2><p>Este módulo se comparte con toda la clase. Elegí al menos <strong>un tema</strong>, escribí tu opinión, y luego respondé (con respeto) al aporte de <strong>al menos un compañero</strong>. Necesitás escribir tu nombre arriba para participar.</p>`;
+  if(!sheetsReady()){
+    info.innerHTML += `<p style="color:var(--coral);font-size:12px;">⚠️ Falta configurar la conexión a la hoja de datos. Avisale a tu docente.</p>`;
+  }
+  pageEl.appendChild(info);
+
+  DEBATE_TEMAS.forEach(tema=>{
+    const card = document.createElement('div');
+    card.className = 'caso-card';
+    card.innerHTML = `
+      <div class="caso-tag">${tema.tag}</div>
+      <p class="enunciado">${tema.text}</p>
+      <div class="caso-msgs" id="msgs-${tema.id}"><div style="font-size:11px;color:var(--muted);">Cargando respuestas...</div></div>
+      <textarea class="caso-input" id="input-${tema.id}" placeholder="Escribí tu opinión o tu comentario a un compañero..."></textarea>
+      <button class="btn" data-tema="${tema.id}" style="margin-top:8px;">Publicar</button>
+    `;
+    pageEl.appendChild(card);
+  });
+
+  document.querySelectorAll('[data-tema]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const temaId = btn.dataset.tema;
+      if(!studentName){ alert('Escribí tu nombre arriba antes de participar.'); return; }
+      const text = document.getElementById('input-'+temaId).value.trim();
+      if(!text) return;
+      try{
+        const nowIso = new Date().toISOString();
+        await sheetPost('Casos', [nowIso, temaId, studentName, text]);
+        document.getElementById('input-'+temaId).value='';
+        await loadDebateMessages(temaId);
+        checkDebateParticipation();
+      }catch(e){
+        alert('No se pudo publicar. Revisá la conexión a la hoja de datos.');
+      }
+    });
+  });
+
+  DEBATE_TEMAS.forEach(t=>loadDebateMessages(t.id));
+}
+
+async function loadDebateMessages(temaId){
+  const wrap = document.getElementById('msgs-'+temaId);
+  if(!wrap) return;
+  if(!sheetsReady()){
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--coral);">Hoja de datos no configurada todavía.</div>';
+    return;
+  }
+  try{
+    const rows = await sheetGet('Casos');
+    const items = rows
+      .filter(r => r.CasoId === temaId)
+      .map(r => ({ name: r.Nombre, text: r.Texto, ts: new Date(r.Timestamp).getTime() }));
+    if(items.length===0){ wrap.innerHTML = '<div style="font-size:11px;color:var(--muted);">Nadie ha respondido todavía.</div>'; return; }
+    items.sort((a,b)=>a.ts-b.ts);
+    wrap.innerHTML = items.map(m=>`<div class="caso-msg" style="background:#f7f8f6;border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:12.5px;"><div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-bottom:3px;"><span style="font-weight:700;color:var(--navy);">${escapeHtml(m.name)}</span><span>${new Date(m.ts).toLocaleTimeString('es-CR',{hour:'2-digit',minute:'2-digit'})}</span></div>${escapeHtml(m.text)}</div>`).join('');
+  }catch(e){
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--coral);">No se pudo cargar (revisá la conexión a la hoja de datos).</div>';
+  }
+}
+
+async function checkDebateParticipation(){
+  if(!studentName || !sheetsReady()) return;
+  let ownCount = 0;
+  try{
+    const rows = await sheetGet('Casos');
+    DEBATE_TEMAS.forEach(t=>{
+      ownCount += rows.filter(r => r.CasoId === t.id && r.Nombre === studentName).length;
+    });
+  }catch(e){}
+  if(ownCount >= 2 && !isStepDone('repasobonos_casos')){
+    saveProgress('repasobonos_casos', 1, 1);
+    renderPage();
+  }
+}
+
+/* ============================================================
+   CERTIFICADO
+   ============================================================ */
+const COMPETENCIAS = [
+  { ra:"RA1", unidad:"Repaso avanzado", modules:["repasobonos_calculo","repasobonos_tipos","repasobonos_vf"],
+    text:"Reconocer los conceptos y cuentas contables asociados a bonos y acciones." },
+  { ra:"RA2", unidad:"Repaso avanzado", modules:["repasobonos_trabajo","repasobonos_re"],
+    text:"Aplicar el registro contable (asientos de diario) de emisiones de bonos, acciones y dividendos." },
+];
+
+function competencyScore(comp){
+  let sum=0, total=0, anyData=false;
+  comp.modules.forEach(mid=>{
+    const p = localProgress[mid];
+    if(p){ sum+=p.score; total+=p.total; anyData=true; }
+  });
+  return { sum, total, pct: anyData && total>0 ? Math.round((sum/total)*100) : null };
+}
+
+function competencyLevel(pctVal){
+  if(pctVal===null) return { label:"Sin evidencia", cls:"status-pending" };
+  if(pctVal<=50) return { label:"No logrado", cls:"status-bad" };
+  if(pctVal<=80) return { label:"En proceso", cls:"status-mid" };
+  return { label:"Logrado", cls:"status-ok" };
+}
+
+function renderCertificado(){
+  const card = document.createElement('div');
+  card.className = 'actcard';
+
+  let rows = '';
+  let allLogrado = true;
+  COMPETENCIAS.forEach(comp=>{
+    const s = competencyScore(comp);
+    const lvl = competencyLevel(s.pct);
+    if(lvl.label !== "Logrado") allLogrado = false;
+    rows += `<tr>
+      <td><span class="ra-tag">${comp.ra}</span><span class="competency-desc">${comp.text}</span></td>
+      <td class="center">${s.total>0 ? s.sum+' / '+s.total : '—'}</td>
+      <td class="center">${s.pct!==null ? s.pct+'%' : '—'}</td>
+      <td class="center"><span class="${lvl.cls}">${lvl.label}</span></td>
+    </tr>`;
+  });
+  const antologiaOk = localProgress['repasobonos_antologia'] && localProgress['repasobonos_antologia'].score>0;
+  rows += `<tr><td><span class="ra-tag">Lectura</span><span class="competency-desc">Antología del tema (lectura previa obligatoria)</span></td><td class="center">—</td><td class="center">—</td><td class="center">${antologiaOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
+  const casosOk = localProgress['repasobonos_casos'] && localProgress['repasobonos_casos'].score>0;
+  rows += `<tr><td><span class="ra-tag">Participación</span><span class="competency-desc">Módulo compartido de Casos y Debate</span></td><td class="center">—</td><td class="center">—</td><td class="center">${casosOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
+  const finalOk = allLogrado && antologiaOk && casosOk;
+
+  card.innerHTML = `
+    <h3>Evaluación por competencias</h3>
+    <p style="font-size:11px;color:var(--muted);margin:-4px 0 10px;">Escala: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado. Repaso avanzado para Duodécimo año.</p>
+    <table class="progress-table">
+      <tr><th>Indicador</th><th>Puntaje</th><th>%</th><th>Nivel</th></tr>
+      ${rows}
+    </table>
+    ${finalOk ? `
+      <div class="certificate show" id="certBlock">
+        <div class="kicker">Contable CR · Duodécimo Año</div>
+        <h2>Certificado de Aprobación</h2>
+        <p>Se otorga el presente certificado a</p>
+        <div class="name">${escapeHtml(studentName || '____________________')}</div>
+        <p>por haber alcanzado el nivel <strong>Logrado</strong> en todos los indicadores evaluados sobre <strong>Bonos y Acciones (nivel avanzado)</strong>: conceptos, cuentas contables, y asientos de diario para emisión de bonos, acciones y dividendos, incluyendo la participación en Casos y Debate.</p>
+        <div class="seal">MEP<br>12°</div>
+        <p style="margin-top:14px;font-size:10.5px;">Contabilidad · Repaso Avanzado · Prof. Gerardo Gonzalez Gonzalez</p>
+      </div>
+      <button class="btn" style="margin-top:12px;" onclick="window.print()">Imprimir / Guardar como PDF</button>
+    ` : `<div class="locked-msg">🔒 El certificado se desbloquea cuando los indicadores alcanzan el nivel <strong>Logrado</strong> (81% o más) y se registró la lectura de la Antología y la participación en Casos y Debate.</div>`}
+  `;
+  pageEl.appendChild(card);
+}
+
+/* ============================================================
+   PANEL DOCENTE
+   ============================================================ */
+document.getElementById('teacherBtnOpen').addEventListener('click', ()=>{
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinError').style.display = 'none';
+  document.getElementById('pinModalBg').classList.add('show');
+  document.getElementById('pinInput').focus();
+});
+document.getElementById('pinModalClose').addEventListener('click', ()=>{
+  document.getElementById('pinModalBg').classList.remove('show');
+});
+document.getElementById('pinSubmit').addEventListener('click', checkPin);
+document.getElementById('pinInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkPin(); });
+
+async function checkPin(){
+  const val = document.getElementById('pinInput').value.trim();
+  if(val !== TEACHER_PIN){
+    document.getElementById('pinError').style.display = 'block';
+    return;
+  }
+  document.getElementById('pinModalBg').classList.remove('show');
+  await openTeacherPanel();
+}
+
+async function openTeacherPanel(){
+  document.getElementById('teacherModalBg').classList.add('show');
+  const content = document.getElementById('teacherContent');
+  content.innerHTML = 'Cargando...';
+  if(!sheetsReady()){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">⚠️ Falta configurar la conexión a la hoja de datos (SHEET_API_URL) en este archivo.</p>';
+    return;
+  }
+  try{
+    const progRows = await sheetGet('Progreso');
+    const byStudent = {};
+    progRows.forEach(r=>{
+      const name = r.Estudiante, mod = r.Modulo;
+      if(!name || !mod) return;
+      byStudent[name] = byStudent[name] || {};
+      byStudent[name][mod] = { score:Number(r.Score), total:Number(r.Total) };
+    });
+
+    const names = Object.keys(byStudent).sort();
+    if(names.length===0){ content.innerHTML = '<p style="font-size:12.5px;color:var(--muted);">Todavía no hay estudiantes con progreso guardado.</p>'; return; }
+    const levelAbbrev = (pctVal)=>{
+      if(pctVal===null) return '—';
+      const lvl = competencyLevel(pctVal);
+      const short = {"Logrado":"✓ Logrado","En proceso":"◐ En proceso","No logrado":"✕ No logrado"}[lvl.label] || lvl.label;
+      return `<span class="${lvl.cls}">${short}</span>`;
+    };
+    let html = '<p style="font-size:10.5px;color:var(--muted);margin-top:0;">Nivel por indicador: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado.</p>';
+    html += '<table class="progress-table"><tr><th>Estudiante</th><th>Antología</th><th>RA1</th><th>RA2</th><th>Casos</th><th>Salidas</th></tr>';
+    names.forEach(n=>{
+      const d = byStudent[n];
+      const compPct = (mods)=>{
+        let sum=0,total=0,any=false;
+        mods.forEach(mid=>{ const x=d[mid]; if(x){ sum+=x.score; total+=x.total; any=true; } });
+        return any && total>0 ? Math.round((sum/total)*100) : null;
+      };
+      const okCell = (obj)=> obj ? (obj.score>0 ? '<span class="status-ok">✓ Logrado</span>' : '<span class="status-pending">Sin evidencia</span>') : '—';
+      const salidas = d.incidente_salida_pantalla ? d.incidente_salida_pantalla.score : 0;
+      const salidasCell = salidas > 0 ? `<span class="status-bad">⚠️ ${salidas}</span>` : '<span class="status-pending">0</span>';
+      html += `<tr>
+        <td>${escapeHtml(n)}</td>
+        <td class="center">${okCell(d.repasobonos_antologia)}</td>
+        <td class="center">${levelAbbrev(compPct(['repasobonos_calculo','repasobonos_tipos','repasobonos_vf']))}</td>
+        <td class="center">${levelAbbrev(compPct(['repasobonos_trabajo','repasobonos_re']))}</td>
+        <td class="center">${okCell(d.repasobonos_casos)}</td>
+        <td class="center">${salidasCell}</td>
+      </tr>`;
+    });
+    html += '</table>';
+    content.innerHTML = html;
+  }catch(e){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">No se pudo cargar el panel (revisá la conexión a la hoja de datos).</p>';
+  }
+}
+document.getElementById('teacherModalClose').addEventListener('click', ()=>{
+  document.getElementById('teacherModalBg').classList.remove('show');
+});
+
+/* ============================================================
+   NOMBRE DEL ESTUDIANTE
+   ============================================================ */
+document.getElementById('studentName').addEventListener('input', function(){
+  studentName = this.value.trim();
+  document.getElementById('nameStatus').textContent = studentName ? '● identificado' : '';
+});
+document.getElementById('studentName').addEventListener('change', function(){
+  if(studentName) loadExistingProgress();
+});
+
+(function prefillFromLink(){
+  const params = new URLSearchParams(window.location.search);
+  const nombreParam = params.get('nombre');
+  if(nombreParam){
+    studentName = nombreParam;
+    document.getElementById('studentName').value = nombreParam;
+    document.getElementById('nameStatus').textContent = '● identificado';
+    loadExistingProgress();
+  }
+})();
+
+/* ============================================================
+   MODO ENFOQUE + DETECCIÓN DE SALIDAS
+   ============================================================ */
+let salidaCount = 0;
+document.getElementById('focusModeBtn').addEventListener('click', ()=>{
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  if(req) req.call(el).catch(()=>{});
+});
+
+function showWarnBanner(msg){
+  let banner = document.getElementById('warnBanner');
+  if(!banner){
+    banner = document.createElement('div');
+    banner.id = 'warnBanner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:200;background:#EF6A5B;color:#fff;text-align:center;padding:8px 12px;font-size:12.5px;font-family:monospace;';
+    document.body.prepend(banner);
+  }
+  banner.textContent = msg;
+  banner.style.display = 'block';
+  clearTimeout(window._warnTimeout);
+  window._warnTimeout = setTimeout(()=>{ banner.style.display='none'; }, 6000);
+}
+
+function logSalida(){
+  salidaCount++;
+  showWarnBanner('⚠️ Se detectó que saliste de esta pestaña o ventana (van: ' + salidaCount + ').');
+  if(studentName && sheetsReady()){
+    sheetPost('Progreso', [new Date().toISOString(), studentName, 'incidente_salida_pantalla', salidaCount, salidaCount]).catch(()=>{});
+  }
+}
+
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) logSalida(); });
+
+window.addEventListener('beforeunload', function(e){
+  e.preventDefault();
+  e.returnValue = '';
+});
+
+document.addEventListener('contextmenu', e=> e.preventDefault());
+document.addEventListener('copy', e=> e.preventDefault());
+
+/* ============================================================
+   INICIO
+   ============================================================ */
+renderTabs();
+renderPage();
+</script>
+</body>
+</html>
