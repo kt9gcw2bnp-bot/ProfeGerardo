@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juego · Corre y Responde</title>
+<style>
+:root{
+  --navy:#0E1B3D; --navy-deep:#0A1230;
+  --gold:#B8863C; --gold-light:#F4DD7A;
+  --teal:#2FC2AD; --coral:#EF6A5B;
+  --ink:#20242B; --paper:#F3F5F4; --muted:#5B6470; --line:#D8DCDD;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);padding:16px;}
+.wrap{max-width:640px;margin:0 auto;}
+h1{font-size:16px;color:var(--navy);margin:0 0 4px;}
+p.sub{font-size:12px;color:var(--muted);margin:0 0 14px;font-family:var(--mono);}
+
+.hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.hud .score{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--navy);}
+.hud .lives{font-size:16px;}
+.hud .best{font-family:var(--mono);font-size:11px;color:var(--muted);}
+
+.gamebox{
+  position:relative;
+  width:100%;
+  height:220px;
+  background:linear-gradient(180deg,#dfe9f0 0%,#f3f5f4 70%);
+  border:2px solid var(--navy);
+  border-radius:10px;
+  overflow:hidden;
+  touch-action:none;
+  cursor:pointer;
+  -webkit-user-select:none;user-select:none;
+}
+.ground{
+  position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--navy);
+}
+.ground::after{
+  content:"";position:absolute;bottom:-2px;left:0;right:0;height:1px;
+  background:repeating-linear-gradient(90deg,var(--muted) 0 12px, transparent 12px 24px);
+}
+.player{
+  position:absolute;
+  bottom:3px;
+  left:40px;
+  font-size:34px;
+  line-height:1;
+  transform:scaleX(-1) translateY(0);
+  transition:transform .08s linear;
+  z-index:5;
+}
+.player.jump{
+  transition:transform .5s cubic-bezier(.22,.9,.4,1.1);
+}
+.obstacle{
+  position:absolute;
+  bottom:3px;
+  font-size:30px;
+  line-height:1;
+  z-index:4;
+}
+.startOverlay, .qOverlay, .overOverlay{
+  position:absolute;inset:0;background:rgba(14,27,61,.92);color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:16px;gap:10px;z-index:10;
+}
+.startOverlay h2, .overOverlay h2{font-size:16px;margin:0;}
+.startOverlay p, .overOverlay p{font-size:11.5px;color:rgba(255,255,255,.75);margin:0;max-width:380px;}
+.bigbtn{
+  padding:10px 22px;background:var(--gold);color:var(--navy-deep);border:none;
+  border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;
+}
+.bigbtn:hover{background:var(--gold-light);}
+
+.qOverlay{gap:8px;padding:14px;}
+.qOverlay .qtag{font-family:var(--mono);font-size:10px;color:var(--gold-light);text-transform:uppercase;letter-spacing:.5px;}
+.qOverlay .qtext{font-size:13px;font-weight:600;max-width:420px;}
+.qOverlay .opts{display:flex;flex-direction:column;gap:6px;width:100%;max-width:420px;}
+.qOverlay .opt{
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);color:#fff;
+  padding:8px 12px;border-radius:8px;font-size:12px;cursor:pointer;text-align:left;display:flex;gap:8px;
+}
+.qOverlay .opt:hover{background:rgba(255,255,255,.16);}
+.qOverlay .opt.locked{cursor:default;}
+.qOverlay .opt.chosen-correct{background:rgba(47,194,173,.35);border-color:var(--teal);}
+.qOverlay .opt.chosen-incorrect{background:rgba(239,106,91,.35);border-color:var(--coral);}
+.qOverlay .opt.reveal-correct{background:rgba(47,194,173,.35);border-color:var(--teal);}
+.qOverlay .opt .letter{font-family:var(--mono);font-weight:700;color:var(--gold-light);}
+.qOverlay .justif{font-size:11px;background:rgba(255,255,255,.08);padding:8px 10px;border-radius:8px;max-width:420px;display:none;}
+.qOverlay .justif.show{display:block;}
+
+.obstacle.colon{
+  font-weight:800;
+  color:var(--gold);
+  -webkit-text-stroke:1px var(--navy);
+}
+.winOverlay{
+  position:absolute;inset:0;background:rgba(184,134,60,.95);color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:16px;gap:10px;z-index:10;
+}
+.winOverlay h2{font-size:20px;margin:0;}
+.winOverlay p{font-size:12px;color:rgba(255,255,255,.9);margin:0;max-width:380px;}
+.footer-note{font-size:11px;color:var(--muted);margin-top:10px;text-align:center;}
+.controls-hint{font-size:10.5px;color:var(--muted);text-align:center;margin-top:6px;font-family:var(--mono);}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🏃 Corre y Responde — Bonos y Acciones</h1>
+  <p class="sub">Prototipo · saltá los obstáculos · si chocás, respondé bien para revivir</p>
+
+  <div class="hud">
+    <span class="score" id="scoreDisplay">Puntos: 0</span>
+    <span class="best" id="bestDisplay">Mejor: 0</span>
+  </div>
+
+  <div class="gamebox" id="gameBox">
+    <div class="ground"></div>
+    <div class="player" id="player">🦖</div>
+
+    <div class="startOverlay" id="startOverlay">
+      <h2>🏃 Corre y Responde</h2>
+      <p>Tocá o presioná ESPACIO para saltar los obstáculos. Si chocás, tenés que responder una pregunta correctamente para seguir — si fallás, se reinicia el puntaje.</p>
+      <button class="bigbtn" id="startBtn">▶️ Comenzar</button>
+    </div>
+  </div>
+
+  <p class="controls-hint">Tocá la pantalla / Espacio = saltar</p>
+  <p class="footer-note" id="footerNote"></p>
+</div>
+
+<script>
+/* ============================================================
+   BANCO DE PREGUNTAS (tema: Bonos y Acciones — se puede
+   reemplazar con las preguntas de cualquier curso)
+   ============================================================ */
+const QUESTION_BANK = [
+  { q:"¿Qué es un bono?", opts:["Un título de deuda","Una porción de propiedad de la empresa","Un tipo de acción preferente"], correct:0,
+    just:"Un bono es un título de deuda: quien lo emite promete devolver el valor nominal y pagar intereses." },
+  { q:"¿Qué representa una acción?", opts:["Una deuda de la empresa","Una porción de propiedad de la empresa","Un gasto operativo"], correct:1,
+    just:"Una acción representa una porción de propiedad (patrimonio) de la empresa." },
+  { q:"Si la tasa cupón de un bono es menor que la del mercado, el bono se vende:", opts:["A la par","Con descuento","Con prima"], correct:1,
+    just:"Una tasa cupón menor a la de mercado hace que el bono se venda con descuento." },
+  { q:"¿Qué cuenta se acredita al declarar dividendos (antes de pagarlos)?", opts:["Efectivo","Capital Social","Dividendos por Pagar"], correct:2,
+    just:"La declaración crea una obligación: se acredita Dividendos por Pagar hasta el momento del pago." },
+  { q:"¿Qué tipo de acción prioriza el cobro de dividendos, pero generalmente no da voto?", opts:["Común","Preferente","Ordinaria"], correct:1,
+    just:"Las acciones preferentes priorizan el cobro de dividendos, a cambio de renunciar generalmente al voto." },
+  { q:"La prima en colocación de acciones se clasifica como:", opts:["Pasivo","Patrimonio","Gasto"], correct:1,
+    just:"Es un aporte adicional de los accionistas, clasificado dentro del patrimonio." },
+  { q:"¿Qué le ocurre al gasto por intereses cuando se amortiza un descuento en bonos?", opts:["Aumenta con el tiempo","Disminuye con el tiempo","No cambia nunca"], correct:0,
+    just:"La amortización del descuento se suma al gasto por intereses, aumentándolo período a período." },
+  { q:"¿En qué momento se reconoce la ganancia o pérdida de una inversión en bonos o acciones?", opts:["Al comprarla","Al venderla","Nunca se reconoce"], correct:1,
+    just:"La ganancia o pérdida se determina al momento de la venta, comparando el precio con el costo." },
+];
+
+/* ============================================================
+   ESTADO DEL JUEGO
+   ============================================================ */
+const WIN_SCORE = 1000;
+let running = false;
+let paused = false;
+let score = 0;
+let best = 0;
+let lives = 3;
+let speed = 4.2;
+let spawnTimer = 0;
+let spawnInterval = 90;
+let frameCount = 0;
+let jumping = false;
+let obstacles = [];
+let usedQuestions = [];
+let animFrame = null;
+
+const gameBox = document.getElementById('gameBox');
+const player = document.getElementById('player');
+const scoreDisplay = document.getElementById('scoreDisplay');
+const livesDisplay = document.getElementById('livesDisplay');
+const bestDisplay = document.getElementById('bestDisplay');
+const startOverlay = document.getElementById('startOverlay');
+const footerNote = document.getElementById('footerNote');
+
+function updateHUD(){
+  scoreDisplay.textContent = 'Puntos: ' + Math.floor(score);
+  bestDisplay.textContent = 'Mejor: ' + Math.floor(best);
+}
+
+function resetGameState(fullReset){
+  score = 0;
+  speed = 4.2;
+  spawnInterval = 90;
+  frameCount = 0;
+  spawnTimer = 0;
+  obstacles.forEach(o=>o.el.remove());
+  obstacles = [];
+  if(fullReset){
+    usedQuestions = [];
+  }
+  updateHUD();
+}
+
+document.getElementById('startBtn').addEventListener('click', ()=>{
+  startOverlay.style.display = 'none';
+  resetGameState(true);
+  running = true;
+  paused = false;
+  loop();
+});
+
+function doJump(){
+  if(!running || paused || jumping) return;
+  jumping = true;
+  player.classList.add('jump');
+  player.style.transform = 'scaleX(-1) translateY(-70px)';
+  setTimeout(()=>{
+    player.style.transform = 'scaleX(-1) translateY(0)';
+    setTimeout(()=>{ jumping = false; player.classList.remove('jump'); }, 480);
+  }, 260);
+}
+
+gameBox.addEventListener('mousedown', doJump);
+gameBox.addEventListener('touchstart', (e)=>{ e.preventDefault(); doJump(); }, {passive:false});
+document.addEventListener('keydown', (e)=>{
+  if(e.code === 'Space'){ e.preventDefault(); doJump(); }
+});
+
+function spawnObstacle(){
+  const el = document.createElement('div');
+  const isColon = Math.random() < 0.5;
+  el.className = 'obstacle' + (isColon ? ' colon' : '');
+  el.textContent = isColon ? '₡' : '💲';
+  el.style.right = '-30px';
+  gameBox.appendChild(el);
+  obstacles.push({ el, x: gameBox.clientWidth + 10 });
+}
+
+function rectsOverlap(a, b){
+  return !(a.right < b.left || a.left > b.right || a.bottom < b.top || a.top > b.bottom);
+}
+
+function loop(){
+  if(!running || paused){ return; }
+  frameCount++;
+  score += 0.12;
+
+  if(score >= WIN_SCORE){
+    score = WIN_SCORE;
+    showWin();
+    return;
+  }
+
+  speed = Math.min(16, 4.2 + score*0.012);
+
+  spawnTimer++;
+  if(spawnTimer > spawnInterval){
+    spawnTimer = 0;
+    spawnInterval = Math.max(48, 90 - score*0.3);
+    spawnObstacle();
+  }
+
+  const boxRect = gameBox.getBoundingClientRect();
+  const playerRect = player.getBoundingClientRect();
+  const playerBox = {
+    left: playerRect.left - boxRect.left + 6,
+    right: playerRect.right - boxRect.left - 6,
+    top: playerRect.top - boxRect.top + 4,
+    bottom: playerRect.bottom - boxRect.top
+  };
+
+  for(let i = obstacles.length - 1; i >= 0; i--){
+    const o = obstacles[i];
+    o.x -= speed;
+    o.el.style.right = 'auto';
+    o.el.style.left = o.x + 'px';
+    if(o.x < -40){
+      o.el.remove();
+      obstacles.splice(i,1);
+      continue;
+    }
+    const oRect = o.el.getBoundingClientRect();
+    const oBox = {
+      left: oRect.left - boxRect.left + 4,
+      right: oRect.right - boxRect.left - 4,
+      top: oRect.top - boxRect.top + 4,
+      bottom: oRect.bottom - boxRect.top
+    };
+    if(!jumping && rectsOverlap(playerBox, oBox)){
+      handleCollision();
+      return;
+    }
+  }
+
+  updateHUD();
+  animFrame = requestAnimationFrame(loop);
+}
+
+function handleCollision(){
+  paused = true;
+  if(animFrame) cancelAnimationFrame(animFrame);
+  best = Math.max(best, score);
+  updateHUD();
+  showQuestion();
+}
+
+function pickQuestion(){
+  const available = QUESTION_BANK.filter((_,i)=>!usedQuestions.includes(i));
+  const pool = available.length ? available : QUESTION_BANK;
+  const idx = QUESTION_BANK.indexOf(pool[Math.floor(Math.random()*pool.length)]);
+  usedQuestions.push(idx);
+  if(usedQuestions.length >= QUESTION_BANK.length) usedQuestions = [];
+  return QUESTION_BANK[idx];
+}
+
+function showQuestion(){
+  const item = pickQuestion();
+  const overlay = document.createElement('div');
+  overlay.className = 'qOverlay';
+  overlay.id = 'activeQOverlay';
+  const letters = ['A','B','C'];
+  overlay.innerHTML = `
+    <span class="qtag">⚠️ Chocaste — respondé bien para revivir</span>
+    <div class="qtext">${item.q}</div>
+    <div class="opts"></div>
+    <div class="justif"></div>
+  `;
+  gameBox.appendChild(overlay);
+  const optsDiv = overlay.querySelector('.opts');
+  item.opts.forEach((optText, oi)=>{
+    const opt = document.createElement('div');
+    opt.className = 'opt';
+    opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+    opt.addEventListener('click', ()=>{
+      if(overlay.dataset.answered) return;
+      overlay.dataset.answered = '1';
+      optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+      const isCorrect = oi === item.correct;
+      opt.classList.add(isCorrect ? 'chosen-correct' : 'chosen-incorrect');
+      if(!isCorrect) optsDiv.querySelectorAll('.opt')[item.correct].classList.add('reveal-correct');
+      const j = overlay.querySelector('.justif');
+      j.classList.add('show');
+      j.textContent = (isCorrect ? '✓ ' : '✕ ') + item.just;
+
+      totalAnswered++;
+      if(isCorrect) totalCorrect++;
+
+      setTimeout(()=>{
+        overlay.remove();
+        if(isCorrect){
+          resumeAfterCorrect();
+        }else{
+          showGameOver();
+        }
+      }, 1400);
+    });
+    optsDiv.appendChild(opt);
+  });
+}
+
+function resumeAfterCorrect(){
+  obstacles.forEach(o=>o.el.remove());
+  obstacles = [];
+  spawnTimer = 0;
+  paused = false;
+  animFrame = requestAnimationFrame(loop);
+}
+
+let totalCorrect = 0, totalAnswered = 0;
+
+function showWin(){
+  running = false;
+  paused = false;
+  if(animFrame) cancelAnimationFrame(animFrame);
+  best = Math.max(best, score);
+  updateHUD();
+  const overlay = document.createElement('div');
+  overlay.className = 'winOverlay';
+  overlay.innerHTML = `
+    <h2>🏆 ¡Ganaste!</h2>
+    <p>Llegaste a ${WIN_SCORE} puntos. Preguntas respondidas: ${totalAnswered} · Correctas: ${totalCorrect}</p>
+    <button class="bigbtn" id="playAgainBtn">🔄 Jugar de nuevo</button>
+  `;
+  gameBox.appendChild(overlay);
+  document.getElementById('playAgainBtn').addEventListener('click', ()=>{
+    overlay.remove();
+    resetGameState(true);
+    running = true;
+    paused = false;
+    loop();
+  });
+  footerNote.textContent = '¡Meta alcanzada! Este resultado se registraría en el panel docente.';
+}
+
+function showGameOver(){
+  running = false;
+  paused = false;
+  const overlay = document.createElement('div');
+  overlay.className = 'overOverlay';
+  overlay.innerHTML = `
+    <h2>💥 Fin del juego</h2>
+    <p>Puntaje: <strong>${Math.floor(score)}</strong> · Mejor puntaje: <strong>${Math.floor(best)}</strong></p>
+    <p>Preguntas respondidas: ${totalAnswered} · Correctas: ${totalCorrect}</p>
+    <button class="bigbtn" id="retryBtn">🔄 Reintentar</button>
+  `;
+  gameBox.appendChild(overlay);
+  document.getElementById('retryBtn').addEventListener('click', ()=>{
+    overlay.remove();
+    resetGameState(true);
+    running = true;
+    paused = false;
+    loop();
+  });
+  footerNote.textContent = 'Cada intento se registraría automáticamente en el panel docente (puntos: ' + totalCorrect + ' / ' + totalAnswered + ').';
+}
+
+updateHUD();
+</script>
+</body>
+</html>
