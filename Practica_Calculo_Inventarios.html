@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Práctica · Cálculos de Inventarios</title>
+<style>
+:root{
+  --navy:#0E1B3D; --navy-deep:#0A1230;
+  --gold:#B8863C; --gold-light:#F4DD7A;
+  --teal:#2FC2AD; --coral:#EF6A5B;
+  --ink:#20242B; --paper:#F3F5F4; --muted:#5B6470; --line:#D8DCDD;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);padding-bottom:60px;}
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;padding:12px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.topbar h1{font-size:14.5px;margin:0 0 2px;}
+.topbar p{margin:0;font-size:10px;color:rgba(255,255,255,.65);font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;}
+.badge-practica{background:var(--gold);color:var(--navy-deep);font-size:9.5px;font-family:var(--mono);font-weight:700;padding:3px 9px;border-radius:10px;text-transform:uppercase;letter-spacing:.4px;}
+
+.namebar{background:#fff;border-bottom:1px solid var(--line);padding:9px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.namebar input{padding:7px 9px;border:1px solid var(--line);border-radius:6px;font-size:13px;flex:1;min-width:160px;}
+.namebar label{font-size:11px;color:var(--muted);font-family:var(--mono);}
+
+.page{max-width:760px;margin:0 auto;padding:16px;}
+.intro-card{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:16px 18px;margin-bottom:18px;font-size:13.5px;line-height:1.6;color:var(--ink);}
+.intro-card h2{font-size:16px;margin:0 0 8px;color:var(--navy);text-align:center;}
+.btn{display:inline-block;padding:8px 16px;background:var(--navy);color:#fff;border:none;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.btn:hover{background:var(--navy-deep);}
+.btn:disabled{opacity:.45;cursor:default;}
+
+.exercise-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px;}
+.exercise-card h3{font-size:13.5px;margin:0 0 8px;color:var(--navy);}
+.exercise-data{background:#f7f8f6;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12px;margin-bottom:12px;}
+.exercise-data table{width:100%;border-collapse:collapse;margin-top:6px;}
+.exercise-data th,.exercise-data td{padding:4px 6px;text-align:left;font-size:11.5px;}
+.exercise-data th{color:var(--muted);font-family:var(--mono);text-transform:uppercase;font-size:9.5px;}
+.venta-line{font-weight:700;color:var(--navy);margin-top:6px;}
+
+.answer-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:10px;}
+@media (max-width:650px){.answer-grid{grid-template-columns:1fr;}}
+.answer-block{background:#f7f8f6;border:1px solid var(--line);border-radius:8px;padding:10px 12px;}
+.answer-block b{display:block;font-size:11.5px;color:var(--navy);margin-bottom:6px;}
+.answer-block label{font-size:11px;color:var(--muted);display:block;margin-top:6px;}
+.answer-block input{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:6px;font-family:var(--mono);font-size:12.5px;margin-top:2px;}
+
+.check-row{margin-top:12px;}
+.result-msg{margin-top:10px;padding:9px 11px;border-radius:6px;font-size:11.5px;display:none;}
+.result-msg.show{display:block;}
+.result-msg.ok{background:#e7f1ec;color:#1e4a37;}
+.result-msg.bad{background:#f7e9e8;color:#6f2626;}
+.result-msg.partial{background:#fdf6e8;color:#7a5a15;}
+
+.field.ok input{border-color:var(--teal);background:#e7f1ec;}
+.field.bad input{border-color:var(--coral);background:#f7e9e8;}
+
+.footerbar{text-align:center;margin-top:20px;}
+.footerbar p{font-size:11px;color:var(--muted);}
+.scorepill{display:inline-block;font-family:var(--mono);font-size:11px;background:var(--teal);color:#fff;padding:3px 10px;border-radius:12px;margin-left:8px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div>
+      <h1>🧮 Práctica: Cálculos de Inventarios</h1>
+      <p>Contabilidad · Gestión Contable · PEPS, UEPS y Promedio Ponderado</p>
+    </div>
+    <span class="badge-practica">🏋️ Solo práctica</span>
+  </div>
+</div>
+
+<div class="namebar">
+  <label>Tu nombre:</label>
+  <input type="text" id="studentName" placeholder="Nombre completo" maxlength="45">
+  <span id="nameStatus" style="font-size:11px;color:var(--muted);font-family:var(--mono);"></span>
+</div>
+
+<div class="page" id="page">
+  <div class="intro-card">
+    <h2>Práctica de cálculos — PEPS, UEPS y Promedio Ponderado</h2>
+    <p>Para cada ejercicio, calculá el <strong>costo de ventas</strong> y el <strong>inventario final</strong> bajo los tres métodos de valuación: PEPS, UEPS y Promedio Ponderado. Escribí solo números, sin colones ni puntos de miles (ejemplo: <code>155000</code>).</p>
+    <p style="font-size:11.5px;color:var(--muted);margin:0;">Podés repetir esta práctica todas las veces que quieras — no queda registrada como examen formal.</p>
+  </div>
+  <div id="exercisesWrap"></div>
+</div>
+
+<script>
+const EXERCISES = [
+  {
+    id: "ej1",
+    title: "Ejercicio 1",
+    inv_inicial: {u:80, costo:1200},
+    compras: [{u:120, costo:1250}],
+    vendidas: 150,
+    peps_cv: 183500, peps_if: 62500,
+    ueps_cv: 186000, ueps_if: 60000,
+    pp_cv: 184500, pp_if: 61500
+  },
+  {
+    id: "ej2",
+    title: "Ejercicio 2",
+    inv_inicial: {u:200, costo:800},
+    compras: [{u:100, costo:850}, {u:150, costo:900}],
+    vendidas: 350,
+    peps_cv: 290000, peps_if: 90000,
+    ueps_cv: 300000, ueps_if: 80000,
+    pp_cv: 295556, pp_if: 84444
+  },
+  {
+    id: "ej3",
+    title: "Ejercicio 3",
+    inv_inicial: {u:50, costo:2000},
+    compras: [{u:80, costo:2100}],
+    vendidas: 100,
+    peps_cv: 205000, peps_if: 63000,
+    ueps_cv: 208000, ueps_if: 60000,
+    pp_cv: 206154, pp_if: 61846
+  },
+  {
+    id: "ej4",
+    title: "Ejercicio 4",
+    inv_inicial: {u:60, costo:3000},
+    compras: [{u:40, costo:3200}, {u:90, costo:3100}],
+    vendidas: 130,
+    peps_cv: 401000, peps_if: 186000,
+    ueps_cv: 407000, ueps_if: 180000,
+    pp_cv: 401632, pp_if: 185368
+  },
+];
+
+let studentName = "";
+let completedCount = 0;
+
+/* ============================================================
+   CONEXIÓN A GOOGLE SHEETS
+   ============================================================ */
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbzMGf_Gpf6UWswFPSqEBMdq-93GxGkrURsT4jtO9Jaz8yT5gyMMtp1btlcDZjRCeuAb/exec";
+function sheetsReady(){ return SHEET_API_URL && !SHEET_API_URL.startsWith('REEMPLAZAR'); }
+async function sheetPost(sheetName, row){
+  await fetch(SHEET_API_URL, { method:'POST', mode:'no-cors', body: JSON.stringify({ sheet: sheetName, row }) });
+  return { ok:true };
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function fmt(n){ return new Intl.NumberFormat('es-CR').format(n); }
+
+function renderExercises(){
+  const wrap = document.getElementById('exercisesWrap');
+  wrap.innerHTML = '';
+  EXERCISES.forEach((ex, idx)=>{
+    const totalUnidades = ex.inv_inicial.u + ex.compras.reduce((s,c)=>s+c.u,0);
+    const totalCosto = ex.inv_inicial.u*ex.inv_inicial.costo + ex.compras.reduce((s,c)=>s+c.u*c.costo,0);
+    const inventarioFinalU = totalUnidades - ex.vendidas;
+
+    let dataRows = `<tr><th>Concepto</th><th>Unidades</th><th>Costo unitario</th></tr>`;
+    dataRows += `<tr><td>Inventario inicial</td><td>${ex.inv_inicial.u}</td><td>₡${fmt(ex.inv_inicial.costo)}</td></tr>`;
+    ex.compras.forEach((c,i)=>{
+      dataRows += `<tr><td>Compra ${i+1}</td><td>${c.u}</td><td>₡${fmt(c.costo)}</td></tr>`;
+    });
+
+    const card = document.createElement('div');
+    card.className = 'exercise-card';
+    card.innerHTML = `
+      <h3>${ex.title} <span class="scorepill" id="pill-${ex.id}" style="display:none;"></span></h3>
+      <div class="exercise-data">
+        <table>${dataRows}</table>
+        <div class="venta-line">Total disponible: ${totalUnidades} unidades por ₡${fmt(totalCosto)} — se venden ${ex.vendidas} unidades (quedan ${inventarioFinalU} en inventario final).</div>
+      </div>
+      <div class="answer-grid">
+        <div class="answer-block">
+          <b>Método PEPS</b>
+          <div class="field" id="field-${ex.id}-peps_cv">
+            <label>Costo de ventas (₡)</label>
+            <input type="text" inputmode="numeric" id="${ex.id}-peps_cv">
+          </div>
+          <div class="field" id="field-${ex.id}-peps_if">
+            <label>Inventario final (₡)</label>
+            <input type="text" inputmode="numeric" id="${ex.id}-peps_if">
+          </div>
+        </div>
+        <div class="answer-block">
+          <b>Método UEPS</b>
+          <div class="field" id="field-${ex.id}-ueps_cv">
+            <label>Costo de ventas (₡)</label>
+            <input type="text" inputmode="numeric" id="${ex.id}-ueps_cv">
+          </div>
+          <div class="field" id="field-${ex.id}-ueps_if">
+            <label>Inventario final (₡)</label>
+            <input type="text" inputmode="numeric" id="${ex.id}-ueps_if">
+          </div>
+        </div>
+        <div class="answer-block">
+          <b>Promedio Ponderado</b>
+          <div class="field" id="field-${ex.id}-pp_cv">
+            <label>Costo de ventas (₡)</label>
+            <input type="text" inputmode="numeric" id="${ex.id}-pp_cv">
+          </div>
+          <div class="field" id="field-${ex.id}-pp_if">
+            <label>Inventario final (₡)</label>
+            <input type="text" inputmode="numeric" id="${ex.id}-pp_if">
+          </div>
+        </div>
+      </div>
+      <div class="check-row">
+        <button class="btn" id="check-${ex.id}">Comprobar</button>
+      </div>
+      <div class="result-msg" id="result-${ex.id}"></div>
+    `;
+    wrap.appendChild(card);
+
+    document.getElementById('check-'+ex.id).addEventListener('click', ()=>{
+      checkExercise(ex);
+    });
+  });
+
+  const footer = document.createElement('div');
+  footer.className = 'footerbar';
+  footer.innerHTML = `<p>Podés repetir cualquier ejercicio las veces que necesites.</p>`;
+  wrap.appendChild(footer);
+}
+
+function parseNum(str){
+  const cleaned = (str||'').replace(/[^0-9]/g,'');
+  if(cleaned==='') return null;
+  return parseInt(cleaned,10);
+}
+
+async function checkExercise(ex){
+  const fields = [
+    {key:'peps_cv', expected:ex.peps_cv},
+    {key:'peps_if', expected:ex.peps_if},
+    {key:'ueps_cv', expected:ex.ueps_cv},
+    {key:'ueps_if', expected:ex.ueps_if},
+    {key:'pp_cv', expected:ex.pp_cv},
+    {key:'pp_if', expected:ex.pp_if},
+  ];
+  let correctCount = 0;
+  fields.forEach(f=>{
+    const input = document.getElementById(ex.id+'-'+f.key);
+    const val = parseNum(input.value);
+    const fieldDiv = document.getElementById('field-'+ex.id+'-'+f.key);
+    fieldDiv.classList.remove('ok','bad');
+    const tolerance = Math.max(2, Math.round(f.expected*0.005));
+    if(val!==null && Math.abs(val-f.expected)<=tolerance){
+      fieldDiv.classList.add('ok');
+      correctCount++;
+    }else{
+      fieldDiv.classList.add('bad');
+    }
+  });
+
+  const msg = document.getElementById('result-'+ex.id);
+  msg.classList.remove('ok','bad','partial');
+  msg.classList.add('show');
+  const pill = document.getElementById('pill-'+ex.id);
+  pill.style.display = 'inline-block';
+  pill.textContent = correctCount + ' / 6';
+
+  if(correctCount===6){
+    msg.classList.add('ok');
+    msg.textContent = `✓ ¡Todo correcto! PEPS → CV ₡${fmt(ex.peps_cv)}, IF ₡${fmt(ex.peps_if)}. UEPS → CV ₡${fmt(ex.ueps_cv)}, IF ₡${fmt(ex.ueps_if)}. Promedio Ponderado → CV ₡${fmt(ex.pp_cv)}, IF ₡${fmt(ex.pp_if)}.`;
+  }else if(correctCount>0){
+    msg.classList.add('partial');
+    msg.textContent = `◐ Tenés ${correctCount} de 6 correctos. Revisá los campos marcados en rojo — PEPS usa las unidades más antiguas primero, UEPS usa las más recientes primero, y el Promedio Ponderado usa un costo unitario único (costo total ÷ unidades disponibles).`;
+  }else{
+    msg.classList.add('bad');
+    msg.textContent = `✕ Ningún valor coincide todavía. Revisá la fórmula: Costo de Ventas = Inventario Inicial + Compras − Inventario Final, y aplicá el orden de salida según cada método.`;
+  }
+
+  if(studentName && sheetsReady()){
+    try{
+      const nowIso = new Date().toISOString();
+      await sheetPost('Progreso', [nowIso, studentName, 'practica_calculo_inventarios_'+ex.id, correctCount, 6]);
+    }catch(e){}
+  }
+}
+
+/* ============================================================
+   NOMBRE
+   ============================================================ */
+document.getElementById('studentName').addEventListener('input', function(){
+  studentName = this.value.trim();
+  document.getElementById('nameStatus').textContent = studentName ? '● identificado' : '';
+});
+(function prefillFromLink(){
+  const params = new URLSearchParams(window.location.search);
+  const nombreParam = params.get('nombre');
+  if(nombreParam){
+    studentName = nombreParam;
+    document.getElementById('studentName').value = nombreParam;
+    document.getElementById('nameStatus').textContent = '● identificado';
+  }
+})();
+
+/* ============================================================
+   DETECCIÓN DE SALIDA DE PANTALLA
+   ============================================================ */
+let salidaCount = 0;
+function showWarnBanner(msg){
+  let banner = document.getElementById('warnBanner');
+  if(!banner){
+    banner = document.createElement('div');
+    banner.id = 'warnBanner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:200;background:#EF6A5B;color:#fff;text-align:center;padding:8px 12px;font-size:12.5px;font-family:monospace;';
+    document.body.prepend(banner);
+  }
+  banner.textContent = msg;
+  banner.style.display = 'block';
+  clearTimeout(window._warnTimeout);
+  window._warnTimeout = setTimeout(()=>{ banner.style.display='none'; }, 6000);
+}
+function logSalida(){
+  salidaCount++;
+  showWarnBanner('⚠️ Se detectó que saliste de esta pestaña o ventana (van: ' + salidaCount + ').');
+  if(studentName && sheetsReady()){
+    sheetPost('Progreso', [new Date().toISOString(), studentName, 'incidente_salida_pantalla_practica_inventarios', salidaCount, salidaCount]).catch(()=>{});
+  }
+}
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) logSalida(); });
+
+renderExercises();
+</script>
+</body>
+</html>

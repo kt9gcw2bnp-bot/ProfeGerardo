@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso · Repaso: Inventarios</title>
+<style>
+:root{
+  --navy:#0E1B3D; --navy-deep:#0A1230;
+  --gold:#B8863C; --gold-light:#F4DD7A;
+  --teal:#2FC2AD; --coral:#EF6A5B;
+  --ink:#20242B; --paper:#F3F5F4; --muted:#5B6470; --line:#D8DCDD;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);padding-bottom:60px;}
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;padding:12px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.topbar h1{font-size:15px;margin:0 0 2px;}
+.topbar p{margin:0;font-size:10px;color:rgba(255,255,255,.65);font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;}
+.teacherBtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:10.5px;padding:5px 10px;border-radius:14px;cursor:pointer;}
+
+.namebar{background:#fff;border-bottom:1px solid var(--line);padding:9px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.namebar input{padding:7px 9px;border:1px solid var(--line);border-radius:6px;font-size:13px;flex:1;min-width:160px;}
+.namebar label{font-size:11px;color:var(--muted);font-family:var(--mono);}
+
+.tabs{display:flex;gap:4px;overflow-x:auto;background:#fff;border-bottom:1px solid var(--line);padding:8px 10px;}
+.tab{flex:0 0 auto;padding:7px 12px;border-radius:16px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid var(--line);color:var(--muted);white-space:nowrap;background:#f7f8f6;}
+.tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+.tab.done::after{content:" ✓";color:var(--teal);}
+.tab.cert{border-color:var(--gold);}
+.tab.cert.active{background:var(--gold);color:var(--navy-deep);border-color:var(--gold);}
+.tab.tab-locked{opacity:.45;}
+.tab.tab-locked::before{content:"🔒 ";}
+
+.info-hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;border-radius:12px;padding:22px 20px;margin-bottom:16px;text-align:center;}
+.info-hero .kicker{font-family:var(--mono);font-size:10.5px;letter-spacing:2px;color:var(--gold-light);text-transform:uppercase;}
+.info-hero h2{margin:8px 0 4px;font-size:19px;}
+.info-hero p{margin:0;font-size:12px;color:rgba(255,255,255,.75);}
+.info-block{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px;position:relative;overflow:hidden;}
+.info-block::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--block-color,var(--gold));}
+.info-block .ib-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.info-block .ib-icon{font-size:22px;flex-shrink:0;}
+.info-block h3{margin:0;font-size:14.5px;color:var(--navy);}
+.info-block p{font-size:12.5px;line-height:1.6;margin:0 0 8px;color:var(--ink);}
+.info-block .ib-tag{display:inline-block;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.5px;background:#f7f8f6;color:var(--muted);padding:2px 8px;border-radius:10px;margin-top:6px;}
+.compare-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:11.5px;}
+.compare-table th,.compare-table td{border:1px solid var(--line);padding:7px 8px;text-align:left;}
+.compare-table th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;}
+.formula-box{background:#f7f8f6;border:1px dashed var(--line);border-radius:8px;padding:10px 12px;font-family:var(--mono);font-size:12px;color:var(--navy);text-align:center;margin:8px 0;}
+.read-confirm{text-align:center;margin:20px 0 6px;}
+.read-confirm .btn{padding:12px 26px;font-size:13.5px;}
+.read-confirm p{font-size:11.5px;color:var(--muted);margin-top:8px;}
+
+.page{max-width:760px;margin:0 auto;padding:16px;}
+.content-card{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:13.5px;line-height:1.55;color:var(--ink);}
+.content-card h2{font-size:16px;margin:0 0 8px;color:var(--navy);}
+
+.actcard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:14px;}
+.actcard h3{font-size:13.5px;margin:0 0 10px;color:var(--navy);}
+.btn{display:inline-block;padding:8px 16px;background:var(--navy);color:#fff;border:none;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.btn:hover{background:var(--navy-deep);}
+.btn:disabled{opacity:.45;cursor:default;}
+.scorepill{display:inline-block;font-family:var(--mono);font-size:11px;background:var(--teal);color:#fff;padding:3px 10px;border-radius:12px;margin-left:8px;}
+
+.qcard{border:1px solid var(--line);border-radius:8px;padding:12px 13px;margin-bottom:10px;}
+.qcard.correct{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset;}
+.qcard.incorrect{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral) inset;}
+.qtext{font-size:13px;font-weight:600;margin-bottom:8px;}
+.opt{display:flex;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:6px;margin-top:6px;cursor:pointer;font-size:12.5px;}
+.opt:hover{background:#f7f8f6;}
+.opt .letter{font-family:var(--mono);font-weight:700;color:var(--navy);}
+.opt.locked{cursor:default;}
+.opt.chosen-correct{background:#e7f1ec;border-color:var(--teal);}
+.opt.chosen-incorrect{background:#f7e9e8;border-color:var(--coral);}
+.opt.reveal-correct{background:#e7f1ec;border-color:var(--teal);}
+.justif{margin-top:8px;padding:8px 10px;border-radius:6px;font-size:11.5px;display:none;}
+.justif.show{display:block;}
+.justif.ok{background:#e7f1ec;color:#1e4a37;}
+.justif.bad{background:#f7e9e8;color:#6f2626;}
+
+.match-table{width:100%;border-collapse:collapse;margin-top:6px;}
+.match-table td{padding:6px 4px;font-size:12.5px;vertical-align:middle;}
+.match-table select{width:100%;font-size:12.5px;padding:6px;border-radius:5px;border:1px solid var(--line);}
+.match-row.ok select{border-color:var(--teal);background:#e7f1ec;}
+.match-row.bad select{border-color:var(--coral);background:#f7e9e8;}
+.bank{font-size:11px;color:var(--muted);background:#f7f8f6;border:1px solid var(--line);border-radius:6px;padding:8px 10px;margin-top:8px;}
+
+.cw-wrap{display:flex;gap:18px;flex-wrap:wrap;}
+.cw-grid{display:grid;gap:1px;background:#1c1f24;border:2px solid var(--navy);border-radius:4px;padding:2px;}
+.cw-cell{width:22px;height:22px;position:relative;background:#fff;}
+.cw-cell.blocked{background:#1c1f24;}
+.cw-cell input{width:100%;height:100%;border:none;text-align:center;font-family:var(--mono);font-weight:700;font-size:11.5px;text-transform:uppercase;background:transparent;padding:0;}
+.cw-cell input.ok{background:#e7f1ec;color:#1e4a37;}
+.cw-cell input.bad{background:#f7e9e8;color:#6f2626;}
+.cw-num{position:absolute;top:0px;left:1px;font-size:6.5px;color:var(--gold);font-family:var(--mono);}
+.cw-clues{flex:1;min-width:200px;font-size:11.5px;}
+.cw-clues b{color:var(--navy);display:block;margin:8px 0 3px;font-size:11px;}
+.cw-clues li{margin-bottom:4px;}
+
+.caso-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:16px;}
+.caso-card.correct{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset;}
+.caso-card.incorrect{border-color:var(--coral);box-shadow:0 0 0 1px var(--coral) inset;}
+.caso-card .caso-tag{font-family:var(--mono);font-size:10px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;}
+.caso-card p.enunciado{font-size:13px;margin:8px 0 4px;color:var(--ink);}
+textarea.caso-input{width:100%;border:1px solid var(--line);border-radius:8px;padding:9px 10px;font-family:var(--sans);font-size:12.5px;min-height:60px;margin-top:10px;}
+.caso-opts{margin-top:10px;}
+.caso-msgs{margin-top:10px;}
+.caso-msg{background:#f7f8f6;border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:12.5px;}
+.caso-msg-head{display:flex;justify-content:space-between;font-size:10.5px;color:var(--muted);margin-bottom:3px;}
+.caso-msg-head b{color:var(--navy);}
+
+/* ============ JUEGO: Corre y Responde ============ */
+.gamebox{
+  position:relative;width:100%;height:200px;
+  background:linear-gradient(180deg,#dfe9f0 0%,#f3f5f4 70%);
+  border:2px solid var(--navy);border-radius:10px;overflow:hidden;
+  touch-action:none;cursor:pointer;-webkit-user-select:none;user-select:none;
+}
+.gb-ground{position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--navy);}
+.gb-ground::after{content:"";position:absolute;bottom:-2px;left:0;right:0;height:1px;background:repeating-linear-gradient(90deg,var(--muted) 0 12px, transparent 12px 24px);}
+.gb-player{position:absolute;bottom:3px;left:40px;font-size:32px;line-height:1;transform:scaleX(-1) translateY(0);transition:transform .08s linear;z-index:5;}
+.gb-obstacle{position:absolute;bottom:3px;font-size:28px;line-height:1;z-index:4;}
+.gb-obstacle.colon{font-weight:800;color:var(--gold);-webkit-text-stroke:1px var(--navy);}
+.gb-startOverlay,.gb-qOverlay,.gb-overOverlay,.gb-winOverlay{
+  position:absolute;inset:0;background:rgba(14,27,61,.92);color:#fff;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:14px;gap:8px;z-index:10;
+}
+.gb-winOverlay{background:rgba(184,134,60,.95);}
+.gb-startOverlay h2,.gb-overOverlay h2,.gb-winOverlay h2{font-size:15px;margin:0;}
+.gb-startOverlay p,.gb-overOverlay p,.gb-winOverlay p{font-size:11px;color:rgba(255,255,255,.8);margin:0;max-width:380px;}
+.gb-qOverlay .qtag{font-family:var(--mono);font-size:9.5px;color:var(--gold-light);text-transform:uppercase;}
+.gb-qOverlay .qtext{font-size:12.5px;font-weight:600;max-width:400px;}
+.gb-qOverlay .opts{display:flex;flex-direction:column;gap:5px;width:100%;max-width:400px;}
+.gb-qOverlay .opt{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);color:#fff;padding:7px 10px;border-radius:8px;font-size:11.5px;cursor:pointer;text-align:left;display:flex;gap:7px;}
+.gb-qOverlay .opt.locked{cursor:default;}
+.gb-qOverlay .opt.chosen-correct{background:rgba(47,194,173,.35);border-color:var(--teal);}
+.gb-qOverlay .opt.chosen-incorrect{background:rgba(239,106,91,.35);border-color:var(--coral);}
+.gb-qOverlay .opt.reveal-correct{background:rgba(47,194,173,.35);border-color:var(--teal);}
+.gb-hud{display:flex;justify-content:space-between;font-size:11px;font-family:var(--mono);color:var(--navy);margin-bottom:6px;}
+.gb-hint{font-size:10.5px;color:var(--muted);text-align:center;margin-top:6px;font-family:var(--mono);}
+
+.progress-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+.progress-table th,.progress-table td{border:1px solid var(--line);padding:7px 9px;font-size:12px;text-align:left;}
+.progress-table th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;}
+.progress-table td.center{text-align:center;}
+.status-ok{color:var(--teal);font-weight:700;}
+.status-mid{color:#c98a2c;font-weight:700;}
+.status-bad{color:var(--coral);font-weight:700;}
+.status-pending{color:var(--muted);}
+.competency-desc{font-size:10.5px;color:var(--muted);display:block;margin-top:2px;}
+.ra-tag{font-family:var(--mono);font-size:9.5px;color:var(--gold);font-weight:700;}
+
+.rubric-table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:11px;}
+.rubric-table th,.rubric-table td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top;}
+.rubric-table th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;}
+.rubric-table td.lvl1{background:#fdf0ee;}
+.rubric-table td.lvl2{background:#fdf6e8;}
+.rubric-table td.lvl3{background:#eaf7f3;}
+
+.certificate{display:none;border:8px double var(--gold);border-radius:10px;padding:34px 24px;text-align:center;background:#fffdf7;margin-top:10px;}
+.certificate.show{display:block;}
+.certificate .kicker{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;}
+.certificate h2{font-size:22px;color:var(--navy);margin:10px 0 4px;font-family:Georgia,serif;}
+.certificate .name{font-size:26px;font-weight:700;color:var(--navy-deep);margin:14px 0;font-family:Georgia,serif;border-bottom:2px solid var(--gold);display:inline-block;padding-bottom:6px;}
+.certificate p{font-size:12.5px;color:var(--muted);max-width:440px;margin:6px auto;}
+.certificate .seal{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d488,#a97c29);margin:14px auto 0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#3a2a06;font-weight:700;}
+
+.locked-msg{text-align:center;color:var(--muted);font-size:12.5px;padding:30px 20px;background:#fff;border:1px dashed var(--line);border-radius:8px;}
+
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,18,48,.6);z-index:50;align-items:flex-start;justify-content:center;padding:30px 14px;overflow-y:auto;}
+.modal-bg.show{display:flex;}
+.modal{background:#fff;border-radius:10px;max-width:700px;width:100%;padding:20px;}
+.modal h3{margin:0 0 12px;color:var(--navy);}
+.modal .close{float:right;cursor:pointer;font-size:18px;color:var(--muted);}
+.pin-row{display:flex;gap:8px;margin-top:10px;}
+.pin-row input{flex:1;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-size:14px;font-family:var(--mono);letter-spacing:3px;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div>
+      <h1>📦 Repaso: Inventarios</h1>
+      <p>Contabilidad · Gestión Contable · Sistemas y Métodos de Valuación</p>
+    </div>
+    <button class="teacherBtn" id="teacherBtnOpen">👩‍🏫 Panel docente</button>
+    <button class="teacherBtn" id="focusModeBtn" style="margin-left:6px;">🔒 Modo enfoque</button>
+  </div>
+</div>
+
+<div class="namebar">
+  <label>Tu nombre:</label>
+  <input type="text" id="studentName" placeholder="Nombre completo" maxlength="45">
+  <span id="nameStatus" style="font-size:11px;color:var(--muted);font-family:var(--mono);"></span>
+</div>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="page" id="page"></div>
+
+<div class="modal-bg" id="pinModalBg">
+  <div class="modal">
+    <span class="close" id="pinModalClose">✕</span>
+    <h3>Panel docente</h3>
+    <p style="font-size:12.5px;color:var(--muted);margin:0;">Ingrese el PIN para ver el progreso del grupo.</p>
+    <div class="pin-row">
+      <input type="password" id="pinInput" maxlength="6" placeholder="PIN">
+      <button class="btn" id="pinSubmit">Entrar</button>
+    </div>
+    <div id="pinError" style="color:var(--coral);font-size:11.5px;margin-top:6px;display:none;">PIN incorrecto.</div>
+  </div>
+</div>
+
+<div class="modal-bg" id="teacherModalBg">
+  <div class="modal">
+    <span class="close" id="teacherModalClose">✕</span>
+    <h3>Panel docente — progreso del curso</h3>
+    <div id="teacherContent">Cargando...</div>
+  </div>
+</div>
+
+<script>
+const TEACHER_PIN = "9986";
+
+/* ============================================================
+   CONFIGURACIÓN DE MÓDULOS — sin sopa de letras esta vez,
+   con el juego "Corre y Responde" como pestaña propia
+   ============================================================ */
+const MODULES = [
+  { id:"invent_antologia", label:"📘 Antología", title:"Antología — Inventarios", activityType:"antologia" },
+  { id:"invent_calculo", label:"⚖️ Cuestionario", title:"Conceptos de Inventarios",
+    content:"Repasemos los sistemas de registro y los métodos de valuación de inventarios: periódico, perpetuo, PEPS, promedio ponderado y valor neto realizable.",
+    activityType:"quiz" },
+  { id:"invent_tipos", label:"🔗 Asocie", title:"Asocie — Sistemas y Métodos", activityType:"matching" },
+  { id:"invent_juego", label:"🦖 Corre y Responde", title:"Corre y Responde", activityType:"juego" },
+  { id:"invent_trabajo", label:"📝 Trabajo en clase", title:"Trabajo en clase — ¿Qué sistema o método aplica?", activityType:"trabajo" },
+  { id:"invent_metodos", label:"🗂️ Crucigrama", title:"Vocabulario de Inventarios",
+    content:"Cada término tiene un rol preciso: el sistema define cuándo se calcula el costo, y el método define cómo se valúan las unidades vendidas y las que quedan en existencia.",
+    activityType:"crossword" },
+  { id:"invent_vf", label:"✅ Verdadero/Falso", title:"Verdadero o Falso",
+    content:"Repasemos con afirmaciones que pueden ser ciertas o falsas — prestá atención a los detalles.",
+    activityType:"vf" },
+  { id:"invent_casos", label:"💬 Casos y Debate", title:"Casos y Debate (módulo compartido)", activityType:"casos" },
+  { id:"certificado", label:"🏆 Rúbrica y Certificado", title:"Rúbrica y Certificado", activityType:"certificado" },
+];
+
+const ORDER = ["invent_antologia","invent_calculo","invent_tipos","invent_juego","invent_trabajo","invent_metodos","invent_vf","invent_casos"];
+
+function isStepDone(id){
+  if(id==='invent_antologia') return antologiaLeida;
+  if(id==='invent_casos') return !!(localProgress['invent_casos'] && localProgress['invent_casos'].score>0);
+  return !!(localProgress[id] && localProgress[id].total > 0);
+}
+
+function currentStepIndex(){
+  for(let i=0;i<ORDER.length;i++){ if(!isStepDone(ORDER[i])) return i; }
+  return ORDER.length;
+}
+
+let activeModule = MODULES[0].id;
+let studentName = "";
+let antologiaLeida = false;
+
+/* ============================================================
+   CONEXIÓN A GOOGLE SHEETS
+   ============================================================ */
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbzMGf_Gpf6UWswFPSqEBMdq-93GxGkrURsT4jtO9Jaz8yT5gyMMtp1btlcDZjRCeuAb/exec";
+function sheetsReady(){ return SHEET_API_URL && !SHEET_API_URL.startsWith('REEMPLAZAR'); }
+
+let jsonpCounter = 0;
+function jsonpRequest(url){
+  return new Promise((resolve, reject)=>{
+    const cbName = 'jsonp_cb_' + (jsonpCounter++) + '_' + Date.now();
+    const script = document.createElement('script');
+    let settled = false;
+    const cleanup = ()=>{ delete window[cbName]; if(script.parentNode) script.parentNode.removeChild(script); };
+    window[cbName] = (data)=>{ settled = true; cleanup(); resolve(data); };
+    script.onerror = ()=>{ if(!settled){ cleanup(); reject(new Error('Error de red (JSONP)')); } };
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    document.body.appendChild(script);
+    setTimeout(()=>{ if(!settled){ cleanup(); reject(new Error('Tiempo de espera agotado')); } }, 10000);
+  });
+}
+async function sheetGet(sheetName){
+  const data = await jsonpRequest(SHEET_API_URL + '?sheet=' + encodeURIComponent(sheetName));
+  return data.rows || [];
+}
+async function sheetPost(sheetName, row){
+  await fetch(SHEET_API_URL, { method:'POST', mode:'no-cors', body: JSON.stringify({ sheet: sheetName, row }) });
+  return { ok:true };
+}
+
+/* ============================================================
+   PROGRESO
+   ============================================================ */
+const localProgress = {};
+
+async function saveProgress(moduleId, score, total){
+  localProgress[moduleId] = {score, total, ts:Date.now()};
+  renderTabs();
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const nowIso = new Date().toISOString();
+    await sheetPost('Progreso', [nowIso, studentName, moduleId, score, total]);
+  }catch(e){}
+}
+
+function isLocked(moduleId){
+  return !!(localProgress[moduleId] && localProgress[moduleId].total > 0);
+}
+
+function renderLockedNotice(moduleId, activityLabel){
+  const p = localProgress[moduleId];
+  const pctVal = p.total>0 ? Math.round((p.score/p.total)*100) : 0;
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>✅ Actividad completada</h3>
+    <p style="font-size:13px;">Ya completaste <strong>${activityLabel}</strong>. Tu resultado fue <strong>${p.score} / ${p.total}</strong> (${pctVal}%).</p>
+    <p style="font-size:11px;color:var(--muted);">Esta actividad ya quedó registrada y no se puede repetir.</p>`;
+  pageEl.appendChild(card);
+}
+
+async function loadExistingProgress(){
+  if(!studentName || !sheetsReady()) return;
+  try{
+    const rows = await sheetGet('Progreso');
+    rows.filter(r => r.Estudiante === studentName).forEach(r=>{
+      const mod = r.Modulo;
+      if(!mod) return;
+      localProgress[mod] = { score:Number(r.Score), total:Number(r.Total), ts:new Date(r.Timestamp).getTime() };
+    });
+    if(localProgress['invent_antologia']) antologiaLeida = true;
+    renderTabs();
+    renderPage();
+  }catch(e){}
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+const tabsEl = document.getElementById('tabs');
+function renderTabs(){
+  tabsEl.innerHTML = '';
+  const curIdx = currentStepIndex();
+  MODULES.forEach(m=>{
+    const t = document.createElement('div');
+    const done = isStepDone(m.id);
+    const orderIdx = ORDER.indexOf(m.id);
+    let clickable;
+    if(m.id==='certificado' || m.id==='invent_antologia') clickable = true;
+    else clickable = (orderIdx === curIdx);
+    t.className = 'tab' + (m.id===activeModule?' active':'') + (done?' done':'') + (m.id==='certificado'?' cert':'') + (!clickable?' tab-locked':'');
+    t.textContent = m.label;
+    t.addEventListener('click', ()=>{
+      if(!clickable){
+        if(orderIdx > curIdx) alert('Primero debés completar la actividad actual antes de avanzar a esta.');
+        else alert('Ya completaste esta actividad — solo podés regresar a la Antología, no a etapas anteriores.');
+        return;
+      }
+      activeModule = m.id;
+      renderTabs(); renderPage();
+    });
+    tabsEl.appendChild(t);
+  });
+}
+
+/* ============================================================
+   RENDER PAGE ROUTER
+   ============================================================ */
+const pageEl = document.getElementById('page');
+function renderPage(){
+  const m = MODULES.find(x=>x.id===activeModule);
+  pageEl.innerHTML = '';
+  if(m.content){
+    const c = document.createElement('div');
+    c.className = 'content-card';
+    c.innerHTML = `<h2>${m.title}</h2><p>${m.content}</p>`;
+    pageEl.appendChild(c);
+  }
+  if(m.activityType==='antologia') renderAntologia();
+  else if(m.activityType==='crossword') renderCrossword();
+  else if(m.activityType==='quiz') renderQuiz();
+  else if(m.activityType==='vf') renderVF();
+  else if(m.activityType==='matching') renderMatching();
+  else if(m.activityType==='trabajo') renderTrabajo();
+  else if(m.activityType==='juego') renderJuego();
+  else if(m.activityType==='casos') renderCasos();
+  else if(m.activityType==='certificado') renderCertificado();
+  maybeShowContinue();
+}
+
+function maybeShowContinue(){
+  if(activeModule==='certificado') return;
+  if(!isStepDone(activeModule)) return;
+  const idx = ORDER.indexOf(activeModule);
+  if(idx===-1) return;
+  const nextId = (idx+1<ORDER.length) ? ORDER[idx+1] : 'certificado';
+  const nextMod = MODULES.find(x=>x.id===nextId);
+  const bar = document.createElement('div');
+  bar.className = 'read-confirm';
+  bar.innerHTML = `<button class="btn" id="continueBtn">➡️ Continuar a: ${nextMod.label}</button>`;
+  pageEl.appendChild(bar);
+  document.getElementById('continueBtn').addEventListener('click', ()=>{
+    activeModule = nextId; renderTabs(); renderPage();
+  });
+}
+
+function escapeHtml(s){ return (s+"").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ============================================================
+   MÓDULO: ANTOLOGÍA
+   ============================================================ */
+function renderAntologia(){
+  const card = document.createElement('div');
+  card.innerHTML = `
+    <div class="info-hero">
+      <div class="kicker">Antología · Gestión Contable</div>
+      <h2>📦 Inventarios: PEPS, UEPS y Promedio Ponderado</h2>
+      <p>Leé con calma cada bloque antes de pasar a las actividades — todas se desbloquean en orden, una por una.</p>
+    </div>
+
+    <div class="info-block" style="--block-color:#B8863C;">
+      <div class="ib-head"><span class="ib-icon">📦</span><h3>1. ¿Qué son los inventarios?</h3></div>
+      <p>Los <strong>inventarios</strong> son bienes mantenidos para la venta en el curso ordinario del negocio, en proceso de producción para dicha venta, o en forma de materiales y suministros para ser consumidos en el proceso de producción o en la prestación de servicios.</p>
+      <p>Cómo se registra y valúa el inventario afecta directamente el costo de ventas y, por lo tanto, la utilidad que reporta la empresa — por eso este tema combina dos decisiones distintas: <strong>qué sistema</strong> usar para llevar el control, y <strong>qué método</strong> usar para valuar las unidades.</p>
+      <span class="ib-tag">Gestión Contable</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#2FC2AD;">
+      <div class="ib-head"><span class="ib-icon">🔄</span><h3>2. Sistema Periódico vs. Sistema Permanente (Perpetuo)</h3></div>
+      <table class="compare-table">
+        <tr><th>Criterio</th><th>Sistema Periódico</th><th>Sistema Permanente</th></tr>
+        <tr><td>Control del saldo</td><td>Se actualiza mediante conteo físico al final del periodo</td><td>Registro continuo en tiempo real de entradas y salidas</td></tr>
+        <tr><td>Costo de ventas</td><td>Se calcula globalmente al final del ejercicio</td><td>Se registra de forma simultánea con cada venta</td></tr>
+        <tr><td>Cuentas utilizadas</td><td>Compras, Fletes sobre compras, Devoluciones en compras</td><td>Inventario de Mercancías, Costo de Ventas</td></tr>
+      </table>
+      <div class="formula-box">Costo de Ventas (Periódico) = Inventario Inicial + Compras Netas − Inventario Final</div>
+      <p>En el sistema periódico, la empresa <em>no sabe</em> su costo de ventas hasta que hace el conteo físico al cierre. En el sistema permanente, ese costo se conoce al instante, venta por venta.</p>
+      <span class="ib-tag">Gestión Contable</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#0E1B3D;">
+      <div class="ib-head"><span class="ib-icon">🔤</span><h3>3. Método PEPS (Primeras Entradas, Primeras Salidas)</h3></div>
+      <p>Asume que las <strong>primeras unidades</strong> que ingresaron al almacén son las <strong>primeras en venderse</strong>. En periodos inflacionarios, este método genera un inventario final valuado a precios más recientes (cercanos al mercado), y un costo de ventas menor — lo que incrementa la utilidad bruta reportada.</p>
+      <p><strong>Ejemplo:</strong> una empresa tiene disponibles 450 unidades por un costo total de ₡236.000 (100 unidades iniciales a ₡500, más compras de 150 a ₡520 y 200 a ₡540). Al vender 300 unidades bajo PEPS:</p>
+      <div class="formula-box">Costo de ventas = (100×₡500) + (150×₡520) + (50×₡540) = ₡155.000<br>Inventario final = 150 unidades × ₡540 = ₡81.000</div>
+      <span class="ib-tag">Gestión Contable</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#EF6A5B;">
+      <div class="ib-head"><span class="ib-icon">📊</span><h3>4. Método de Promedio Ponderado</h3></div>
+      <p>Determina un <strong>costo promedio unitario</strong> dividiendo el costo total de la mercancía disponible entre el total de unidades disponibles. En el sistema permanente, este promedio se recalcula después de cada nueva compra, suavizando las variaciones de precio.</p>
+      <p>Con los mismos datos del ejemplo anterior (450 unidades, ₡236.000 disponibles):</p>
+      <div class="formula-box">Costo promedio unitario = ₡236.000 ÷ 450 = ₡524,44<br>Costo de ventas (300u) = ₡157.333 · Inventario final (150u) = ₡78.667</div>
+      <span class="ib-tag">Gestión Contable</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#0E1B3D;">
+      <div class="ib-head"><span class="ib-icon">🔄</span><h3>5. Método UEPS (Últimas Entradas, Primeras Salidas)</h3></div>
+      <p>Es el método contrario a PEPS: asume que las <strong>últimas unidades</strong> que ingresaron al almacén son las <strong>primeras en venderse</strong>. Esto significa que el inventario final queda valuado con los costos más antiguos, mientras que el costo de ventas refleja los precios más recientes.</p>
+      <p><strong>Importante:</strong> el método UEPS está <strong>prohibido</strong> bajo NIIF para PYMES y NIIF Plenas para efectos de reportar estados financieros oficiales — pero sigue siendo importante saber calcularlo, tanto para comprender su lógica como para efectos de análisis comparativo y evaluaciones técnicas.</p>
+      <p>Con los mismos datos del ejemplo (450 unidades disponibles: 100 iniciales a ₡500, 150 a ₡520, 200 a ₡540; se venden 300 unidades). Bajo UEPS, se venden primero las 200 más recientes, luego 100 de la compra anterior:</p>
+      <div class="formula-box">Costo de ventas = (200×₡540) + (100×₡520) = ₡160.000<br>Inventario final = (50×₡520) + (100×₡500) = ₡76.000</div>
+      <span class="ib-tag">Gestión Contable</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#2FC2AD;">
+      <div class="ib-head"><span class="ib-icon">⚖️</span><h3>6. Comparación de los tres métodos</h3></div>
+      <table class="compare-table">
+        <tr><th>Método</th><th>Costo de Ventas</th><th>Inventario Final</th></tr>
+        <tr><td>PEPS</td><td>₡155.000</td><td>₡81.000</td></tr>
+        <tr><td>UEPS</td><td>₡160.000</td><td>₡76.000</td></tr>
+        <tr><td>Promedio Ponderado</td><td>₡157.333</td><td>₡78.667</td></tr>
+      </table>
+      <p>Con los mismos datos disponibles (450 unidades, ₡236.000), cada método arroja un resultado distinto. En periodos inflacionarios, PEPS deja el inventario final valuado más cerca del mercado y reporta mayor utilidad; UEPS hace lo contrario, reportando un costo de ventas más alto y una utilidad menor.</p>
+      <span class="ib-tag">Gestión Contable</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#B8863C;">
+      <div class="ib-head"><span class="ib-icon">🔍</span><h3>7. Valuación: Valor Neto Realizable (VNR) y Deterioro</h3></div>
+      <p>Los inventarios deben valuarse al monto que resulte <strong>menor</strong> entre el Costo Histórico y el Valor Neto Realizable (VNR):</p>
+      <div class="formula-box">VNR = Precio Estimado de Venta − Costos Estimados de Terminación − Costos Estimados de Venta</div>
+      <p>Si el VNR resulta menor que el valor en libros, se reconoce un <strong>deterioro</strong>:</p>
+      <table class="compare-table">
+        <tr><th>Cuenta</th><th>Debe</th><th>Haber</th></tr>
+        <tr><td>Gasto por Deterioro de Inventario</td><td class="center">XXX</td><td></td></tr>
+        <tr><td>Estimación por Deterioro de Inventario</td><td></td><td class="center">XXX</td></tr>
+      </table>
+      <span class="ib-tag">Gestión Contable</span>
+    </div>
+
+    <div class="info-block" style="--block-color:#2FC2AD;">
+      <div class="ib-head"><span class="ib-icon">📊</span><h3>Material de consulta adicional</h3></div>
+      <p>Presentación de apoyo con la comparación completa entre sistemas y métodos:</p>
+      <a class="btn" href="https://profe-gerardo.vercel.app/Inventarios_Sistemas_y_Metodos_de_Valuacion.pdf" target="_blank" style="text-decoration:none;display:inline-block;margin-top:6px;">📊 Ver presentación: Inventarios</a>
+      <span class="ib-tag" style="margin-left:8px;">Material de apoyo</span>
+    </div>
+
+    <div class="read-confirm">
+      <button class="btn" id="confirmReadBtn">✅ Ya leí la antología, continuar</button>
+      <p>Al confirmar, empieza el recorrido por las actividades — cada una desbloquea la siguiente.</p>
+    </div>
+  `;
+  pageEl.appendChild(card);
+
+  document.getElementById('confirmReadBtn').addEventListener('click', ()=>{
+    antologiaLeida = true;
+    saveProgress('invent_antologia', 1, 1);
+    activeModule = 'invent_calculo';
+    renderTabs(); renderPage();
+  });
+}
+
+/* ============================================================
+   MÓDULO: CUESTIONARIO
+   ============================================================ */
+const QUIZ_BANK = [
+  { q:"¿Cuál es la fórmula del costo de ventas bajo el sistema periódico?",
+    opts:["Ventas − Costo de Ventas","Inventario Inicial + Compras Netas − Inventario Final","Inventario Final − Inventario Inicial"], correct:1,
+    just:"Costo de Ventas = Inventario Inicial + Compras Netas − Inventario Final." },
+  { q:"¿Cuál es la principal diferencia entre el sistema periódico y el permanente?",
+    opts:["El permanente registra el costo de ventas en tiempo real; el periódico lo calcula al cierre","El periódico solo se usa en empresas de servicios","No existe ninguna diferencia real entre ambos"], correct:0,
+    just:"El sistema permanente registra el costo de ventas con cada venta; el periódico lo calcula globalmente al final." },
+  { q:"¿Qué asume el método PEPS?",
+    opts:["Que las últimas unidades en entrar son las primeras en salir","Que las primeras unidades en entrar son las primeras en salir","Que todas las unidades cuestan siempre lo mismo"], correct:1,
+    just:"PEPS (Primeras Entradas, Primeras Salidas) asume que lo primero que entra es lo primero en venderse." },
+  { q:"¿Qué asume el método UEPS?",
+    opts:["Que las últimas unidades en entrar son las primeras en salir","Que las primeras unidades en entrar son las primeras en salir","Que el costo nunca varía entre compras"], correct:0,
+    just:"UEPS (Últimas Entradas, Primeras Salidas) asume que lo último que entra es lo primero en venderse." },
+  { q:"¿Cómo se calcula el costo promedio unitario bajo el método de Promedio Ponderado?",
+    opts:["Dividiendo el costo total disponible entre el total de unidades disponibles","Tomando el precio de la última compra únicamente","Sumando todos los precios de compra sin dividir"], correct:0,
+    just:"El costo promedio unitario es el costo total de la mercancía disponible entre el total de unidades disponibles." },
+  { q:"En un periodo inflacionario, ¿qué método reporta un costo de ventas más alto y una utilidad menor?",
+    opts:["PEPS","UEPS","Ambos reportan exactamente lo mismo"], correct:1,
+    just:"UEPS usa los costos más recientes (más altos, en inflación) para el costo de ventas, reduciendo la utilidad reportada." },
+  { q:"¿Qué método de valuación está prohibido bajo NIIF para PYMES y NIIF Plenas para efectos de reportar estados financieros oficiales?",
+    opts:["PEPS","Promedio Ponderado","UEPS"], correct:2,
+    just:"El método UEPS está prohibido bajo la normativa NIIF vigente para reportes financieros oficiales, aunque sigue siendo importante saber calcularlo." },
+  { q:"¿Cuál es la fórmula del Valor Neto Realizable (VNR)?",
+    opts:["Precio Estimado de Venta − Costos Estimados de Terminación − Costos Estimados de Venta","Costo Histórico + Costos de Venta","Precio de Venta ÷ Unidades Disponibles"], correct:0,
+    just:"VNR = Precio Estimado de Venta − Costos Estimados de Terminación − Costos Estimados de Venta." },
+];
+
+function renderQuiz(){
+  if(isLocked('invent_calculo')){
+    renderLockedNotice('invent_calculo', 'el cuestionario');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Cuestionario <span class="scorepill" id="qzScorePill">0 / ${QUIZ_BANK.length}</span></h3><div id="qzWrap"></div>`;
+  pageEl.appendChild(card);
+  const wrap = document.getElementById('qzWrap');
+  let score=0, answered=0;
+  QUIZ_BANK.forEach((item,qi)=>{
+    const qcard = document.createElement('div');
+    qcard.className='qcard';
+    qcard.innerHTML = `<div class="qtext">${qi+1}. ${item.q}</div><div class="opts"></div><div class="justif"></div>`;
+    const optsDiv = qcard.querySelector('.opts');
+    const letters=['A','B','C'];
+    item.opts.forEach((optText,oi)=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(qcard.classList.contains('answered')) return;
+        qcard.classList.add('answered');
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = oi===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect) optsDiv.querySelectorAll('.opt')[item.correct].classList.add('reveal-correct');
+        qcard.classList.add(isCorrect?'correct':'incorrect');
+        const j = qcard.querySelector('.justif');
+        j.classList.add('show', isCorrect?'ok':'bad');
+        j.textContent = (isCorrect?'✓ ':'✕ ') + item.just;
+        if(isCorrect) score++;
+        answered++;
+        document.getElementById('qzScorePill').textContent = score+' / '+QUIZ_BANK.length;
+        if(answered===QUIZ_BANK.length){ saveProgress('invent_calculo', score, QUIZ_BANK.length); maybeShowContinue(); }
+      });
+      optsDiv.appendChild(opt);
+    });
+    wrap.appendChild(qcard);
+  });
+}
+
+/* ============================================================
+   MÓDULO: ASOCIE
+   ============================================================ */
+const MATCH_DATA = {
+  terms:["Sistema Periódico","PEPS","UEPS","Promedio Ponderado","Valor Neto Realizable"],
+  defs:[
+    "El costo de ventas se calcula globalmente al final del ejercicio, tras un conteo físico",
+    "Asume que las primeras unidades en entrar son las primeras en venderse",
+    "Asume que las últimas unidades en entrar son las primeras en venderse",
+    "Costo unitario que se obtiene dividiendo el costo total disponible entre las unidades disponibles",
+    "Precio estimado de venta menos los costos estimados de terminación y de venta"
+  ],
+  correct:[0,1,2,3,4]
+};
+
+function renderMatching(){
+  if(isLocked('invent_tipos')){
+    renderLockedNotice('invent_tipos', 'el asocie');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const letters=['A','B','C','D','E'];
+  let rows='';
+  MATCH_DATA.terms.forEach((t,i)=>{
+    rows += `<tr class="match-row" data-i="${i}"><td>${i+1}. ${t}</td><td><select data-i="${i}"><option value="">— Seleccione —</option>${MATCH_DATA.defs.map((d,j)=>`<option value="${j}">${letters[j]}</option>`).join('')}</select></td></tr>`;
+  });
+  card.innerHTML = `<h3>Asocie — relacione ambas columnas <span class="scorepill" id="mtScorePill">0 / 5</span></h3>
+    <table class="match-table"><tbody>${rows}</tbody></table>
+    <div class="bank"><b>Columna B</b><br>${MATCH_DATA.defs.map((d,j)=>`${letters[j]}. ${d}`).join('<br>')}</div>
+    <button class="btn" id="mtCheckBtn" style="margin-top:10px;">Comprobar</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('mtCheckBtn').addEventListener('click', function(){
+    if(this.disabled) return;
+    const selects = document.querySelectorAll('.match-table select');
+    let correct=0, allAnswered=true;
+    selects.forEach(sel=>{
+      const i = parseInt(sel.dataset.i,10);
+      if(sel.value===""){ allAnswered=false; return; }
+      const row = sel.closest('.match-row');
+      if(parseInt(sel.value,10)===MATCH_DATA.correct[i]){ row.classList.add('ok'); correct++; }
+      else row.classList.add('bad');
+    });
+    if(!allAnswered){ alert('Completá las 5 relaciones antes de comprobar.'); return; }
+    selects.forEach(s=>s.disabled=true);
+    this.disabled=true;
+    document.getElementById('mtScorePill').textContent = correct+' / 5';
+    saveProgress('invent_tipos', correct, 5);
+    maybeShowContinue();
+  });
+}
+
+/* ============================================================
+   MÓDULO: TRABAJO EN CLASE — ¿Qué sistema o método aplica?
+   ============================================================ */
+const CASOS_TRABAJO = [
+  { id:"inventcaso1", tag:"Caso 1", inst:"Elección de sistema",
+    text:"Una tienda pequeña vende pocos artículos y solo hace un conteo físico completo cada fin de mes para saber su costo de ventas. ¿Qué sistema de registro de inventario está utilizando?",
+    opts:["Sistema periódico","Sistema permanente","Ninguno de los dos"], correct:0,
+    just:"El sistema periódico calcula el costo de ventas globalmente, mediante conteo físico al cierre del periodo." },
+  { id:"inventcaso2", tag:"Caso 2", inst:"Elección de sistema",
+    text:"Un supermercado usa un software que actualiza el inventario y calcula el costo de cada venta automáticamente, en el momento exacto en que el cliente paga en caja. ¿Qué sistema está utilizando?",
+    opts:["Sistema periódico","Sistema permanente","Ninguno de los dos"], correct:1,
+    just:"El sistema permanente (perpetuo) registra el costo de ventas en tiempo real, con cada transacción." },
+  { id:"inventcaso3", tag:"Caso 3", inst:"Elección de método en inflación",
+    text:"En un contexto de precios en constante aumento, una empresa quiere que su inventario final quede valuado lo más cerca posible de los precios actuales de mercado. ¿Qué método de valuación le conviene más?",
+    opts:["PEPS","Promedio Ponderado","UEPS"], correct:0,
+    just:"PEPS deja las unidades más recientes (a precios más altos, en inflación) en el inventario final, acercándolo al valor de mercado." },
+  { id:"inventcaso5", tag:"Caso 5", inst:"Efecto de UEPS en la utilidad",
+    text:"En un contexto de precios en constante aumento, una empresa quiere reportar un costo de ventas más alto y así reducir su utilidad reportada (y su impuesto de renta). ¿Qué método de valuación produce ese efecto?",
+    opts:["PEPS","UEPS","Promedio Ponderado"], correct:1,
+    just:"UEPS usa los costos más recientes (más altos, en inflación) para el costo de ventas, lo que reduce la utilidad reportada." },
+  { id:"inventcaso4", tag:"Caso 4", inst:"Deterioro de inventario",
+    text:"Una empresa tiene mercancía en bodega con un costo en libros de ₡2.000.000, pero por daños y obsolescencia, estima que solo podrá venderla por un Valor Neto Realizable de ₡1.600.000. ¿Qué debe hacer contablemente?",
+    opts:["Nada, el inventario se mantiene siempre a su costo histórico","Reconocer un deterioro de ₡400.000, ajustando el inventario a su VNR","Aumentar el inventario a ₡2.400.000"], correct:1,
+    just:"Como el VNR (₡1.600.000) es menor al costo en libros (₡2.000.000), se debe reconocer un deterioro por la diferencia." },
+];
+
+function renderTrabajo(){
+  if(isLocked('invent_trabajo')){
+    const info = document.createElement('div');
+    info.className = 'content-card';
+    info.innerHTML = `<h2>Trabajo en clase — ¿Qué sistema o método aplica?</h2>`;
+    pageEl.appendChild(info);
+    renderLockedNotice('invent_trabajo', 'el trabajo en clase');
+    return;
+  }
+
+  const info = document.createElement('div');
+  info.className = 'content-card';
+  info.innerHTML = `<h2>Trabajo en clase — ¿Qué sistema o método aplica?</h2>
+    <p>Para cada situación, determiná qué sistema o método corresponde aplicar, y justificá tu decisión en un par de líneas.</p>`;
+  if(!sheetsReady()){
+    info.innerHTML += `<p style="color:var(--coral);font-size:12px;">⚠️ Falta configurar la conexión a la hoja de datos. Avisale a tu docente.</p>`;
+  }
+  pageEl.appendChild(info);
+
+  let correctCount = 0, answeredCount = 0;
+
+  CASOS_TRABAJO.forEach(caso=>{
+    const card = document.createElement('div');
+    card.className = 'caso-card';
+    const letters = ['A','B','C'];
+    card.innerHTML = `
+      <div class="caso-tag">${caso.tag}</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:2px;">${escapeHtml(caso.inst)}</div>
+      <p class="enunciado">${caso.text}</p>
+      <div class="caso-opts"></div>
+      <div class="justif"></div>
+      <textarea class="caso-input" id="just-${caso.id}" placeholder="Justificá brevemente tu respuesta (2-3 líneas)..."></textarea>
+      <button class="btn" data-caso="${caso.id}" style="margin-top:8px;">Publicar respuesta</button>
+    `;
+    const optsDiv = card.querySelector('.caso-opts');
+    caso.opts.forEach((optText, oi)=>{
+      const opt = document.createElement('div');
+      opt.className = 'opt';
+      opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(card.dataset.answered) return;
+        card.dataset.chosen = oi;
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.style.outline='');
+        opt.style.outline = '2px solid var(--navy)';
+      });
+      optsDiv.appendChild(opt);
+    });
+    pageEl.appendChild(card);
+
+    card.querySelector('[data-caso]').addEventListener('click', async ()=>{
+      if(card.dataset.answered) return;
+      if(card.dataset.chosen === undefined){ alert('Elegí una opción antes de publicar.'); return; }
+      if(!studentName){ alert('Escribí tu nombre arriba antes de participar.'); return; }
+      const oi = Number(card.dataset.chosen);
+      const isCorrect = oi === caso.correct;
+      const textoJust = document.getElementById('just-'+caso.id).value.trim();
+
+      card.dataset.answered = '1';
+      optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+      optsDiv.querySelectorAll('.opt')[oi].classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+      if(!isCorrect) optsDiv.querySelectorAll('.opt')[caso.correct].classList.add('reveal-correct');
+      card.classList.add(isCorrect?'correct':'incorrect');
+      const j = card.querySelector('.justif');
+      j.classList.add('show', isCorrect?'ok':'bad');
+      j.textContent = (isCorrect?'✓ ':'✕ ') + caso.just;
+
+      if(isCorrect) correctCount++;
+      answeredCount++;
+
+      try{
+        const nowIso = new Date().toISOString();
+        await sheetPost('Casos', [nowIso, caso.id, studentName, (isCorrect?'[CORRECTO] ':'[INCORRECTO] ') + (textoJust||'(sin justificación escrita)')]);
+      }catch(e){}
+
+      if(answeredCount === CASOS_TRABAJO.length){
+        saveProgress('invent_trabajo', correctCount, CASOS_TRABAJO.length);
+        maybeShowContinue();
+      }
+    });
+  });
+}
+
+/* ============================================================
+   MÓDULO: JUEGO — Corre y Responde
+   ============================================================ */
+const GAME_QUESTIONS = [
+  { q:"¿Cuál sistema calcula el costo de ventas al final del periodo, mediante conteo físico?", opts:["Periódico","Permanente","Ninguno"], correct:0,
+    just:"El sistema periódico calcula el costo de ventas globalmente, al cierre." },
+  { q:"¿Qué asume el método PEPS?", opts:["Que lo último en entrar sale primero","Que lo primero en entrar sale primero","Que el costo nunca cambia"], correct:1,
+    just:"PEPS asume que las primeras unidades en entrar son las primeras en venderse." },
+  { q:"¿Qué asume el método UEPS?", opts:["Que lo último en entrar sale primero","Que lo primero en entrar sale primero","Que el costo nunca cambia"], correct:0,
+    just:"UEPS asume que las últimas unidades en entrar son las primeras en venderse." },
+  { q:"¿Cómo se calcula el costo promedio ponderado?", opts:["Costo total disponible ÷ unidades disponibles","Solo el precio de la última compra","Sumando todos los precios sin dividir"], correct:0,
+    just:"Es el costo total de la mercancía disponible, dividido entre el total de unidades disponibles." },
+  { q:"¿Qué método está prohibido bajo NIIF para reportes oficiales?", opts:["PEPS","Promedio Ponderado","UEPS"], correct:2,
+    just:"El método UEPS está prohibido bajo NIIF para PYMES y NIIF Plenas para reportes oficiales." },
+  { q:"¿Qué es el Valor Neto Realizable (VNR)?", opts:["El costo histórico más los gastos de venta","Precio de venta menos costos de terminación y venta","El precio de la última compra"], correct:1,
+    just:"VNR = Precio Estimado de Venta − Costos de Terminación − Costos de Venta." },
+  { q:"¿Cuándo se reconoce un deterioro de inventario?", opts:["Cuando el VNR es menor al costo en libros","Cuando el VNR es mayor al costo en libros","Nunca, el inventario no se ajusta"], correct:0,
+    just:"Se reconoce deterioro cuando el VNR resulta menor que el valor en libros del inventario." },
+  { q:"En el sistema permanente, ¿cuándo se registra el costo de ventas?", opts:["Solo al cierre del año","De forma simultánea con cada venta","Nunca se registra"], correct:1,
+    just:"El sistema permanente registra el costo de ventas en tiempo real, con cada venta." },
+  { q:"En periodos inflacionarios, ¿qué método deja el inventario final más cercano al precio de mercado?", opts:["PEPS","UEPS","Ambos son iguales"], correct:0,
+    just:"PEPS deja las unidades más recientes (más caras, en inflación) como inventario final." },
+  { q:"En periodos inflacionarios, ¿qué método reporta la menor utilidad?", opts:["PEPS","UEPS","Ambos reportan la misma utilidad"], correct:1,
+    just:"UEPS usa los costos más recientes (más altos) para el costo de ventas, reduciendo la utilidad reportada." },
+];
+
+function renderJuego(){
+  if(isLocked('invent_juego')){
+    renderLockedNotice('invent_juego', 'Corre y Responde');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `
+    <h3>🦖 Corre y Responde</h3>
+    <div class="gb-hud"><span id="gbScore">Puntos: 0</span><span id="gbBest">Mejor: 0</span></div>
+    <div class="gamebox" id="gbBox">
+      <div class="gb-ground"></div>
+      <div class="gb-player" id="gbPlayer">🦖</div>
+      <div class="gb-startOverlay" id="gbStart">
+        <h2>🦖 Corre y Responde</h2>
+        <p>Tocá o presioná ESPACIO para saltar. Si chocás, respondé bien para revivir. Llegá a 1000 puntos para ganar.</p>
+        <button class="btn" id="gbStartBtn">▶️ Comenzar</button>
+      </div>
+    </div>
+    <p class="gb-hint">Tocá la pantalla / Espacio = saltar</p>
+  `;
+  pageEl.appendChild(card);
+  initGame();
+}
+
+function initGame(){
+  const WIN_SCORE = 1000;
+  const gbBox = document.getElementById('gbBox');
+  const gbPlayer = document.getElementById('gbPlayer');
+  const gbScoreEl = document.getElementById('gbScore');
+  const gbBestEl = document.getElementById('gbBest');
+  const gbStart = document.getElementById('gbStart');
+
+  let running=false, paused=false, score=0, best=0, speed=4.2;
+  let spawnTimer=0, spawnInterval=90, jumping=false, obstacles=[], animFrame=null;
+  let usedQ = [], totalCorrect=0, totalAnswered=0;
+
+  function updateHUD(){
+    gbScoreEl.textContent = 'Puntos: ' + Math.floor(score);
+    gbBestEl.textContent = 'Mejor: ' + Math.floor(best);
+  }
+
+  function resetState(){
+    score=0; speed=4.2; spawnInterval=90; spawnTimer=0;
+    obstacles.forEach(o=>o.el.remove()); obstacles=[];
+    updateHUD();
+  }
+
+  document.getElementById('gbStartBtn').addEventListener('click', ()=>{
+    gbStart.style.display='none';
+    resetState();
+    running=true; paused=false;
+    loop();
+  });
+
+  function doJump(){
+    if(!running||paused||jumping) return;
+    jumping=true;
+    gbPlayer.style.transform='scaleX(-1) translateY(-60px)';
+    setTimeout(()=>{
+      gbPlayer.style.transform='scaleX(-1) translateY(0)';
+      setTimeout(()=>{ jumping=false; }, 420);
+    }, 220);
+  }
+  gbBox.addEventListener('mousedown', doJump);
+  gbBox.addEventListener('touchstart', e=>{ e.preventDefault(); doJump(); }, {passive:false});
+  const keyHandler = (e)=>{ if(e.code==='Space' && activeModule==='invent_juego'){ e.preventDefault(); doJump(); } };
+  document.addEventListener('keydown', keyHandler);
+
+  function spawnObstacle(){
+    const el = document.createElement('div');
+    const isColon = Math.random()<0.5;
+    el.className='gb-obstacle'+(isColon?' colon':'');
+    el.textContent = isColon ? '₡' : '💲';
+    el.style.right='-30px';
+    gbBox.appendChild(el);
+    obstacles.push({el, x: gbBox.clientWidth+10});
+  }
+
+  function overlap(a,b){ return !(a.right<b.left||a.left>b.right||a.bottom<b.top||a.top>b.bottom); }
+
+  function loop(){
+    if(!running||paused) return;
+    score += 0.12;
+    if(score>=WIN_SCORE){ score=WIN_SCORE; showWin(); return; }
+    speed = Math.min(16, 4.2+score*0.012);
+    spawnTimer++;
+    if(spawnTimer>spawnInterval){
+      spawnTimer=0; spawnInterval=Math.max(48,90-score*0.3); spawnObstacle();
+    }
+    const boxRect = gbBox.getBoundingClientRect();
+    const pRect = gbPlayer.getBoundingClientRect();
+    const pBox = {left:pRect.left-boxRect.left+6, right:pRect.right-boxRect.left-6, top:pRect.top-boxRect.top+4, bottom:pRect.bottom-boxRect.top};
+    for(let i=obstacles.length-1;i>=0;i--){
+      const o=obstacles[i]; o.x -= speed; o.el.style.left=o.x+'px'; o.el.style.right='auto';
+      if(o.x<-40){ o.el.remove(); obstacles.splice(i,1); continue; }
+      const oRect=o.el.getBoundingClientRect();
+      const oBox={left:oRect.left-boxRect.left+4, right:oRect.right-boxRect.left-4, top:oRect.top-boxRect.top+4, bottom:oRect.bottom-boxRect.top};
+      if(!jumping && overlap(pBox,oBox)){ handleCollision(); return; }
+    }
+    updateHUD();
+    animFrame = requestAnimationFrame(loop);
+  }
+
+  function handleCollision(){
+    paused=true;
+    if(animFrame) cancelAnimationFrame(animFrame);
+    best=Math.max(best,score);
+    updateHUD();
+    showQuestion();
+  }
+
+  function pickQ(){
+    const avail = GAME_QUESTIONS.filter((_,i)=>!usedQ.includes(i));
+    const pool = avail.length?avail:GAME_QUESTIONS;
+    const idx = GAME_QUESTIONS.indexOf(pool[Math.floor(Math.random()*pool.length)]);
+    usedQ.push(idx);
+    if(usedQ.length>=GAME_QUESTIONS.length) usedQ=[];
+    return GAME_QUESTIONS[idx];
+  }
+
+  function showQuestion(){
+    const item = pickQ();
+    const overlay = document.createElement('div');
+    overlay.className='gb-qOverlay'; overlay.id='gbQOverlay';
+    const letters=['A','B','C'];
+    overlay.innerHTML = `<span class="qtag">⚠️ Chocaste — respondé bien para revivir</span>
+      <div class="qtext">${item.q}</div><div class="opts"></div>`;
+    gbBox.appendChild(overlay);
+    const optsDiv = overlay.querySelector('.opts');
+    item.opts.forEach((optText,oi)=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML=`<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(overlay.dataset.answered) return;
+        overlay.dataset.answered='1';
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = oi===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect) optsDiv.querySelectorAll('.opt')[item.correct].classList.add('reveal-correct');
+        totalAnswered++; if(isCorrect) totalCorrect++;
+        setTimeout(()=>{
+          overlay.remove();
+          if(isCorrect){ obstacles.forEach(o=>o.el.remove()); obstacles=[]; spawnTimer=0; paused=false; animFrame=requestAnimationFrame(loop); }
+          else{ showOver(); }
+        }, 1300);
+      });
+      optsDiv.appendChild(opt);
+    });
+  }
+
+  function showOver(){
+    running=false; paused=false;
+    const overlay = document.createElement('div');
+    overlay.className='gb-overOverlay';
+    overlay.innerHTML = `<h2>💥 Fin del juego</h2>
+      <p>Puntaje: ${Math.floor(score)} · Mejor: ${Math.floor(best)}</p>
+      <p>Preguntas: ${totalAnswered} · Correctas: ${totalCorrect}</p>
+      <button class="btn" id="gbRetry">🔄 Reintentar</button>`;
+    gbBox.appendChild(overlay);
+    document.getElementById('gbRetry').addEventListener('click', ()=>{
+      overlay.remove(); resetState(); running=true; paused=false; loop();
+    });
+    finalizeGame();
+  }
+
+  function showWin(){
+    running=false; paused=false;
+    if(animFrame) cancelAnimationFrame(animFrame);
+    best=Math.max(best,score); updateHUD();
+    const overlay = document.createElement('div');
+    overlay.className='gb-winOverlay';
+    overlay.innerHTML = `<h2>🏆 ¡Ganaste!</h2>
+      <p>Llegaste a ${WIN_SCORE} puntos. Preguntas: ${totalAnswered} · Correctas: ${totalCorrect}</p>
+      <button class="btn" id="gbPlayAgain">🔄 Jugar de nuevo</button>`;
+    gbBox.appendChild(overlay);
+    document.getElementById('gbPlayAgain').addEventListener('click', ()=>{
+      overlay.remove(); resetState(); running=true; paused=false; loop();
+    });
+    finalizeGame();
+  }
+
+  function finalizeGame(){
+    if(!isLocked('invent_juego')){
+      const finalScore = totalAnswered>0 ? totalCorrect : 0;
+      const finalTotal = totalAnswered>0 ? totalAnswered : 1;
+      saveProgress('invent_juego', finalScore, finalTotal);
+      maybeShowContinue();
+    }
+  }
+
+  updateHUD();
+}
+
+/* ============================================================
+   MÓDULO: CRUCIGRAMA
+   ============================================================ */
+const CW_DATA = {"size": {"rows": 16, "cols": 15}, "grid": ["...............", "..P.......V....", "..R..COMPRAS...", "..O.......L....", "..M.......UEPS.", ".PEPS..D..A....", "..D..P.E..C....", "..INVENTARIO...", "..O..R.E..O....", ".....I.R..N....", ".....O.I.......", ".....D.O.......", ".....I.R.......", ".....C.O.......", ".....O.........", "..............."], "words": [{"word": "INVENTARIO", "clue": "Bienes mantenidos para la venta o consumo en el proceso productivo", "row": 7, "col": 2, "dir": "H", "num": 8}, {"word": "PERIODICO", "clue": "Sistema que actualiza el saldo solo mediante conteo fisico al final del periodo", "row": 6, "col": 5, "dir": "V", "num": 7}, {"word": "DETERIORO", "clue": "Ajuste que se reconoce cuando el valor neto realizable es menor al costo en libros", "row": 5, "col": 7, "dir": "V", "num": 6}, {"word": "VALUACION", "clue": "Proceso de determinar el valor al que se registra un inventario", "row": 1, "col": 10, "dir": "V", "num": 2}, {"word": "PROMEDIO", "clue": "Metodo que calcula un costo unitario dividiendo el costo total entre las unidades disponibles", "row": 1, "col": 2, "dir": "V", "num": 1}, {"word": "COMPRAS", "clue": "Cuenta usada en el sistema periodico para registrar las adquisiciones de mercancia", "row": 2, "col": 5, "dir": "H", "num": 3}, {"word": "UEPS", "clue": "Metodo que asume que las ultimas unidades en entrar son las primeras en salir", "row": 4, "col": 10, "dir": "H", "num": 4}, {"word": "PEPS", "clue": "Metodo que asume que las primeras unidades en entrar son las primeras en salir", "row": 5, "col": 1, "dir": "H", "num": 5}]};
+
+function renderCrossword(){
+  if(isLocked('invent_metodos')){
+    renderLockedNotice('invent_metodos', 'el crucigrama');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  const across = CW_DATA.words.filter(w=>w.dir==='H').sort((a,b)=>a.num-b.num);
+  const down = CW_DATA.words.filter(w=>w.dir==='V').sort((a,b)=>a.num-b.num);
+  card.innerHTML = `<h3>Crucigrama — completá según las pistas <span class="scorepill" id="cwScorePill">0%</span></h3>
+    <div class="cw-wrap">
+      <div class="cw-grid" id="cwGrid" style="grid-template-columns:repeat(${CW_DATA.size.cols},22px);"></div>
+      <div class="cw-clues">
+        <b>Horizontales</b><ul id="cwAcross"></ul>
+        <b>Verticales</b><ul id="cwDown"></ul>
+      </div>
+    </div>
+    <button class="btn" id="cwCheckBtn" style="margin-top:12px;">Comprobar crucigrama</button>`;
+  pageEl.appendChild(card);
+
+  document.getElementById('cwAcross').innerHTML = across.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+  document.getElementById('cwDown').innerHTML = down.map(w=>`<li><b>${w.num}.</b> ${w.clue}</li>`).join('');
+
+  const R = CW_DATA.size.rows, C = CW_DATA.size.cols;
+  const gridEl = document.getElementById('cwGrid');
+  const numAt = {};
+  CW_DATA.words.forEach(w=>{ numAt[w.row+','+w.col] = w.num; });
+  const inputs = {};
+  for(let r=0;r<R;r++){
+    for(let c=0;c<C;c++){
+      const ch = CW_DATA.grid[r][c];
+      const cell = document.createElement('div');
+      if(ch==='.'){
+        cell.className='cw-cell blocked';
+      } else {
+        cell.className='cw-cell';
+        const key = numAt[r+','+c];
+        if(key) cell.innerHTML = `<span class="cw-num">${key}</span>`;
+        const inp = document.createElement('input');
+        inp.maxLength=1;
+        inp.dataset.r=r; inp.dataset.c=c;
+        inp.addEventListener('input', function(){
+          this.value = this.value.toUpperCase().replace(/[^A-ZÑ]/g,'');
+          if(this.value){
+            const next = findNextInput(r,c);
+            if(next) next.focus();
+          }
+        });
+        cell.appendChild(inp);
+        inputs[r+','+c] = inp;
+      }
+      gridEl.appendChild(cell);
+    }
+  }
+  function findNextInput(r,c){
+    if(inputs[r+','+(c+1)]) return inputs[r+','+(c+1)];
+    if(inputs[(r+1)+','+c]) return inputs[(r+1)+','+c];
+    return null;
+  }
+
+  document.getElementById('cwCheckBtn').addEventListener('click', ()=>{
+    let correct=0, total=0;
+    for(const key in inputs){
+      const [r,c] = key.split(',').map(Number);
+      const expected = CW_DATA.grid[r][c];
+      const inp = inputs[key];
+      total++;
+      if(inp.value === expected){ inp.classList.add('ok'); inp.classList.remove('bad'); correct++; }
+      else{ inp.classList.add('bad'); inp.classList.remove('ok'); }
+    }
+    document.getElementById('cwScorePill').textContent = Math.round((correct/total)*100)+'%';
+    saveProgress('invent_metodos', correct, total);
+    maybeShowContinue();
+  });
+}
+
+/* ============================================================
+   MÓDULO: VERDADERO O FALSO
+   ============================================================ */
+const VF_BANK = [
+  { s:"El sistema periódico registra el costo de ventas de forma simultánea con cada venta.", correct:false,
+    just:"Falso: el sistema periódico calcula el costo de ventas globalmente al final del periodo; el que lo hace en tiempo real es el permanente." },
+  { s:"El método PEPS asume que las primeras unidades en entrar son las primeras en venderse.", correct:true,
+    just:"Correcto." },
+  { s:"El método UEPS asume que las primeras unidades en entrar son las primeras en venderse, igual que PEPS.", correct:false,
+    just:"Falso: UEPS asume lo contrario — que las últimas unidades en entrar son las primeras en venderse." },
+  { s:"El costo promedio ponderado se calcula tomando únicamente el precio de la compra más reciente.", correct:false,
+    just:"Falso: se calcula dividiendo el costo total disponible entre el total de unidades disponibles." },
+  { s:"El método UEPS está prohibido bajo NIIF para PYMES y NIIF Plenas para efectos de reportar estados financieros oficiales.", correct:true,
+    just:"Correcto." },
+  { s:"El inventario siempre se valúa a su costo histórico, sin importar si baja su valor de mercado.", correct:false,
+    just:"Falso: se valúa al menor entre el costo histórico y el Valor Neto Realizable, reconociendo deterioro si aplica." },
+  { s:"En periodos inflacionarios, PEPS genera un costo de ventas menor que UEPS.", correct:true,
+    just:"Correcto: PEPS usa los costos más antiguos (más bajos, en inflación); UEPS usa los más recientes (más altos)." },
+];
+
+function renderVF(){
+  if(isLocked('invent_vf')){
+    renderLockedNotice('invent_vf', 'el ejercicio de Verdadero/Falso');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `<h3>Verdadero o Falso <span class="scorepill" id="vfScorePill">0 / ${VF_BANK.length}</span></h3><div id="vfWrap"></div>`;
+  pageEl.appendChild(card);
+  const wrap = document.getElementById('vfWrap');
+  let score=0, answered=0;
+  VF_BANK.forEach((item,qi)=>{
+    const qcard = document.createElement('div');
+    qcard.className='qcard';
+    qcard.innerHTML = `<div class="qtext">${qi+1}. ${item.s}</div><div class="opts"></div><div class="justif"></div>`;
+    const optsDiv = qcard.querySelector('.opts');
+    [["Verdadero",true],["Falso",false]].forEach(([label,val])=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML = `<span class="letter">${val?'V':'F'}</span><span>${label}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(qcard.classList.contains('answered')) return;
+        qcard.classList.add('answered');
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = val===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect){
+          const correctOpt = [...optsDiv.querySelectorAll('.opt')].find((o,i)=> (i===0)===item.correct);
+          if(correctOpt) correctOpt.classList.add('reveal-correct');
+        }
+        qcard.classList.add(isCorrect?'correct':'incorrect');
+        const j = qcard.querySelector('.justif');
+        j.classList.add('show', isCorrect?'ok':'bad');
+        j.textContent = (isCorrect?'✓ ':'✕ ') + item.just;
+        if(isCorrect) score++;
+        answered++;
+        document.getElementById('vfScorePill').textContent = score+' / '+VF_BANK.length;
+        if(answered===VF_BANK.length){ saveProgress('invent_vf', score, VF_BANK.length); maybeShowContinue(); }
+      });
+      optsDiv.appendChild(opt);
+    });
+    wrap.appendChild(qcard);
+  });
+}
+
+/* ============================================================
+   MÓDULO: CASOS Y DEBATE
+   - Caso de comparación de métodos (recomendación abierta)
+   - Foro con al menos 2 participaciones
+   ============================================================ */
+function renderCasos(){
+  if(isLocked('invent_casos')){
+    renderLockedNotice('invent_casos', 'Casos y Debate');
+    return;
+  }
+  const info = document.createElement('div');
+  info.className = 'content-card';
+  info.innerHTML = `<h2>Casos y Debate</h2><p>Este módulo se comparte con toda la clase. Primero resolvé el caso de comparación de métodos, y luego participá en el foro — necesitás al menos <strong>dos participaciones</strong> (tu opinión, y un comentario o réplica a un compañero). Necesitás escribir tu nombre arriba para participar.</p>`;
+  if(!sheetsReady()){
+    info.innerHTML += `<p style="color:var(--coral);font-size:12px;">⚠️ Falta configurar la conexión a la hoja de datos. Avisale a tu docente.</p>`;
+  }
+  pageEl.appendChild(info);
+
+  // Caso de comparación de métodos
+  const casoCard = document.createElement('div');
+  casoCard.className = 'caso-card';
+  casoCard.innerHTML = `
+    <div class="caso-tag">Caso — Comparación de métodos</div>
+    <p class="enunciado">Una empresa que vende electrodomésticos opera en un contexto de inflación moderada y constante. Actualmente usa Promedio Ponderado, pero el gerente financiero está considerando cambiar a PEPS para el próximo periodo. Analizá la situación: ¿qué método recomendarías y por qué? Considerá el efecto sobre la utilidad reportada y el valor del inventario final.</p>
+    <textarea class="caso-input" id="input-invent_recomendacion" placeholder="Escribí tu recomendación y su justificación (mínimo 3 líneas)..."></textarea>
+    <button class="btn" id="btn-invent_recomendacion" style="margin-top:8px;">Publicar recomendación</button>
+    <div class="justif" id="msg-invent_recomendacion"></div>
+  `;
+  pageEl.appendChild(casoCard);
+
+  document.getElementById('btn-invent_recomendacion').addEventListener('click', async ()=>{
+    if(!studentName){ alert('Escribí tu nombre arriba antes de participar.'); return; }
+    const text = document.getElementById('input-invent_recomendacion').value.trim();
+    if(text.length < 15){ alert('Escribí una recomendación un poco más completa (mínimo 3 líneas).'); return; }
+    const btn = document.getElementById('btn-invent_recomendacion');
+    if(btn.disabled) return;
+    btn.disabled = true;
+    try{
+      const nowIso = new Date().toISOString();
+      await sheetPost('Casos', [nowIso, 'invent_recomendacion', studentName, text]);
+      const msg = document.getElementById('msg-invent_recomendacion');
+      msg.classList.add('show','ok');
+      msg.textContent = '✓ Recomendación publicada. Gracias por tu análisis.';
+      checkCasosCompletion();
+    }catch(e){
+      alert('No se pudo publicar. Revisá la conexión a la hoja de datos.');
+      btn.disabled = false;
+    }
+  });
+
+  // Foro con al menos 2 participaciones
+  const foroHead = document.createElement('div');
+  foroHead.className = 'content-card';
+  foroHead.innerHTML = `<h2>💬 Foro: ¿Cuál método usarías vos?</h2><p>Compartí tu opinión sobre los métodos de valuación, y respondé al menos a <strong>un comentario de un compañero</strong> (además de tu propia opinión) — necesitás un total de al menos 2 participaciones en este foro.</p>`;
+  pageEl.appendChild(foroHead);
+
+  const foroCard = document.createElement('div');
+  foroCard.className = 'caso-card';
+  foroCard.innerHTML = `
+    <div class="caso-tag">Foro abierto</div>
+    <p class="enunciado">¿En qué tipo de negocio usarías PEPS, y en cuál usarías Promedio Ponderado? Dá un ejemplo concreto, y comentá o respondé la opinión de al menos un compañero.</p>
+    <div class="caso-msgs" id="msgs-invent_foro"><div style="font-size:11px;color:var(--muted);">Cargando respuestas...</div></div>
+    <textarea class="caso-input" id="input-invent_foro" placeholder="Escribí tu opinión o tu comentario a un compañero..."></textarea>
+    <button class="btn" data-tema="invent_foro" style="margin-top:8px;">Publicar</button>
+  `;
+  pageEl.appendChild(foroCard);
+
+  document.querySelector('[data-tema="invent_foro"]').addEventListener('click', async ()=>{
+    if(!studentName){ alert('Escribí tu nombre arriba antes de participar.'); return; }
+    const text = document.getElementById('input-invent_foro').value.trim();
+    if(!text) return;
+    try{
+      const nowIso = new Date().toISOString();
+      await sheetPost('Casos', [nowIso, 'invent_foro', studentName, text]);
+      document.getElementById('input-invent_foro').value='';
+      await loadForoMessages();
+      checkCasosCompletion();
+    }catch(e){
+      alert('No se pudo publicar. Revisá la conexión a la hoja de datos.');
+    }
+  });
+
+  loadForoMessages();
+}
+
+async function loadForoMessages(){
+  const wrap = document.getElementById('msgs-invent_foro');
+  if(!wrap) return;
+  if(!sheetsReady()){
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--coral);">Hoja de datos no configurada todavía.</div>';
+    return;
+  }
+  try{
+    const rows = await sheetGet('Casos');
+    const items = rows
+      .filter(r => r.CasoId === 'invent_foro')
+      .map(r => ({ name: r.Nombre, text: r.Texto, ts: new Date(r.Timestamp).getTime() }));
+    if(items.length===0){ wrap.innerHTML = '<div style="font-size:11px;color:var(--muted);">Nadie ha respondido todavía — ¡sé el primero!</div>'; return; }
+    items.sort((a,b)=>a.ts-b.ts);
+    wrap.innerHTML = items.map(m=>`<div class="caso-msg"><div class="caso-msg-head"><b>${escapeHtml(m.name)}</b><span>${new Date(m.ts).toLocaleTimeString('es-CR',{hour:'2-digit',minute:'2-digit'})}</span></div>${escapeHtml(m.text)}</div>`).join('');
+  }catch(e){
+    wrap.innerHTML = '<div style="font-size:11px;color:var(--coral);">No se pudo cargar (revisá la conexión a la hoja de datos).</div>';
+  }
+}
+
+async function checkCasosCompletion(){
+  if(!studentName || !sheetsReady()) return;
+  let hasRecomendacion = false, foroCount = 0;
+  try{
+    const rows = await sheetGet('Casos');
+    hasRecomendacion = rows.some(r => r.CasoId === 'invent_recomendacion' && r.Nombre === studentName);
+    foroCount = rows.filter(r => r.CasoId === 'invent_foro' && r.Nombre === studentName).length;
+  }catch(e){}
+  if(hasRecomendacion && foroCount >= 2 && !isStepDone('invent_casos')){
+    saveProgress('invent_casos', 1, 1);
+    renderPage();
+  }
+}
+
+/* ============================================================
+   RÚBRICA DE EVALUACIÓN + CERTIFICADO
+   ============================================================ */
+const RUBRICA = [
+  {
+    ra:"RA1", desc:"Diferencia los sistemas de registro de inventario (periódico y permanente) y su forma de calcular el costo de ventas.",
+    modules:["invent_calculo","invent_tipos"],
+    niveles:{
+      1:"No logrado: confunde el sistema periódico con el permanente, o no identifica cuándo se calcula el costo de ventas en cada uno.",
+      2:"En proceso: reconoce la diferencia conceptual entre ambos sistemas, pero comete errores al aplicarla en casos concretos.",
+      3:"Logrado: distingue con precisión ambos sistemas y aplica correctamente la fórmula del costo de ventas en cada caso."
+    }
+  },
+  {
+    ra:"RA2", desc:"Aplica los métodos de valuación de inventarios (PEPS, Promedio Ponderado) para calcular costo de ventas e inventario final.",
+    modules:["invent_metodos","invent_vf","invent_juego"],
+    niveles:{
+      1:"No logrado: no logra calcular correctamente el costo de ventas ni el inventario final bajo ningún método.",
+      2:"En proceso: calcula correctamente bajo un método, pero comete errores en el otro o en casos con datos más complejos.",
+      3:"Logrado: calcula correctamente el costo de ventas y el inventario final bajo PEPS y Promedio Ponderado."
+    }
+  },
+  {
+    ra:"RA3", desc:"Reconoce y justifica situaciones de aplicación de sistemas, métodos, y ajustes por deterioro (Valor Neto Realizable).",
+    modules:["invent_trabajo"],
+    niveles:{
+      1:"No logrado: no identifica qué sistema, método o ajuste corresponde aplicar en una situación concreta.",
+      2:"En proceso: identifica el sistema o método correcto en algunos casos, pero su justificación es incompleta o imprecisa.",
+      3:"Logrado: identifica y justifica con claridad la aplicación correcta de sistemas, métodos y ajustes por deterioro."
+    }
+  },
+];
+
+function competencyScore(mods){
+  let sum=0, total=0, anyData=false;
+  mods.forEach(mid=>{
+    const p = localProgress[mid];
+    if(p){ sum+=p.score; total+=p.total; anyData=true; }
+  });
+  return { sum, total, pct: anyData && total>0 ? Math.round((sum/total)*100) : null };
+}
+
+function competencyLevel(pctVal){
+  if(pctVal===null) return { label:"Sin evidencia", cls:"status-pending", n:0 };
+  if(pctVal<=50) return { label:"No logrado", cls:"status-bad", n:1 };
+  if(pctVal<=80) return { label:"En proceso", cls:"status-mid", n:2 };
+  return { label:"Logrado", cls:"status-ok", n:3 };
+}
+
+function renderCertificado(){
+  const card = document.createElement('div');
+  card.className = 'actcard';
+
+  let rubricRows = '';
+  let allLogrado = true;
+  RUBRICA.forEach(item=>{
+    const s = competencyScore(item.modules);
+    const lvl = competencyLevel(s.pct);
+    if(lvl.label !== "Logrado") allLogrado = false;
+    rubricRows += `<tr>
+      <td><span class="ra-tag">${item.ra}</span><span class="competency-desc">${item.desc}</span></td>
+      <td class="lvl1">${item.niveles[1]}</td>
+      <td class="lvl2">${item.niveles[2]}</td>
+      <td class="lvl3">${item.niveles[3]}</td>
+      <td class="center"><span class="${lvl.cls}">${lvl.label}</span></td>
+    </tr>`;
+  });
+
+  const antologiaOk = localProgress['invent_antologia'] && localProgress['invent_antologia'].score>0;
+  const casosOk = localProgress['invent_casos'] && localProgress['invent_casos'].score>0;
+  const finalOk = allLogrado && antologiaOk && casosOk;
+
+  card.innerHTML = `
+    <h3>Rúbrica de Evaluación por Competencias</h3>
+    <p style="font-size:11px;color:var(--muted);margin:-4px 0 10px;">Escala 1–3, según Resultados de Aprendizaje del programa de estudio (Gestión Contable). Nivel calculado automáticamente: 1 No logrado (0–50%) · 2 En proceso (51–80%) · 3 Logrado (81–100%).</p>
+    <table class="rubric-table">
+      <tr><th>Indicador (RA)</th><th>1 · No logrado</th><th>2 · En proceso</th><th>3 · Logrado</th><th>Tu nivel</th></tr>
+      ${rubricRows}
+    </table>
+    <table class="progress-table">
+      <tr><th>Requisito adicional</th><th>Estado</th></tr>
+      <tr><td>Lectura de la Antología</td><td class="center">${antologiaOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>
+      <tr><td>Caso de recomendación + Foro (mínimo 2 participaciones)</td><td class="center">${casosOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>
+    </table>
+    ${finalOk ? `
+      <div class="certificate show" id="certBlock">
+        <div class="kicker">Contable CR · Gestión Contable</div>
+        <h2>Certificado de Aprobación</h2>
+        <p>Se otorga el presente certificado a</p>
+        <div class="name">${escapeHtml(studentName || '____________________')}</div>
+        <p>por haber alcanzado el nivel <strong>Logrado</strong> en todos los indicadores evaluados sobre <strong>Inventarios: sistemas de registro (periódico y permanente) y métodos de valuación (PEPS, Promedio Ponderado, Valor Neto Realizable)</strong>, incluyendo la participación en Casos y Debate.</p>
+        <div class="seal">MEP</div>
+        <p style="margin-top:14px;font-size:10.5px;">Contabilidad · Gestión Contable · Prof. Gerardo Gonzalez Gonzalez</p>
+      </div>
+      <button class="btn" style="margin-top:12px;" onclick="window.print()">Imprimir / Guardar como PDF</button>
+    ` : `<div class="locked-msg">🔒 El certificado se desbloquea cuando los tres indicadores alcanzan el nivel <strong>3 · Logrado</strong> y se completó la Antología y el módulo de Casos y Debate.</div>`}
+  `;
+  pageEl.appendChild(card);
+}
+
+/* ============================================================
+   PANEL DOCENTE
+   ============================================================ */
+document.getElementById('teacherBtnOpen').addEventListener('click', ()=>{
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinError').style.display = 'none';
+  document.getElementById('pinModalBg').classList.add('show');
+  document.getElementById('pinInput').focus();
+});
+document.getElementById('pinModalClose').addEventListener('click', ()=>{
+  document.getElementById('pinModalBg').classList.remove('show');
+});
+document.getElementById('pinSubmit').addEventListener('click', checkPin);
+document.getElementById('pinInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkPin(); });
+
+async function checkPin(){
+  const val = document.getElementById('pinInput').value.trim();
+  if(val !== TEACHER_PIN){
+    document.getElementById('pinError').style.display = 'block';
+    return;
+  }
+  document.getElementById('pinModalBg').classList.remove('show');
+  await openTeacherPanel();
+}
+
+async function openTeacherPanel(){
+  document.getElementById('teacherModalBg').classList.add('show');
+  const content = document.getElementById('teacherContent');
+  content.innerHTML = 'Cargando...';
+  if(!sheetsReady()){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">⚠️ Falta configurar la conexión a la hoja de datos (SHEET_API_URL) en este archivo.</p>';
+    return;
+  }
+  try{
+    const progRows = await sheetGet('Progreso');
+    const byStudent = {};
+    progRows.forEach(r=>{
+      const name = r.Estudiante, mod = r.Modulo;
+      if(!name || !mod) return;
+      byStudent[name] = byStudent[name] || {};
+      byStudent[name][mod] = { score:Number(r.Score), total:Number(r.Total) };
+    });
+
+    const names = Object.keys(byStudent).sort();
+    if(names.length===0){ content.innerHTML = '<p style="font-size:12.5px;color:var(--muted);">Todavía no hay estudiantes con progreso guardado.</p>'; return; }
+    const levelAbbrev = (pctVal)=>{
+      if(pctVal===null) return '—';
+      const lvl = competencyLevel(pctVal);
+      const short = {"Logrado":"✓ 3","En proceso":"◐ 2","No logrado":"✕ 1"}[lvl.label] || lvl.label;
+      return `<span class="${lvl.cls}">${short}</span>`;
+    };
+    let html = '<p style="font-size:10.5px;color:var(--muted);margin-top:0;">Nivel: 1 No logrado · 2 En proceso · 3 Logrado.</p>';
+    html += '<table class="progress-table"><tr><th>Estudiante</th><th>Antología</th><th>RA1</th><th>RA2</th><th>RA3</th><th>Casos</th><th>Salidas</th></tr>';
+    names.forEach(n=>{
+      const d = byStudent[n];
+      const compPct = (mods)=>{
+        let sum=0,total=0,any=false;
+        mods.forEach(mid=>{ const x=d[mid]; if(x){ sum+=x.score; total+=x.total; any=true; } });
+        return any && total>0 ? Math.round((sum/total)*100) : null;
+      };
+      const okCell = (obj)=> obj ? (obj.score>0 ? '<span class="status-ok">✓</span>' : '<span class="status-pending">—</span>') : '—';
+      const salidas = d.incidente_salida_pantalla_inventarios ? d.incidente_salida_pantalla_inventarios.score : 0;
+      const salidasCell = salidas > 0 ? `<span class="status-bad">⚠️ ${salidas}</span>` : '<span class="status-pending">0</span>';
+      html += `<tr>
+        <td>${escapeHtml(n)}</td>
+        <td class="center">${okCell(d.invent_antologia)}</td>
+        <td class="center">${levelAbbrev(compPct(['invent_calculo','invent_tipos']))}</td>
+        <td class="center">${levelAbbrev(compPct(['invent_metodos','invent_vf','invent_juego']))}</td>
+        <td class="center">${levelAbbrev(compPct(['invent_trabajo']))}</td>
+        <td class="center">${okCell(d.invent_casos)}</td>
+        <td class="center">${salidasCell}</td>
+      </tr>`;
+    });
+    html += '</table>';
+    content.innerHTML = html;
+  }catch(e){
+    content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">No se pudo cargar el panel (revisá la conexión a la hoja de datos).</p>';
+  }
+}
+document.getElementById('teacherModalClose').addEventListener('click', ()=>{
+  document.getElementById('teacherModalBg').classList.remove('show');
+});
+
+/* ============================================================
+   NOMBRE DEL ESTUDIANTE
+   ============================================================ */
+document.getElementById('studentName').addEventListener('input', function(){
+  studentName = this.value.trim();
+  document.getElementById('nameStatus').textContent = studentName ? '● identificado' : '';
+});
+document.getElementById('studentName').addEventListener('change', function(){
+  if(studentName) loadExistingProgress();
+});
+
+(function prefillFromLink(){
+  const params = new URLSearchParams(window.location.search);
+  const nombreParam = params.get('nombre');
+  if(nombreParam){
+    studentName = nombreParam;
+    document.getElementById('studentName').value = nombreParam;
+    document.getElementById('nameStatus').textContent = '● identificado';
+    loadExistingProgress();
+  }
+})();
+
+/* ============================================================
+   MODO ENFOQUE + DETECCIÓN DE SALIDAS
+   ============================================================ */
+let salidaCount = 0;
+document.getElementById('focusModeBtn').addEventListener('click', ()=>{
+  const el = document.documentElement;
+  const req = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+  if(req) req.call(el).catch(()=>{});
+});
+
+function showWarnBanner(msg){
+  let banner = document.getElementById('warnBanner');
+  if(!banner){
+    banner = document.createElement('div');
+    banner.id = 'warnBanner';
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:200;background:#EF6A5B;color:#fff;text-align:center;padding:8px 12px;font-size:12.5px;font-family:monospace;';
+    document.body.prepend(banner);
+  }
+  banner.textContent = msg;
+  banner.style.display = 'block';
+  clearTimeout(window._warnTimeout);
+  window._warnTimeout = setTimeout(()=>{ banner.style.display='none'; }, 6000);
+}
+
+function logSalida(){
+  salidaCount++;
+  showWarnBanner('⚠️ Se detectó que saliste de esta pestaña o ventana (van: ' + salidaCount + ').');
+  if(studentName && sheetsReady()){
+    sheetPost('Progreso', [new Date().toISOString(), studentName, 'incidente_salida_pantalla_inventarios', salidaCount, salidaCount]).catch(()=>{});
+  }
+}
+
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) logSalida(); });
+
+window.addEventListener('beforeunload', function(e){
+  e.preventDefault();
+  e.returnValue = '';
+});
+
+document.addEventListener('contextmenu', e=> e.preventDefault());
+document.addEventListener('copy', e=> e.preventDefault());
+
+/* ============================================================
+   INICIO
+   ============================================================ */
+renderTabs();
+renderPage();
+</script>
+</body>
+</html>
