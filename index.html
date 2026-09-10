@@ -160,16 +160,14 @@ async function renderPortal(){
       <p>${isDocente ? 'Acceso a todos los niveles y paneles docentes.' : 'Nivel ' + escapeHtml(session.nivel||'') + '° — este es el programa de tu especialidad.'}</p>
       <button class="logout-btn" id="logoutBtn">Cerrar sesión</button>
     </div>
-    ${!isDocente ? `
     <a class="sat-card" href="SAT_Profe_Gerardo.html?nombre=${nombreParam}" target="_blank">
       <span class="sat-icon">🏛️</span>
       <span>
         <div class="sat-title">El SAT del Profe Gerardo</div>
-        <div class="sat-sub">Tu simulador contable · disponible en todos los niveles</div>
+        <div class="sat-sub">${isDocente ? 'Simulador contable · panel disponible para todos los niveles' : 'Tu simulador contable · disponible en todos los niveles'}</div>
       </span>
       <span class="sat-arrow">→</span>
     </a>
-    ` : ''}
     <div id="courseList"><div class="empty-msg">Cargando catálogo...</div></div>
   `;
   document.getElementById('logoutBtn').addEventListener('click', logout);
