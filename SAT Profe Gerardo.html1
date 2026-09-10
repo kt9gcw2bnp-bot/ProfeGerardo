@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El SAT del Profe Gerardo</title>
+<style>
+:root{
+  --navy:#0E1B3D; --navy-deep:#0A1230;
+  --gold:#B8863C; --gold-light:#F4DD7A;
+  --teal:#2FC2AD; --coral:#EF6A5B;
+  --ink:#20242B; --paper:#F3F5F4; --muted:#5B6470; --line:#D8DCDD;
+  --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);padding-bottom:60px;}
+.topbar{position:sticky;top:0;z-index:30;background:var(--navy);color:#fff;padding:12px 16px;box-shadow:0 2px 10px rgba(0,0,0,.18);}
+.topbar-row{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.topbar h1{font-size:15px;margin:0 0 2px;}
+.topbar p{margin:0;font-size:10px;color:rgba(255,255,255,.65);font-family:var(--mono);letter-spacing:.4px;text-transform:uppercase;}
+.badge-phase{background:var(--gold);color:var(--navy-deep);font-size:9.5px;font-family:var(--mono);font-weight:700;padding:3px 9px;border-radius:10px;text-transform:uppercase;letter-spacing:.4px;}
+
+.namebar{background:#fff;border-bottom:1px solid var(--line);padding:9px 14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.namebar input{padding:7px 9px;border:1px solid var(--line);border-radius:6px;font-size:13px;flex:1;min-width:160px;}
+.namebar input:disabled{background:#f7f8f6;color:var(--navy);font-weight:600;border-color:var(--teal);}
+.namebar label{font-size:11px;color:var(--muted);font-family:var(--mono);}
+.namebar.verified{background:#e7f1ec;}
+.namebar .verified-tag{font-size:10.5px;color:var(--teal);font-family:var(--mono);font-weight:700;}
+
+.page{max-width:760px;margin:0 auto;padding:16px;}
+.intro-card{background:#fff;border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:8px;padding:16px 18px;margin-bottom:18px;font-size:13px;line-height:1.6;color:var(--ink);}
+.intro-card h2{font-size:16px;margin:0 0 8px;color:var(--navy);}
+
+.section-title{font-size:13.5px;font-weight:700;color:var(--navy);margin:20px 0 10px;display:flex;align-items:center;gap:8px;}
+.section-title .line{flex:1;height:1px;background:var(--line);}
+
+.empresa-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+@media (max-width:520px){.empresa-grid{grid-template-columns:1fr;}}
+.empresa-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;cursor:pointer;transition:border-color .15s;position:relative;}
+.empresa-card:hover{border-color:var(--gold);}
+.empresa-card.active{border-color:var(--teal);box-shadow:0 0 0 1px var(--teal) inset;}
+.empresa-card .ec-name{font-weight:700;color:var(--navy);font-size:13.5px;margin-bottom:3px;padding-right:22px;}
+.empresa-card .ec-sector{font-size:10.5px;color:var(--muted);font-family:var(--mono);text-transform:uppercase;}
+.empresa-card .ec-cedula{font-size:10px;color:var(--muted);font-family:var(--mono);margin-top:2px;}
+.empresa-card .ec-date{font-size:10px;color:var(--muted);margin-top:6px;}
+.empresa-card .ec-delete{position:absolute;top:10px;right:10px;font-size:15px;color:var(--muted);cursor:pointer;line-height:1;padding:2px 4px;border-radius:4px;}
+.empresa-card .ec-delete:hover{color:var(--coral);background:#f7e9e8;}
+
+.new-empresa-card{background:#f7f8f6;border:1px dashed var(--line);border-radius:10px;padding:14px;text-align:center;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);font-size:12.5px;min-height:90px;}
+.new-empresa-card:hover{border-color:var(--gold);color:var(--gold);}
+.new-empresa-card .plus{font-size:24px;margin-bottom:4px;}
+
+.form-card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:16px;}
+.form-card h3{font-size:13.5px;margin:0 0 10px;color:var(--navy);}
+.form-row{margin-bottom:12px;}
+.form-row label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:4px;font-family:var(--mono);text-transform:uppercase;}
+.form-row input, .form-row select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font-size:13px;font-family:var(--sans);}
+.btn{display:inline-block;padding:9px 18px;background:var(--navy);color:#fff;border:none;border-radius:20px;font-size:12.5px;font-weight:600;cursor:pointer;}
+.btn:hover{background:var(--navy-deep);}
+.btn:disabled{opacity:.45;cursor:default;}
+.btn.secondary{background:#fff;color:var(--navy);border:1px solid var(--navy);}
+.btn-row{display:flex;gap:8px;}
+
+.catalogo-header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%);color:#fff;border-radius:10px;padding:16px 18px;margin-bottom:14px;}
+.catalogo-header .ch-label{font-family:var(--mono);font-size:10px;color:var(--gold-light);text-transform:uppercase;letter-spacing:1px;}
+.catalogo-header h2{margin:6px 0 2px;font-size:17px;}
+.catalogo-header p{margin:0;font-size:11.5px;color:rgba(255,255,255,.7);}
+
+.informe-header{background:#fff;border:2px solid var(--navy);border-radius:10px;padding:16px 18px;margin-bottom:14px;text-align:center;}
+.informe-header .ih-empresa{font-size:15px;font-weight:800;color:var(--navy);margin:0 0 2px;}
+.informe-header .ih-cedula{font-size:11px;color:var(--muted);font-family:var(--mono);margin:0 0 8px;}
+.informe-header .ih-titulo{font-size:12.5px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin:8px 0 2px;padding-top:8px;border-top:1px dashed var(--line);}
+.informe-header .ih-fecha{font-size:10.5px;color:var(--muted);font-family:var(--mono);}
+
+.cat-group{background:#fff;border:1px solid var(--line);border-radius:10px;margin-bottom:12px;overflow:hidden;}
+.cat-group-head{padding:10px 14px;font-size:12.5px;font-weight:700;color:#fff;display:flex;justify-content:space-between;align-items:center;}
+.cat-group-head .count{font-family:var(--mono);font-size:11px;font-weight:400;opacity:.85;}
+.cat-table{width:100%;border-collapse:collapse;}
+.cat-table td{padding:8px 14px;font-size:12px;border-top:1px solid var(--line);}
+.cat-table td.code{font-family:var(--mono);color:var(--muted);width:60px;}
+.cat-table td.nature{font-family:var(--mono);font-size:10px;text-align:right;width:80px;}
+.nature.deudora{color:#1e7a63;}
+.nature.acreedora{color:#a3541e;}
+
+.empty-state{text-align:center;color:var(--muted);font-size:12.5px;padding:30px 20px;background:#fff;border:1px dashed var(--line);border-radius:8px;}
+.footer-note{font-size:11px;color:var(--muted);text-align:center;margin-top:20px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-row">
+    <div>
+      <h1>🏛️ El SAT del Profe Gerardo</h1>
+      <p>Simulador contable · Contabilidad</p>
+    </div>
+    <span class="badge-phase">Fase 1: Empresas y Catálogo</span>
+  </div>
+</div>
+
+<div class="namebar" id="namebar">
+  <label>Tu nombre:</label>
+  <input type="text" id="studentName" placeholder="Nombre completo" maxlength="45">
+  <span id="nameStatus" style="font-size:11px;color:var(--muted);font-family:var(--mono);"></span>
+</div>
+
+<div class="page" id="page">
+  <div class="intro-card">
+    <h2>Bienvenido a tu simulador contable</h2>
+    <p>Acá vas a crear tus propias empresas y llevar su contabilidad completa: catálogo de cuentas, registro de facturas, asientos de diario, mayorización y estados financieros. Iremos agregando partes conforme avancemos en el curso.</p>
+    <p style="margin:0;color:var(--muted);">Por ahora: escribí tu nombre arriba, y creá tu primera empresa.</p>
+  </div>
+
+  <div class="section-title"><span>📂 Mis empresas</span><span class="line"></span></div>
+  <div class="empresa-grid" id="empresaGrid"></div>
+
+  <div id="formArea"></div>
+  <div id="catalogoArea"></div>
+</div>
+
+<script>
+/* ============================================================
+   CONEXIÓN A GOOGLE SHEETS
+   ============================================================ */
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbzMGf_Gpf6UWswFPSqEBMdq-93GxGkrURsT4jtO9Jaz8yT5gyMMtp1btlcDZjRCeuAb/exec";
+function sheetsReady(){ return SHEET_API_URL && !SHEET_API_URL.startsWith('REEMPLAZAR'); }
+
+let jsonpCounter = 0;
+function jsonpRequest(url){
+  return new Promise((resolve, reject)=>{
+    const cbName = 'jsonp_cb_' + (jsonpCounter++) + '_' + Date.now();
+    const script = document.createElement('script');
+    let settled = false;
+    const cleanup = ()=>{ delete window[cbName]; if(script.parentNode) script.parentNode.removeChild(script); };
+    window[cbName] = (data)=>{ settled = true; cleanup(); resolve(data); };
+    script.onerror = ()=>{ if(!settled){ cleanup(); reject(new Error('Error de red')); } };
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    document.body.appendChild(script);
+    setTimeout(()=>{ if(!settled){ cleanup(); reject(new Error('Tiempo de espera agotado')); } }, 10000);
+  });
+}
+async function sheetGet(sheetName){
+  const data = await jsonpRequest(SHEET_API_URL + '?sheet=' + encodeURIComponent(sheetName));
+  return data.rows || [];
+}
+async function sheetPost(sheetName, row){
+  await fetch(SHEET_API_URL, { method:'POST', mode:'no-cors', body: JSON.stringify({ sheet: sheetName, row }) });
+  return { ok:true };
+}
+function escapeHtml(s){ return (s+"").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function genId(){ return 'emp_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2,7); }
+
+/* ============================================================
+   ENCABEZADO FORMAL DE INFORMES
+   Reutilizable para todo informe generado por el sistema:
+   catálogo, asientos, mayor, estados financieros, etc.
+   ============================================================ */
+function renderInformeHeader(empresa, tituloInforme){
+  const fechaHoy = new Date().toLocaleDateString('es-CR', { day:'2-digit', month:'long', year:'numeric' });
+  return `
+    <div class="informe-header">
+      <div class="ih-empresa">${escapeHtml(empresa.NombreEmpresa)}</div>
+      <div class="ih-cedula">Cédula Jurídica: ${escapeHtml(empresa.CedulaJuridica || 'No registrada')}</div>
+      <div class="ih-titulo">${escapeHtml(tituloInforme)}</div>
+      <div class="ih-fecha">Emitido el ${fechaHoy}</div>
+    </div>
+  `;
+}
+
+/* ============================================================
+   CATÁLOGOS DE CUENTAS ESTÁNDAR (por sector)
+   ============================================================ */
+const CATALOGOS_POR_SECTOR = {
+  "Comercial": {
+    "Activo": { color:"#2FC2AD", cuentas:[
+      {codigo:"1101", nombre:"Efectivo", naturaleza:"Deudora"},
+      {codigo:"1102", nombre:"Bancos", naturaleza:"Deudora"},
+      {codigo:"1103", nombre:"Cuentas por Cobrar", naturaleza:"Deudora"},
+      {codigo:"1104", nombre:"Estimación para Cuentas Incobrables", naturaleza:"Acreedora"},
+      {codigo:"1105", nombre:"Inventario de Mercancías", naturaleza:"Deudora"},
+      {codigo:"1106", nombre:"IVA Acreditable", naturaleza:"Deudora"},
+      {codigo:"1201", nombre:"Terreno", naturaleza:"Deudora"},
+      {codigo:"1202", nombre:"Edificio", naturaleza:"Deudora"},
+      {codigo:"1203", nombre:"Depreciación Acumulada Edificio", naturaleza:"Acreedora"},
+      {codigo:"1204", nombre:"Mobiliario y Equipo", naturaleza:"Deudora"},
+      {codigo:"1205", nombre:"Depreciación Acumulada Mobiliario y Equipo", naturaleza:"Acreedora"},
+      {codigo:"1206", nombre:"Equipo de Cómputo", naturaleza:"Deudora"},
+      {codigo:"1207", nombre:"Depreciación Acumulada Equipo de Cómputo", naturaleza:"Acreedora"},
+    ]},
+    "Pasivo": { color:"#EF6A5B", cuentas:[
+      {codigo:"2101", nombre:"Cuentas por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2102", nombre:"Documentos por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2103", nombre:"IVA por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2104", nombre:"Sueldos y Salarios por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2105", nombre:"Cargas Sociales por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2201", nombre:"Préstamos Bancarios a Largo Plazo", naturaleza:"Acreedora"},
+    ]},
+    "Patrimonio": { color:"#B8863C", cuentas:[
+      {codigo:"3101", nombre:"Capital Social", naturaleza:"Acreedora"},
+      {codigo:"3102", nombre:"Utilidades Retenidas", naturaleza:"Acreedora"},
+      {codigo:"3103", nombre:"Utilidad (Pérdida) del Ejercicio", naturaleza:"Acreedora"},
+    ]},
+    "Ingreso": { color:"#0E1B3D", cuentas:[
+      {codigo:"4101", nombre:"Ventas", naturaleza:"Acreedora"},
+      {codigo:"4102", nombre:"Devoluciones sobre Ventas", naturaleza:"Deudora"},
+      {codigo:"4103", nombre:"Descuentos sobre Ventas", naturaleza:"Deudora"},
+      {codigo:"4104", nombre:"Ingresos Financieros", naturaleza:"Acreedora"},
+    ]},
+    "Costo": { color:"#5B6470", cuentas:[
+      {codigo:"5101", nombre:"Costo de Ventas", naturaleza:"Deudora"},
+      {codigo:"5102", nombre:"Compras", naturaleza:"Deudora"},
+      {codigo:"5103", nombre:"Devoluciones sobre Compras", naturaleza:"Acreedora"},
+      {codigo:"5104", nombre:"Descuentos sobre Compras", naturaleza:"Acreedora"},
+      {codigo:"5105", nombre:"Fletes sobre Compras", naturaleza:"Deudora"},
+    ]},
+    "Gasto": { color:"#a3541e", cuentas:[
+      {codigo:"6101", nombre:"Gastos de Salarios", naturaleza:"Deudora"},
+      {codigo:"6102", nombre:"Gastos de Cargas Sociales", naturaleza:"Deudora"},
+      {codigo:"6103", nombre:"Gastos de Alquiler", naturaleza:"Deudora"},
+      {codigo:"6104", nombre:"Gastos de Servicios Públicos", naturaleza:"Deudora"},
+      {codigo:"6105", nombre:"Gastos de Depreciación", naturaleza:"Deudora"},
+      {codigo:"6106", nombre:"Gastos de Publicidad", naturaleza:"Deudora"},
+      {codigo:"6107", nombre:"Gastos Financieros", naturaleza:"Deudora"},
+      {codigo:"6108", nombre:"Gastos de Papelería y Útiles", naturaleza:"Deudora"},
+      {codigo:"6109", nombre:"Gastos Diversos", naturaleza:"Deudora"},
+    ]}
+  },
+
+  "Servicios": {
+    "Activo": { color:"#2FC2AD", cuentas:[
+      {codigo:"1101", nombre:"Efectivo", naturaleza:"Deudora"},
+      {codigo:"1102", nombre:"Bancos", naturaleza:"Deudora"},
+      {codigo:"1103", nombre:"Cuentas por Cobrar", naturaleza:"Deudora"},
+      {codigo:"1104", nombre:"Estimación para Cuentas Incobrables", naturaleza:"Acreedora"},
+      {codigo:"1105", nombre:"Suministros", naturaleza:"Deudora"},
+      {codigo:"1106", nombre:"IVA Acreditable", naturaleza:"Deudora"},
+      {codigo:"1201", nombre:"Mobiliario y Equipo", naturaleza:"Deudora"},
+      {codigo:"1202", nombre:"Depreciación Acumulada Mobiliario y Equipo", naturaleza:"Acreedora"},
+      {codigo:"1203", nombre:"Equipo de Cómputo", naturaleza:"Deudora"},
+      {codigo:"1204", nombre:"Depreciación Acumulada Equipo de Cómputo", naturaleza:"Acreedora"},
+    ]},
+    "Pasivo": { color:"#EF6A5B", cuentas:[
+      {codigo:"2101", nombre:"Cuentas por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2102", nombre:"Documentos por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2103", nombre:"IVA por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2104", nombre:"Sueldos y Salarios por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2105", nombre:"Cargas Sociales por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2106", nombre:"Ingresos Cobrados por Anticipado", naturaleza:"Acreedora"},
+    ]},
+    "Patrimonio": { color:"#B8863C", cuentas:[
+      {codigo:"3101", nombre:"Capital Social", naturaleza:"Acreedora"},
+      {codigo:"3102", nombre:"Utilidades Retenidas", naturaleza:"Acreedora"},
+      {codigo:"3103", nombre:"Utilidad (Pérdida) del Ejercicio", naturaleza:"Acreedora"},
+    ]},
+    "Ingreso": { color:"#0E1B3D", cuentas:[
+      {codigo:"4101", nombre:"Ingresos por Servicios", naturaleza:"Acreedora"},
+      {codigo:"4102", nombre:"Descuentos sobre Servicios", naturaleza:"Deudora"},
+      {codigo:"4103", nombre:"Ingresos Financieros", naturaleza:"Acreedora"},
+    ]},
+    "Costo": { color:"#5B6470", cuentas:[
+      {codigo:"5101", nombre:"Costo de Servicios Prestados", naturaleza:"Deudora"},
+    ]},
+    "Gasto": { color:"#a3541e", cuentas:[
+      {codigo:"6101", nombre:"Gastos de Salarios", naturaleza:"Deudora"},
+      {codigo:"6102", nombre:"Gastos de Cargas Sociales", naturaleza:"Deudora"},
+      {codigo:"6103", nombre:"Gastos de Alquiler", naturaleza:"Deudora"},
+      {codigo:"6104", nombre:"Gastos de Servicios Públicos", naturaleza:"Deudora"},
+      {codigo:"6105", nombre:"Gastos de Depreciación", naturaleza:"Deudora"},
+      {codigo:"6106", nombre:"Gastos de Publicidad", naturaleza:"Deudora"},
+      {codigo:"6107", nombre:"Gastos Financieros", naturaleza:"Deudora"},
+      {codigo:"6108", nombre:"Gastos de Papelería y Útiles", naturaleza:"Deudora"},
+      {codigo:"6109", nombre:"Gastos Diversos", naturaleza:"Deudora"},
+    ]}
+  },
+
+  "Industrial": {
+    "Activo": { color:"#2FC2AD", cuentas:[
+      {codigo:"1101", nombre:"Efectivo", naturaleza:"Deudora"},
+      {codigo:"1102", nombre:"Bancos", naturaleza:"Deudora"},
+      {codigo:"1103", nombre:"Cuentas por Cobrar", naturaleza:"Deudora"},
+      {codigo:"1104", nombre:"Estimación para Cuentas Incobrables", naturaleza:"Acreedora"},
+      {codigo:"1105", nombre:"Inventario de Materia Prima", naturaleza:"Deudora"},
+      {codigo:"1106", nombre:"Inventario de Productos en Proceso", naturaleza:"Deudora"},
+      {codigo:"1107", nombre:"Inventario de Productos Terminados", naturaleza:"Deudora"},
+      {codigo:"1108", nombre:"IVA Acreditable", naturaleza:"Deudora"},
+      {codigo:"1201", nombre:"Terreno", naturaleza:"Deudora"},
+      {codigo:"1202", nombre:"Edificio", naturaleza:"Deudora"},
+      {codigo:"1203", nombre:"Depreciación Acumulada Edificio", naturaleza:"Acreedora"},
+      {codigo:"1204", nombre:"Maquinaria y Equipo de Producción", naturaleza:"Deudora"},
+      {codigo:"1205", nombre:"Depreciación Acumulada Maquinaria y Equipo", naturaleza:"Acreedora"},
+      {codigo:"1206", nombre:"Equipo de Cómputo", naturaleza:"Deudora"},
+      {codigo:"1207", nombre:"Depreciación Acumulada Equipo de Cómputo", naturaleza:"Acreedora"},
+    ]},
+    "Pasivo": { color:"#EF6A5B", cuentas:[
+      {codigo:"2101", nombre:"Cuentas por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2102", nombre:"Documentos por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2103", nombre:"IVA por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2104", nombre:"Sueldos y Salarios por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2105", nombre:"Cargas Sociales por Pagar", naturaleza:"Acreedora"},
+      {codigo:"2201", nombre:"Préstamos Bancarios a Largo Plazo", naturaleza:"Acreedora"},
+    ]},
+    "Patrimonio": { color:"#B8863C", cuentas:[
+      {codigo:"3101", nombre:"Capital Social", naturaleza:"Acreedora"},
+      {codigo:"3102", nombre:"Utilidades Retenidas", naturaleza:"Acreedora"},
+      {codigo:"3103", nombre:"Utilidad (Pérdida) del Ejercicio", naturaleza:"Acreedora"},
+    ]},
+    "Ingreso": { color:"#0E1B3D", cuentas:[
+      {codigo:"4101", nombre:"Ventas", naturaleza:"Acreedora"},
+      {codigo:"4102", nombre:"Devoluciones sobre Ventas", naturaleza:"Deudora"},
+      {codigo:"4103", nombre:"Descuentos sobre Ventas", naturaleza:"Deudora"},
+      {codigo:"4104", nombre:"Ingresos Financieros", naturaleza:"Acreedora"},
+    ]},
+    "Costo": { color:"#5B6470", cuentas:[
+      {codigo:"5101", nombre:"Costo de Ventas", naturaleza:"Deudora"},
+      {codigo:"5102", nombre:"Materia Prima Utilizada", naturaleza:"Deudora"},
+      {codigo:"5103", nombre:"Mano de Obra Directa", naturaleza:"Deudora"},
+      {codigo:"5104", nombre:"Costos Indirectos de Fabricación", naturaleza:"Deudora"},
+      {codigo:"5105", nombre:"Costo de Producción del Periodo", naturaleza:"Deudora"},
+    ]},
+    "Gasto": { color:"#a3541e", cuentas:[
+      {codigo:"6101", nombre:"Gastos de Salarios Administrativos", naturaleza:"Deudora"},
+      {codigo:"6102", nombre:"Gastos de Cargas Sociales", naturaleza:"Deudora"},
+      {codigo:"6103", nombre:"Gastos de Alquiler", naturaleza:"Deudora"},
+      {codigo:"6104", nombre:"Gastos de Servicios Públicos", naturaleza:"Deudora"},
+      {codigo:"6105", nombre:"Gastos de Depreciación (Administrativa)", naturaleza:"Deudora"},
+      {codigo:"6106", nombre:"Gastos de Publicidad", naturaleza:"Deudora"},
+      {codigo:"6107", nombre:"Gastos Financieros", naturaleza:"Deudora"},
+      {codigo:"6108", nombre:"Gastos de Papelería y Útiles", naturaleza:"Deudora"},
+      {codigo:"6109", nombre:"Gastos Diversos", naturaleza:"Deudora"},
+    ]}
+  }
+};
+
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+let studentName = "";
+let misEmpresas = [];
+let empresaActiva = null;
+
+const empresaGrid = document.getElementById('empresaGrid');
+const formArea = document.getElementById('formArea');
+const catalogoArea = document.getElementById('catalogoArea');
+
+/* ============================================================
+   CARGA DE EMPRESAS DEL ESTUDIANTE
+   ============================================================ */
+let empresasEliminadasIds = [];
+
+async function loadMisEmpresas(){
+  if(!studentName || !sheetsReady()){ renderEmpresaGrid(); return; }
+  empresaGrid.innerHTML = '<p style="color:var(--muted);font-size:12px;">Cargando tus empresas...</p>';
+  try{
+    const [rows, eliminadas] = await Promise.all([
+      sheetGet('SAT_Empresas'),
+      sheetGet('SAT_EmpresasEliminadas')
+    ]);
+    empresasEliminadasIds = eliminadas.filter(r => r.Estudiante === studentName).map(r => r.EmpresaId);
+    misEmpresas = rows.filter(r => r.Estudiante === studentName && !empresasEliminadasIds.includes(r.EmpresaId));
+  }catch(e){
+    misEmpresas = [];
+  }
+  renderEmpresaGrid();
+}
+
+function renderEmpresaGrid(){
+  empresaGrid.innerHTML = '';
+
+  if(!studentName){
+    empresaGrid.innerHTML = '<div class="empty-state">Escribí tu nombre arriba para ver o crear tus empresas.</div>';
+    return;
+  }
+
+  misEmpresas.forEach(emp=>{
+    const card = document.createElement('div');
+    card.className = 'empresa-card' + (empresaActiva && empresaActiva.EmpresaId===emp.EmpresaId ? ' active' : '');
+    const fecha = emp.Timestamp ? new Date(emp.Timestamp).toLocaleDateString('es-CR') : '';
+    card.innerHTML = `
+      <span class="ec-delete" title="Eliminar empresa">🗑️</span>
+      <div class="ec-name">🏢 ${escapeHtml(emp.NombreEmpresa)}</div>
+      <div class="ec-sector">${escapeHtml(emp.Sector || 'Comercial')}</div>
+      <div class="ec-cedula">Céd. Jurídica: ${escapeHtml(emp.CedulaJuridica || '—')}</div>
+      <div class="ec-date">Creada: ${fecha}</div>
+    `;
+    card.addEventListener('click', ()=>{
+      empresaActiva = emp;
+      formArea.innerHTML = '';
+      renderEmpresaGrid();
+      renderCatalogo();
+    });
+    card.querySelector('.ec-delete').addEventListener('click', async (e)=>{
+      e.stopPropagation();
+      if(!confirm(`¿Eliminar la empresa "${emp.NombreEmpresa}"? Esta acción no se puede deshacer.`)) return;
+      try{
+        const nowIso = new Date().toISOString();
+        await sheetPost('SAT_EmpresasEliminadas', [nowIso, studentName, emp.EmpresaId]);
+        misEmpresas = misEmpresas.filter(m => m.EmpresaId !== emp.EmpresaId);
+        if(empresaActiva && empresaActiva.EmpresaId === emp.EmpresaId){
+          empresaActiva = null;
+          catalogoArea.innerHTML = '';
+        }
+        renderEmpresaGrid();
+      }catch(err){
+        alert('No se pudo eliminar la empresa. Revisá la conexión a la hoja de datos.');
+      }
+    });
+    empresaGrid.appendChild(card);
+  });
+
+  const newCard = document.createElement('div');
+  newCard.className = 'new-empresa-card';
+  newCard.innerHTML = `<div class="plus">➕</div><div>Crear nueva empresa</div>`;
+  newCard.addEventListener('click', renderNuevaEmpresaForm);
+  empresaGrid.appendChild(newCard);
+}
+
+/* ============================================================
+   FORMULARIO: NUEVA EMPRESA
+   ============================================================ */
+function renderNuevaEmpresaForm(){
+  if(!studentName){ alert('Escribí tu nombre arriba antes de crear una empresa.'); return; }
+  catalogoArea.innerHTML = '';
+  empresaActiva = null;
+  renderEmpresaGrid();
+
+  formArea.innerHTML = `
+    <div class="form-card">
+      <h3>➕ Crear nueva empresa</h3>
+      <div class="form-row">
+        <label>Nombre de la empresa</label>
+        <input type="text" id="newEmpresaName" placeholder="Ej: Comercial El Roble S.A.">
+      </div>
+      <div class="form-row">
+        <label>Cédula Jurídica</label>
+        <input type="text" id="newEmpresaCedula" placeholder="Ej: 3-101-123456" inputmode="numeric">
+      </div>
+      <div class="form-row">
+        <label>Sector</label>
+        <select id="newEmpresaSector">
+          <option value="Comercial">Comercial (compra-venta de mercancías)</option>
+          <option value="Servicios">Servicios (empresa que presta servicios)</option>
+          <option value="Industrial">Industrial (empresa que fabrica productos)</option>
+        </select>
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="createEmpresaBtn">Crear empresa</button>
+        <button class="btn secondary" id="cancelEmpresaBtn">Cancelar</button>
+      </div>
+      <p style="font-size:10.5px;color:var(--muted);margin-top:10px;margin-bottom:0;">La empresa se crea con el catálogo de cuentas estándar según el sector elegido. Luego podés agregar cuentas adicionales si lo necesitás.</p>
+    </div>
+  `;
+
+  document.getElementById('cancelEmpresaBtn').addEventListener('click', ()=>{ formArea.innerHTML=''; });
+
+  document.getElementById('createEmpresaBtn').addEventListener('click', async ()=>{
+    const nombre = document.getElementById('newEmpresaName').value.trim();
+    const cedulaJuridica = document.getElementById('newEmpresaCedula').value.trim();
+    const sector = document.getElementById('newEmpresaSector').value;
+    if(!nombre){ alert('Escribí un nombre para la empresa.'); return; }
+    if(!cedulaJuridica){ alert('Escribí la cédula jurídica de la empresa — es parte del procedimiento formal.'); return; }
+
+    const btn = document.getElementById('createEmpresaBtn');
+    btn.disabled = true;
+    btn.textContent = 'Creando...';
+
+    const empresaId = genId();
+    const nowIso = new Date().toISOString();
+    const nuevaEmpresa = { Timestamp: nowIso, Estudiante: studentName, EmpresaId: empresaId, NombreEmpresa: nombre, Sector: sector, CedulaJuridica: cedulaJuridica };
+
+    try{
+      await sheetPost('SAT_Empresas', [nowIso, studentName, empresaId, nombre, sector, cedulaJuridica]);
+      misEmpresas.push(nuevaEmpresa);
+      empresaActiva = nuevaEmpresa;
+      formArea.innerHTML = '';
+      renderEmpresaGrid();
+      renderCatalogo();
+    }catch(e){
+      alert('No se pudo crear la empresa. Revisá la conexión a la hoja de datos.');
+      btn.disabled = false;
+      btn.textContent = 'Crear empresa';
+    }
+  });
+}
+
+/* ============================================================
+   CATÁLOGO DE CUENTAS (estándar por sector + personalizadas)
+   ============================================================ */
+let cuentasPersonalizadas = [];
+
+async function renderCatalogo(){
+  if(!empresaActiva){ catalogoArea.innerHTML = ''; return; }
+
+  catalogoArea.innerHTML = '<p style="color:var(--muted);font-size:12px;">Cargando catálogo...</p>';
+
+  cuentasPersonalizadas = [];
+  if(sheetsReady()){
+    try{
+      const rows = await sheetGet('SAT_CuentasPersonalizadas');
+      cuentasPersonalizadas = rows.filter(r => r.EmpresaId === empresaActiva.EmpresaId);
+    }catch(e){}
+  }
+
+  const sector = empresaActiva.Sector || 'Comercial';
+  const catalogoBase = CATALOGOS_POR_SECTOR[sector] || CATALOGOS_POR_SECTOR['Comercial'];
+
+  // combinar catalogo estandar + personalizadas, agrupadas por Tipo
+  const grupos = {};
+  Object.entries(catalogoBase).forEach(([grupo, data])=>{
+    grupos[grupo] = { color:data.color, cuentas: [...data.cuentas] };
+  });
+  cuentasPersonalizadas.forEach(c=>{
+    const tipo = c.Tipo || 'Gasto';
+    if(!grupos[tipo]) grupos[tipo] = { color:'#5B6470', cuentas:[] };
+    grupos[tipo].cuentas.push({ codigo:c.Codigo, nombre:c.Nombre, naturaleza:c.Naturaleza, personalizada:true });
+  });
+
+  let totalCuentas = 0;
+  Object.values(grupos).forEach(g=>totalCuentas+=g.cuentas.length);
+
+  let html = renderInformeHeader(empresaActiva, 'Catálogo de Cuentas');
+  html += `
+    <div class="catalogo-header">
+      <div class="ch-label">Catálogo de Cuentas</div>
+      <h2>🏢 ${escapeHtml(empresaActiva.NombreEmpresa)}</h2>
+      <p>Sector: ${escapeHtml(sector)} · ${totalCuentas} cuentas${cuentasPersonalizadas.length ? ' (' + cuentasPersonalizadas.length + ' agregadas por vos)' : ''}</p>
+    </div>
+  `;
+
+  const ORDEN_GRUPOS = ["Activo","Pasivo","Patrimonio","Ingreso","Costo","Gasto"];
+  ORDEN_GRUPOS.filter(g=>grupos[g]).forEach(grupo=>{
+    const data = grupos[grupo];
+    let rows = '';
+    data.cuentas.forEach(c=>{
+      const natClass = c.naturaleza === 'Deudora' ? 'deudora' : 'acreedora';
+      const tag = c.personalizada ? ' <span style="font-size:9px;color:var(--gold);font-family:var(--mono);">· agregada</span>' : '';
+      rows += `<tr><td class="code">${escapeHtml(c.codigo)}</td><td>${escapeHtml(c.nombre)}${tag}</td><td class="nature ${natClass}">${c.naturaleza}</td></tr>`;
+    });
+    html += `
+      <div class="cat-group">
+        <div class="cat-group-head" style="background:${data.color};">
+          <span>${grupo}</span><span class="count">${data.cuentas.length} cuentas</span>
+        </div>
+        <table class="cat-table"><tbody>${rows}</tbody></table>
+      </div>
+    `;
+  });
+
+  html += `
+    <div class="form-card" id="addCuentaCard">
+      <h3>➕ Agregar cuenta al catálogo</h3>
+      <div class="form-row">
+        <label>Código</label>
+        <input type="text" id="newCuentaCodigo" placeholder="Ej: 1108" inputmode="numeric">
+      </div>
+      <div class="form-row">
+        <label>Nombre de la cuenta</label>
+        <input type="text" id="newCuentaNombre" placeholder="Ej: Anticipo de Clientes">
+      </div>
+      <div class="form-row">
+        <label>Grupo</label>
+        <select id="newCuentaTipo">
+          <option value="Activo">Activo</option>
+          <option value="Pasivo">Pasivo</option>
+          <option value="Patrimonio">Patrimonio</option>
+          <option value="Ingreso">Ingreso</option>
+          <option value="Costo">Costo</option>
+          <option value="Gasto">Gasto</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>Naturaleza</label>
+        <select id="newCuentaNaturaleza">
+          <option value="Deudora">Deudora</option>
+          <option value="Acreedora">Acreedora</option>
+        </select>
+      </div>
+      <button class="btn" id="addCuentaBtn">Agregar cuenta</button>
+    </div>
+  `;
+
+  html += `<p class="footer-note">Próximamente: registro de facturas, asientos de diario, mayorización y estados financieros para esta empresa.</p>`;
+
+  catalogoArea.innerHTML = html;
+
+  document.getElementById('addCuentaBtn').addEventListener('click', async ()=>{
+    const codigo = document.getElementById('newCuentaCodigo').value.trim();
+    const nombre = document.getElementById('newCuentaNombre').value.trim();
+    const tipo = document.getElementById('newCuentaTipo').value;
+    const naturaleza = document.getElementById('newCuentaNaturaleza').value;
+    if(!codigo || !nombre){ alert('Completá el código y el nombre de la cuenta.'); return; }
+
+    const btn = document.getElementById('addCuentaBtn');
+    btn.disabled = true;
+    btn.textContent = 'Agregando...';
+
+    try{
+      const nowIso = new Date().toISOString();
+      await sheetPost('SAT_CuentasPersonalizadas', [nowIso, empresaActiva.EmpresaId, codigo, nombre, tipo, naturaleza]);
+      await renderCatalogo();
+    }catch(e){
+      alert('No se pudo agregar la cuenta. Revisá la conexión a la hoja de datos.');
+      btn.disabled = false;
+      btn.textContent = 'Agregar cuenta';
+    }
+  });
+}
+
+
+/* ============================================================
+   NOMBRE DEL ESTUDIANTE
+   ============================================================ */
+document.getElementById('studentName').addEventListener('input', function(){
+  studentName = this.value.trim();
+  document.getElementById('nameStatus').textContent = studentName ? '● identificado' : '';
+});
+document.getElementById('studentName').addEventListener('change', function(){
+  empresaActiva = null;
+  formArea.innerHTML = '';
+  catalogoArea.innerHTML = '';
+  if(studentName) loadMisEmpresas();
+});
+
+(function prefillFromLink(){
+  const params = new URLSearchParams(window.location.search);
+  const nombreParam = params.get('nombre');
+  if(nombreParam){
+    studentName = nombreParam;
+    const input = document.getElementById('studentName');
+    input.value = nombreParam;
+    input.disabled = true;
+    document.getElementById('namebar').classList.add('verified');
+    document.getElementById('nameStatus').innerHTML = '<span class="verified-tag">✓ Verificado desde tu perfil</span>';
+    loadMisEmpresas();
+  }
+})();
+
+renderEmpresaGrid();
+</script>
+</body>
+</html>
