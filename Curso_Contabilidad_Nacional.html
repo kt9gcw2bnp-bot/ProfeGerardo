@@ -138,7 +138,56 @@ textarea.caso-input{width:100%;border:1px solid var(--line);border-radius:8px;pa
 .certificate p{font-size:12.5px;color:var(--muted);max-width:440px;margin:6px auto;}
 .certificate .seal{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3d488,#a97c29);margin:14px auto 0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#3a2a06;font-weight:700;}
 
+.empresa-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;}
+.empresa-tab{flex:0 0 auto;padding:8px 14px;border-radius:16px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--line);color:var(--muted);white-space:nowrap;background:#fff;}
+.empresa-tab.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+.rubric-table{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:11px;}
+.rubric-table th,.rubric-table td{border:1px solid var(--line);padding:7px 8px;text-align:left;vertical-align:top;}
+.rubric-table th{background:var(--navy);color:#fff;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;}
+.rubric-table td.lvl1{background:#fdf0ee;}
+.rubric-table td.lvl2{background:#fdf6e8;}
+.rubric-table td.lvl3{background:#eaf7f3;}
+
+/* ============ JUEGO: Aventura de Plataformas ============ */
+.gamebox{position:relative;width:100%;height:280px;background:linear-gradient(180deg,#bfe3f2 0%,#eaf6ee 75%);border:2px solid var(--navy);border-radius:10px;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;}
+.av-world{position:absolute;top:0;left:0;height:100%;}
+.av-platform{position:absolute;background:#7a5230;border-top:4px solid #3f9142;border-radius:3px;}
+.av-player{position:absolute;font-size:26px;line-height:1;z-index:6;}
+.av-player.grown{font-size:36px;}
+.av-player.invincible{animation:av-sparkle .3s infinite alternate;}
+@keyframes av-sparkle{ from{filter:drop-shadow(0 0 4px gold);} to{filter:drop-shadow(0 0 10px gold) brightness(1.3);} }
+.av-coin{position:absolute;font-size:18px;z-index:4;}
+.av-enemy{position:absolute;font-size:22px;z-index:5;}
+.av-powerup{position:absolute;font-size:20px;z-index:4;}
+.av-flag{position:absolute;font-size:28px;z-index:4;}
+.av-squash{animation:av-squash .3s;}
+@keyframes av-squash{ 0%{transform:scaleY(1);} 40%{transform:scaleY(.2);} 100%{transform:scaleY(1);opacity:0;} }
+.av-controls{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px;}
+.av-dpad{display:flex;gap:8px;}
+.av-ctrlbtn{width:52px;height:44px;background:var(--navy);color:#fff;border:none;border-radius:10px;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;-webkit-user-select:none;user-select:none;}
+.av-ctrlbtn:active{background:var(--navy-deep);}
+.av-jumpbtn{width:70px;height:44px;background:var(--gold);color:var(--navy-deep);border:none;border-radius:10px;font-size:13px;font-weight:700;}
+.av-jumpbtn:active{background:var(--gold-light);}
+.av-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-family:var(--mono);font-size:12px;color:var(--navy);flex-wrap:wrap;gap:4px;}
+.av-level-badge{background:var(--navy);color:#fff;padding:2px 9px;border-radius:10px;font-size:11px;}
+.av-overlay{position:absolute;inset:0;background:rgba(14,27,61,.93);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;gap:8px;z-index:20;}
+.av-overlay h2{font-size:15px;margin:0;}
+.av-overlay p{font-size:11px;color:rgba(255,255,255,.8);margin:0;max-width:360px;}
+.av-overlay.win{background:rgba(184,134,60,.95);}
+.av-overlay.levelup{background:rgba(47,194,173,.95);}
+.av-qoverlay{position:absolute;inset:0;background:rgba(14,27,61,.94);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;gap:7px;z-index:20;}
+.av-qoverlay .qtag{font-family:var(--mono);font-size:9.5px;color:var(--gold-light);text-transform:uppercase;}
+.av-qoverlay .qtext{font-size:12.5px;font-weight:600;max-width:360px;}
+.av-qoverlay .opts{display:flex;flex-direction:column;gap:5px;width:100%;max-width:360px;}
+.av-qoverlay .opt{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);color:#fff;padding:7px 10px;border-radius:8px;font-size:11.5px;cursor:pointer;text-align:left;display:flex;gap:7px;}
+.av-qoverlay .opt.locked{cursor:default;}
+.av-qoverlay .opt.chosen-correct{background:rgba(47,194,173,.35);border-color:var(--teal);}
+.av-qoverlay .opt.chosen-incorrect{background:rgba(239,106,91,.35);border-color:var(--coral);}
+.av-qoverlay .opt.reveal-correct{background:rgba(47,194,173,.35);border-color:var(--teal);}
+
 .locked-msg{text-align:center;color:var(--muted);font-size:12.5px;padding:30px 20px;background:#fff;border:1px dashed var(--line);border-radius:8px;}
+.empty-state{text-align:center;color:var(--muted);font-size:12.5px;padding:30px 20px;background:#fff;border:1px dashed var(--line);border-radius:8px;}
 
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(10,18,48,.6);z-index:50;align-items:flex-start;justify-content:center;padding:30px 14px;overflow-y:auto;}
 .modal-bg.show{display:flex;}
@@ -214,18 +263,20 @@ const MODULES = [
     content:"Repasemos con afirmaciones que pueden ser ciertas o falsas — prestá atención a los detalles.",
     activityType:"vf" },
   { id:"tipos", label:"🔗 Asocie", title:"Asocie — Decretos y su Propósito", activityType:"matching" },
+  { id:"contnac_juego", label:"🐱 Aventura de Plataformas", title:"Aventura de Plataformas — Repaso", activityType:"juego" },
   { id:"trabajo", label:"📝 Trabajo en clase", title:"Trabajo en clase — ¿Qué norma aplica?", activityType:"trabajo" },
   { id:"casos", label:"💬 Casos y Debate", title:"Casos y Debate (módulo compartido)", activityType:"casos" },
   { id:"miro", label:"🧠 Lluvia de Ideas", title:"Lluvia de Ideas — Tablero Colaborativo", activityType:"miro" },
   { id:"certificado", label:"🏆 Certificado", title:"Certificado", activityType:"certificado" },
 ];
 
-const ORDER = ["antologia","concepto","normativa","principios","vf","tipos","trabajo","casos","miro"];
+const ORDER = ["antologia","concepto","normativa","principios","vf","tipos","contnac_juego","trabajo","casos","miro"];
 
 function isStepDone(id){
   if(id==='antologia') return antologiaLeida;
   if(id==='casos') return !!(localProgress['casos'] && localProgress['casos'].score>0);
   if(id==='miro') return !!(localProgress['miro'] && localProgress['miro'].score>0);
+  if(id==='contnac_juego') return !!(localProgress['contnac_juego'] && localProgress['contnac_juego'].total>0);
   return !!(localProgress[id] && localProgress[id].total>0);
 }
 
@@ -373,6 +424,7 @@ function renderPage(){
   else if(m.activityType==='trabajo') renderTrabajo();
   else if(m.activityType==='casos') renderCasos();
   else if(m.activityType==='miro') renderMiro();
+  else if(m.activityType==='juego') renderJuego();
   else if(m.activityType==='certificado') renderCertificado();
   maybeShowContinue();
 }
@@ -528,7 +580,7 @@ function renderWordSearch(){
         liByWord[w].classList.add('found');
         found++;
         document.getElementById('wsScorePill').textContent = found+' / '+total;
-        if(found===total) saveProgress('concepto', found, total);
+        if(found===total){ saveProgress('concepto', found, total); maybeShowContinue(); }
         return true;
       }
     }
@@ -636,6 +688,7 @@ function renderCrossword(){
     }
     document.getElementById('cwScorePill').textContent = Math.round((correct/total)*100)+'%';
     saveProgress('normativa', correct, total);
+    maybeShowContinue();
   });
 }
 
@@ -692,7 +745,7 @@ function renderQuiz(){
         if(isCorrect) score++;
         answered++;
         document.getElementById('qzScorePill').textContent = score+' / '+QUIZ_BANK.length;
-        if(answered===QUIZ_BANK.length) saveProgress('principios', score, QUIZ_BANK.length);
+        if(answered===QUIZ_BANK.length){ saveProgress('principios', score, QUIZ_BANK.length); maybeShowContinue(); }
       });
       optsDiv.appendChild(opt);
     });
@@ -755,7 +808,7 @@ function renderVF(){
         if(isCorrect) score++;
         answered++;
         document.getElementById('vfScorePill').textContent = score+' / '+VF_BANK.length;
-        if(answered===VF_BANK.length) saveProgress('vf', score, VF_BANK.length);
+        if(answered===VF_BANK.length){ saveProgress('vf', score, VF_BANK.length); maybeShowContinue(); }
       });
       optsDiv.appendChild(opt);
     });
@@ -812,6 +865,7 @@ function renderMatching(){
     this.disabled=true;
     document.getElementById('mtScorePill').textContent = correct+' / 5';
     saveProgress('tipos', correct, 5);
+    maybeShowContinue();
   });
 }
 
@@ -913,6 +967,7 @@ function renderTrabajo(){
 
       if(answeredCount === CASOS_TRABAJO.length){
         saveProgress('trabajo', correctCount, CASOS_TRABAJO.length);
+        maybeShowContinue();
       }
     });
   });
@@ -1048,18 +1103,491 @@ function renderMiro(){
 /* ============================================================
    CERTIFICADO
    ============================================================ */
-const COMPETENCIAS = [
-  { ra:"RA1", unidad:"Gestión pública", modules:["concepto"],
-    text:"Reconocer la importancia de la Contabilidad Nacional para el país." },
-  { ra:"RA2", unidad:"Gestión pública", modules:["normativa","principios","vf","tipos"],
-    text:"Distinguir los lineamientos y decretos emitidos por la Contabilidad Nacional aplicados al sector público." },
-  { ra:"RA3", unidad:"Gestión pública", modules:["trabajo"],
-    text:"Aplicar el marco normativo de la Contabilidad Nacional para identificar la norma correcta en situaciones concretas." },
+/* ============================================================
+   ACTIVIDAD: JUEGO — AVENTURA DE PLATAFORMAS
+   (banco de preguntas propio del tema, guardado en contnac_juego)
+   ============================================================ */
+const AV_QUESTION_BANK = [
+  { q:"¿Qué institución es el órgano rector de la Contabilidad Nacional en Costa Rica?", opts:["La Contraloría General de la República","La Dirección General de Contabilidad Nacional","El Banco Central de Costa Rica"], correct:1,
+    just:"La DGCN, dentro del Ministerio de Hacienda, es el órgano rector de la contabilidad del sector público." },
+  { q:"¿Qué significan las siglas NICSP?", opts:["Normas Internacionales de Contabilidad para el Sector Público","Normas Internas de Control del Sector Privado","Nuevo Instructivo de Cierre del Sector Público"], correct:0,
+    just:"NICSP: Normas Internacionales de Contabilidad para el Sector Público." },
+  { q:"¿A qué instituciones aplican las normas de la Contabilidad Nacional?", opts:["Solo a empresas privadas que venden al Estado","A las instituciones del sector público en general","Únicamente a los bancos comerciales privados"], correct:1,
+    just:"Su normativa aplica a Gobierno Central, instituciones autónomas, municipalidades y empresas públicas." },
+  { q:"¿Por qué es importante consultar las directrices del año en curso?", opts:["Porque la normativa se actualiza y debe aplicarse la versión vigente","Porque los decretos originales ya no tienen validez legal","Porque las directrices reemplazan por completo a los decretos"], correct:0,
+    just:"La normativa contable del sector público se ajusta con el tiempo; hay que usar siempre la versión vigente." },
+  { q:"¿Qué logra la Contabilidad Nacional al consolidar la información financiera de varias instituciones?", opts:["Elimina la necesidad de que cada institución lleve su propia contabilidad","Permite comparar y sumar las finanzas bajo un mismo lenguaje contable","Aumenta automáticamente el presupuesto de cada institución"], correct:1,
+    just:"La consolidación permite comparar y sumar cifras de instituciones distintas porque todas usan el mismo lenguaje contable." },
+  { q:"¿Bajo qué ministerio funciona la Dirección General de Contabilidad Nacional?", opts:["Ministerio de Hacienda","Ministerio de Educación Pública","Ministerio de Planificación"], correct:0,
+    just:"La DGCN opera como una dirección dentro del Ministerio de Hacienda." },
+  { q:"¿Qué instrumento legal se usa para adoptar formalmente cada norma contable del sector público?", opts:["Un decreto","Un contrato privado","Una resolución municipal"], correct:0,
+    just:"Los decretos del Ministerio de Hacienda son el instrumento legal para adoptar las normas contables del sector público." },
+  { q:"¿Cuál es uno de los objetivos principales de estandarizar la contabilidad pública?", opts:["Dar transparencia y comparabilidad a las finanzas del Estado","Reducir el número de funcionarios públicos","Fijar el tipo de cambio del colón"], correct:0,
+    just:"La estandarización busca transparencia y comparabilidad entre las finanzas de todas las instituciones públicas." },
 ];
 
-function competencyScore(comp){
+const AV_GW = 360, AV_GH = 280;
+const AV_GRAVITY = 0.55;
+const AV_MOVE_SPEED = 2.6;
+const AV_JUMP_VELOCITY = -10.5;
+const AV_PLAYER_SIZE = 26;
+const AV_STOMP_BOUNCE = -6.5;
+
+const AV_LEVELS = [{"levelNum": 1, "width": 2474, "platforms": [{"x": 20, "y": 240, "w": 70, "h": 14, "long": false}, {"x": 75, "y": 208, "w": 88, "h": 14, "long": false}, {"x": 139, "y": 232, "w": 88, "h": 14, "long": false}, {"x": 194, "y": 200, "w": 88, "h": 14, "long": false}, {"x": 258, "y": 224, "w": 113, "h": 14, "long": true}, {"x": 313, "y": 192, "w": 88, "h": 14, "long": false}, {"x": 377, "y": 216, "w": 88, "h": 14, "long": false}, {"x": 432, "y": 184, "w": 88, "h": 14, "long": false}, {"x": 496, "y": 208, "w": 113, "h": 14, "long": true}, {"x": 551, "y": 176, "w": 88, "h": 14, "long": false}, {"x": 615, "y": 200, "w": 88, "h": 14, "long": false}, {"x": 670, "y": 168, "w": 88, "h": 14, "long": false}, {"x": 734, "y": 192, "w": 113, "h": 14, "long": true}, {"x": 789, "y": 160, "w": 88, "h": 14, "long": false}, {"x": 853, "y": 184, "w": 88, "h": 14, "long": false}, {"x": 908, "y": 152, "w": 88, "h": 14, "long": false}, {"x": 972, "y": 176, "w": 113, "h": 14, "long": true}, {"x": 1027, "y": 144, "w": 88, "h": 14, "long": false}, {"x": 1091, "y": 168, "w": 88, "h": 14, "long": false}, {"x": 1146, "y": 136, "w": 88, "h": 14, "long": false}, {"x": 1210, "y": 160, "w": 113, "h": 14, "long": true}, {"x": 1265, "y": 128, "w": 88, "h": 14, "long": false}, {"x": 1329, "y": 152, "w": 88, "h": 14, "long": false}, {"x": 1384, "y": 120, "w": 88, "h": 14, "long": false}, {"x": 1448, "y": 144, "w": 113, "h": 14, "long": true}, {"x": 1503, "y": 112, "w": 88, "h": 14, "long": false}, {"x": 1567, "y": 136, "w": 88, "h": 14, "long": false}, {"x": 1622, "y": 104, "w": 88, "h": 14, "long": false}, {"x": 1686, "y": 128, "w": 113, "h": 14, "long": true}, {"x": 1741, "y": 96, "w": 88, "h": 14, "long": false}, {"x": 1805, "y": 120, "w": 88, "h": 14, "long": false}, {"x": 1860, "y": 88, "w": 88, "h": 14, "long": false}, {"x": 1924, "y": 112, "w": 113, "h": 14, "long": true}, {"x": 1979, "y": 80, "w": 88, "h": 14, "long": false}, {"x": 2043, "y": 104, "w": 88, "h": 14, "long": false}, {"x": 2098, "y": 72, "w": 88, "h": 14, "long": false}, {"x": 2162, "y": 96, "w": 113, "h": 14, "long": true}, {"x": 2217, "y": 64, "w": 88, "h": 14, "long": false}, {"x": 2281, "y": 88, "w": 88, "h": 14, "long": false}, {"x": 2336, "y": 56, "w": 88, "h": 14, "long": false}], "coins": [{"x": 111.0, "y": 182}, {"x": 175.0, "y": 206}, {"x": 230.0, "y": 174}, {"x": 306.5, "y": 198}, {"x": 349.0, "y": 166}, {"x": 413.0, "y": 190}, {"x": 468.0, "y": 158}, {"x": 544.5, "y": 182}, {"x": 587.0, "y": 150}, {"x": 651.0, "y": 174}, {"x": 706.0, "y": 142}, {"x": 782.5, "y": 166}, {"x": 825.0, "y": 134}, {"x": 889.0, "y": 158}, {"x": 944.0, "y": 126}, {"x": 1020.5, "y": 150}, {"x": 1063.0, "y": 118}, {"x": 1127.0, "y": 142}, {"x": 1182.0, "y": 110}, {"x": 1258.5, "y": 134}, {"x": 1301.0, "y": 102}, {"x": 1365.0, "y": 126}, {"x": 1420.0, "y": 94}, {"x": 1496.5, "y": 118}, {"x": 1539.0, "y": 86}, {"x": 1603.0, "y": 110}, {"x": 1658.0, "y": 78}, {"x": 1734.5, "y": 102}, {"x": 1777.0, "y": 70}, {"x": 1841.0, "y": 94}, {"x": 1896.0, "y": 62}, {"x": 1972.5, "y": 86}, {"x": 2015.0, "y": 54}, {"x": 2079.0, "y": 78}, {"x": 2134.0, "y": 46}, {"x": 2210.5, "y": 70}, {"x": 2253.0, "y": 38}, {"x": 2317.0, "y": 62}], "mushrooms": [{"x": 109.0, "y": 186}, {"x": 173.0, "y": 210}, {"x": 228.0, "y": 178}], "stars": [{"x": 347.0, "y": 170}, {"x": 411.0, "y": 194}, {"x": 466.0, "y": 162}], "enemies": [{"platformIdx": 4, "minX": 262, "maxX": 347, "x": 262, "dir": 1, "speed": 0.85}, {"platformIdx": 8, "minX": 500, "maxX": 585, "x": 500, "dir": 1, "speed": 0.85}, {"platformIdx": 12, "minX": 738, "maxX": 823, "x": 738, "dir": 1, "speed": 0.85}, {"platformIdx": 16, "minX": 976, "maxX": 1061, "x": 976, "dir": 1, "speed": 0.85}, {"platformIdx": 20, "minX": 1214, "maxX": 1299, "x": 1214, "dir": 1, "speed": 0.85}, {"platformIdx": 24, "minX": 1452, "maxX": 1537, "x": 1452, "dir": 1, "speed": 0.85}], "flag": {"x": 2400, "y": 22}}, {"levelNum": 2, "width": 3286, "platforms": [{"x": 20, "y": 240, "w": 70, "h": 14, "long": false}, {"x": 80, "y": 208, "w": 78, "h": 14, "long": false}, {"x": 152, "y": 232, "w": 78, "h": 14, "long": false}, {"x": 212, "y": 200, "w": 78, "h": 14, "long": false}, {"x": 284, "y": 224, "w": 103, "h": 14, "long": true}, {"x": 344, "y": 192, "w": 78, "h": 14, "long": false}, {"x": 422, "y": 216, "w": 78, "h": 14, "long": false}, {"x": 482, "y": 184, "w": 78, "h": 14, "long": false}, {"x": 554, "y": 208, "w": 103, "h": 14, "long": true}, {"x": 614, "y": 176, "w": 78, "h": 14, "long": false}, {"x": 686, "y": 200, "w": 78, "h": 14, "long": false}, {"x": 746, "y": 168, "w": 78, "h": 14, "long": false}, {"x": 824, "y": 192, "w": 103, "h": 14, "long": true}, {"x": 884, "y": 160, "w": 78, "h": 14, "long": false}, {"x": 956, "y": 184, "w": 78, "h": 14, "long": false}, {"x": 1016, "y": 152, "w": 78, "h": 14, "long": false}, {"x": 1088, "y": 176, "w": 103, "h": 14, "long": true}, {"x": 1148, "y": 144, "w": 78, "h": 14, "long": false}, {"x": 1226, "y": 168, "w": 78, "h": 14, "long": false}, {"x": 1286, "y": 136, "w": 78, "h": 14, "long": false}, {"x": 1358, "y": 160, "w": 103, "h": 14, "long": true}, {"x": 1418, "y": 128, "w": 78, "h": 14, "long": false}, {"x": 1490, "y": 152, "w": 78, "h": 14, "long": false}, {"x": 1550, "y": 120, "w": 78, "h": 14, "long": false}, {"x": 1628, "y": 144, "w": 103, "h": 14, "long": true}, {"x": 1688, "y": 112, "w": 78, "h": 14, "long": false}, {"x": 1760, "y": 136, "w": 78, "h": 14, "long": false}, {"x": 1820, "y": 104, "w": 78, "h": 14, "long": false}, {"x": 1892, "y": 128, "w": 103, "h": 14, "long": true}, {"x": 1952, "y": 96, "w": 78, "h": 14, "long": false}, {"x": 2030, "y": 120, "w": 78, "h": 14, "long": false}, {"x": 2090, "y": 88, "w": 78, "h": 14, "long": false}, {"x": 2162, "y": 112, "w": 103, "h": 14, "long": true}, {"x": 2222, "y": 80, "w": 78, "h": 14, "long": false}, {"x": 2294, "y": 104, "w": 78, "h": 14, "long": false}, {"x": 2354, "y": 72, "w": 78, "h": 14, "long": false}, {"x": 2432, "y": 96, "w": 103, "h": 14, "long": true}, {"x": 2492, "y": 64, "w": 78, "h": 14, "long": false}, {"x": 2564, "y": 88, "w": 78, "h": 14, "long": false}, {"x": 2624, "y": 56, "w": 78, "h": 14, "long": false}, {"x": 2696, "y": 80, "w": 103, "h": 14, "long": true}, {"x": 2756, "y": 48, "w": 78, "h": 14, "long": false}, {"x": 2834, "y": 72, "w": 78, "h": 14, "long": false}, {"x": 2894, "y": 45, "w": 78, "h": 14, "long": false}, {"x": 2966, "y": 69, "w": 103, "h": 14, "long": true}, {"x": 3026, "y": 45, "w": 78, "h": 14, "long": false}, {"x": 3098, "y": 69, "w": 78, "h": 14, "long": false}, {"x": 3158, "y": 45, "w": 78, "h": 14, "long": false}], "coins": [{"x": 111.0, "y": 182}, {"x": 183.0, "y": 206}, {"x": 243.0, "y": 174}, {"x": 327.5, "y": 198}, {"x": 375.0, "y": 166}, {"x": 453.0, "y": 190}, {"x": 513.0, "y": 158}, {"x": 597.5, "y": 182}, {"x": 645.0, "y": 150}, {"x": 717.0, "y": 174}, {"x": 777.0, "y": 142}, {"x": 867.5, "y": 166}, {"x": 915.0, "y": 134}, {"x": 987.0, "y": 158}, {"x": 1047.0, "y": 126}, {"x": 1131.5, "y": 150}, {"x": 1179.0, "y": 118}, {"x": 1257.0, "y": 142}, {"x": 1317.0, "y": 110}, {"x": 1401.5, "y": 134}, {"x": 1449.0, "y": 102}, {"x": 1521.0, "y": 126}, {"x": 1581.0, "y": 94}, {"x": 1671.5, "y": 118}, {"x": 1719.0, "y": 86}, {"x": 1791.0, "y": 110}, {"x": 1851.0, "y": 78}, {"x": 1935.5, "y": 102}, {"x": 1983.0, "y": 70}, {"x": 2061.0, "y": 94}, {"x": 2121.0, "y": 62}, {"x": 2205.5, "y": 86}, {"x": 2253.0, "y": 54}, {"x": 2325.0, "y": 78}, {"x": 2385.0, "y": 46}, {"x": 2475.5, "y": 70}, {"x": 2523.0, "y": 38}, {"x": 2595.0, "y": 62}, {"x": 2655.0, "y": 30}, {"x": 2739.5, "y": 54}, {"x": 2787.0, "y": 22}, {"x": 2865.0, "y": 46}, {"x": 2925.0, "y": 19}, {"x": 3009.5, "y": 43}, {"x": 3057.0, "y": 19}, {"x": 3129.0, "y": 43}], "mushrooms": [{"x": 109.0, "y": 186}, {"x": 181.0, "y": 210}, {"x": 241.0, "y": 178}], "stars": [{"x": 373.0, "y": 170}, {"x": 451.0, "y": 194}, {"x": 511.0, "y": 162}], "enemies": [{"platformIdx": 4, "minX": 288, "maxX": 363, "x": 288, "dir": 1, "speed": 1.0}, {"platformIdx": 8, "minX": 558, "maxX": 633, "x": 558, "dir": 1, "speed": 1.0}, {"platformIdx": 12, "minX": 828, "maxX": 903, "x": 828, "dir": 1, "speed": 1.0}, {"platformIdx": 16, "minX": 1092, "maxX": 1167, "x": 1092, "dir": 1, "speed": 1.0}, {"platformIdx": 20, "minX": 1362, "maxX": 1437, "x": 1362, "dir": 1, "speed": 1.0}, {"platformIdx": 24, "minX": 1632, "maxX": 1707, "x": 1632, "dir": 1, "speed": 1.0}, {"platformIdx": 28, "minX": 1896, "maxX": 1971, "x": 1896, "dir": 1, "speed": 1.0}, {"platformIdx": 32, "minX": 2166, "maxX": 2241, "x": 2166, "dir": 1, "speed": 1.0}, {"platformIdx": 36, "minX": 2436, "maxX": 2511, "x": 2436, "dir": 1, "speed": 1.0}], "flag": {"x": 3212, "y": 11}}, {"levelNum": 3, "width": 3223, "platforms": [{"x": 20, "y": 240, "w": 70, "h": 14, "long": false}, {"x": 79, "y": 218, "w": 74, "h": 14, "long": false}, {"x": 147, "y": 196, "w": 74, "h": 14, "long": false}, {"x": 206, "y": 166, "w": 99, "h": 14, "long": true}, {"x": 274, "y": 180, "w": 74, "h": 14, "long": false}, {"x": 348, "y": 158, "w": 74, "h": 14, "long": false}, {"x": 416, "y": 128, "w": 99, "h": 14, "long": true}, {"x": 475, "y": 106, "w": 74, "h": 14, "long": false}, {"x": 543, "y": 120, "w": 74, "h": 14, "long": false}, {"x": 602, "y": 90, "w": 99, "h": 14, "long": true}, {"x": 676, "y": 68, "w": 74, "h": 14, "long": false}, {"x": 735, "y": 46, "w": 74, "h": 14, "long": false}, {"x": 803, "y": 60, "w": 99, "h": 14, "long": true}, {"x": 862, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 930, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 1004, "y": 45, "w": 99, "h": 14, "long": true}, {"x": 1072, "y": 59, "w": 74, "h": 14, "long": false}, {"x": 1131, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 1199, "y": 45, "w": 99, "h": 14, "long": true}, {"x": 1258, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 1332, "y": 59, "w": 74, "h": 14, "long": false}, {"x": 1391, "y": 45, "w": 99, "h": 14, "long": true}, {"x": 1459, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 1518, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 1586, "y": 59, "w": 99, "h": 14, "long": true}, {"x": 1660, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 1728, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 1787, "y": 45, "w": 99, "h": 14, "long": true}, {"x": 1855, "y": 59, "w": 74, "h": 14, "long": false}, {"x": 1914, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 1988, "y": 45, "w": 99, "h": 14, "long": true}, {"x": 2047, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 2115, "y": 59, "w": 74, "h": 14, "long": false}, {"x": 2174, "y": 45, "w": 99, "h": 14, "long": true}, {"x": 2242, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 2316, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 2384, "y": 59, "w": 99, "h": 14, "long": true}, {"x": 2443, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 2511, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 2570, "y": 45, "w": 99, "h": 14, "long": true}, {"x": 2644, "y": 59, "w": 74, "h": 14, "long": false}, {"x": 2703, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 2771, "y": 45, "w": 99, "h": 14, "long": true}, {"x": 2830, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 2898, "y": 59, "w": 74, "h": 14, "long": false}, {"x": 2972, "y": 45, "w": 99, "h": 14, "long": true}, {"x": 3040, "y": 45, "w": 74, "h": 14, "long": false}, {"x": 3099, "y": 45, "w": 74, "h": 14, "long": false}], "coins": [{"x": 108.0, "y": 192}, {"x": 176.0, "y": 170}, {"x": 247.5, "y": 140}, {"x": 303.0, "y": 154}, {"x": 377.0, "y": 132}, {"x": 457.5, "y": 102}, {"x": 504.0, "y": 80}, {"x": 572.0, "y": 94}, {"x": 643.5, "y": 64}, {"x": 705.0, "y": 42}, {"x": 764.0, "y": 20}, {"x": 844.5, "y": 34}, {"x": 891.0, "y": 19}, {"x": 959.0, "y": 19}, {"x": 1045.5, "y": 19}, {"x": 1101.0, "y": 33}, {"x": 1160.0, "y": 19}, {"x": 1240.5, "y": 19}, {"x": 1287.0, "y": 19}, {"x": 1361.0, "y": 33}, {"x": 1432.5, "y": 19}, {"x": 1488.0, "y": 19}, {"x": 1547.0, "y": 19}, {"x": 1627.5, "y": 33}, {"x": 1689.0, "y": 19}, {"x": 1757.0, "y": 19}, {"x": 1828.5, "y": 19}, {"x": 1884.0, "y": 33}, {"x": 1943.0, "y": 19}, {"x": 2029.5, "y": 19}, {"x": 2076.0, "y": 19}, {"x": 2144.0, "y": 33}, {"x": 2215.5, "y": 19}, {"x": 2271.0, "y": 19}, {"x": 2345.0, "y": 19}, {"x": 2425.5, "y": 33}, {"x": 2472.0, "y": 19}, {"x": 2540.0, "y": 19}, {"x": 2611.5, "y": 19}, {"x": 2673.0, "y": 33}, {"x": 2732.0, "y": 19}, {"x": 2812.5, "y": 19}, {"x": 2859.0, "y": 19}, {"x": 2927.0, "y": 33}, {"x": 3013.5, "y": 19}, {"x": 3069.0, "y": 19}], "mushrooms": [{"x": 106.0, "y": 196}, {"x": 174.0, "y": 174}, {"x": 301.0, "y": 158}], "stars": [{"x": 375.0, "y": 136}, {"x": 502.0, "y": 84}, {"x": 570.0, "y": 98}, {"x": 703.0, "y": 46}], "enemies": [{"platformIdx": 3, "minX": 210, "maxX": 281, "x": 210, "dir": 1, "speed": 1.05}, {"platformIdx": 6, "minX": 420, "maxX": 491, "x": 420, "dir": 1, "speed": 1.05}, {"platformIdx": 9, "minX": 606, "maxX": 677, "x": 606, "dir": 1, "speed": 1.05}, {"platformIdx": 12, "minX": 807, "maxX": 878, "x": 807, "dir": 1, "speed": 1.05}, {"platformIdx": 15, "minX": 1008, "maxX": 1079, "x": 1008, "dir": 1, "speed": 1.05}, {"platformIdx": 18, "minX": 1203, "maxX": 1274, "x": 1203, "dir": 1, "speed": 1.05}, {"platformIdx": 21, "minX": 1395, "maxX": 1466, "x": 1395, "dir": 1, "speed": 1.05}, {"platformIdx": 24, "minX": 1590, "maxX": 1661, "x": 1590, "dir": 1, "speed": 1.05}, {"platformIdx": 27, "minX": 1791, "maxX": 1862, "x": 1791, "dir": 1, "speed": 1.05}, {"platformIdx": 30, "minX": 1992, "maxX": 2063, "x": 1992, "dir": 1, "speed": 1.05}, {"platformIdx": 33, "minX": 2178, "maxX": 2249, "x": 2178, "dir": 1, "speed": 1.05}], "flag": {"x": 3149, "y": 11}}, {"levelNum": 4, "width": 4186, "platforms": [{"x": 20, "y": 240, "w": 70, "h": 14, "long": false}, {"x": 84, "y": 208, "w": 56, "h": 14, "long": false}, {"x": 160, "y": 232, "w": 56, "h": 14, "long": false}, {"x": 242, "y": 200, "w": 81, "h": 14, "long": true}, {"x": 318, "y": 224, "w": 56, "h": 14, "long": false}, {"x": 382, "y": 192, "w": 56, "h": 14, "long": false}, {"x": 464, "y": 216, "w": 81, "h": 14, "long": true}, {"x": 528, "y": 184, "w": 56, "h": 14, "long": false}, {"x": 604, "y": 208, "w": 56, "h": 14, "long": false}, {"x": 686, "y": 176, "w": 81, "h": 14, "long": true}, {"x": 762, "y": 200, "w": 56, "h": 14, "long": false}, {"x": 826, "y": 168, "w": 56, "h": 14, "long": false}, {"x": 908, "y": 192, "w": 81, "h": 14, "long": true}, {"x": 972, "y": 160, "w": 56, "h": 14, "long": false}, {"x": 1048, "y": 184, "w": 56, "h": 14, "long": false}, {"x": 1130, "y": 152, "w": 81, "h": 14, "long": true}, {"x": 1206, "y": 176, "w": 56, "h": 14, "long": false}, {"x": 1270, "y": 144, "w": 56, "h": 14, "long": false}, {"x": 1352, "y": 168, "w": 81, "h": 14, "long": true}, {"x": 1416, "y": 136, "w": 56, "h": 14, "long": false}, {"x": 1492, "y": 160, "w": 56, "h": 14, "long": false}, {"x": 1574, "y": 128, "w": 81, "h": 14, "long": true}, {"x": 1650, "y": 152, "w": 56, "h": 14, "long": false}, {"x": 1714, "y": 120, "w": 56, "h": 14, "long": false}, {"x": 1796, "y": 144, "w": 81, "h": 14, "long": true}, {"x": 1860, "y": 112, "w": 56, "h": 14, "long": false}, {"x": 1936, "y": 136, "w": 56, "h": 14, "long": false}, {"x": 2018, "y": 104, "w": 81, "h": 14, "long": true}, {"x": 2094, "y": 128, "w": 56, "h": 14, "long": false}, {"x": 2158, "y": 96, "w": 56, "h": 14, "long": false}, {"x": 2240, "y": 120, "w": 81, "h": 14, "long": true}, {"x": 2304, "y": 88, "w": 56, "h": 14, "long": false}, {"x": 2380, "y": 112, "w": 56, "h": 14, "long": false}, {"x": 2462, "y": 80, "w": 81, "h": 14, "long": true}, {"x": 2538, "y": 104, "w": 56, "h": 14, "long": false}, {"x": 2602, "y": 72, "w": 56, "h": 14, "long": false}, {"x": 2684, "y": 96, "w": 81, "h": 14, "long": true}, {"x": 2748, "y": 64, "w": 56, "h": 14, "long": false}, {"x": 2824, "y": 88, "w": 56, "h": 14, "long": false}, {"x": 2906, "y": 56, "w": 81, "h": 14, "long": true}, {"x": 2982, "y": 80, "w": 56, "h": 14, "long": false}, {"x": 3046, "y": 48, "w": 56, "h": 14, "long": false}, {"x": 3128, "y": 72, "w": 81, "h": 14, "long": true}, {"x": 3192, "y": 45, "w": 56, "h": 14, "long": false}, {"x": 3268, "y": 69, "w": 56, "h": 14, "long": false}, {"x": 3350, "y": 45, "w": 81, "h": 14, "long": true}, {"x": 3426, "y": 69, "w": 56, "h": 14, "long": false}, {"x": 3490, "y": 45, "w": 56, "h": 14, "long": false}, {"x": 3572, "y": 69, "w": 81, "h": 14, "long": true}, {"x": 3636, "y": 45, "w": 56, "h": 14, "long": false}, {"x": 3712, "y": 69, "w": 56, "h": 14, "long": false}, {"x": 3794, "y": 45, "w": 81, "h": 14, "long": true}, {"x": 3870, "y": 69, "w": 56, "h": 14, "long": false}, {"x": 3934, "y": 45, "w": 56, "h": 14, "long": false}, {"x": 4016, "y": 69, "w": 81, "h": 14, "long": true}, {"x": 4080, "y": 45, "w": 56, "h": 14, "long": false}], "coins": [{"x": 104.0, "y": 182}, {"x": 180.0, "y": 206}, {"x": 274.5, "y": 174}, {"x": 338.0, "y": 198}, {"x": 402.0, "y": 166}, {"x": 496.5, "y": 190}, {"x": 548.0, "y": 158}, {"x": 624.0, "y": 182}, {"x": 718.5, "y": 150}, {"x": 782.0, "y": 174}, {"x": 846.0, "y": 142}, {"x": 940.5, "y": 166}, {"x": 992.0, "y": 134}, {"x": 1068.0, "y": 158}, {"x": 1162.5, "y": 126}, {"x": 1226.0, "y": 150}, {"x": 1290.0, "y": 118}, {"x": 1384.5, "y": 142}, {"x": 1436.0, "y": 110}, {"x": 1512.0, "y": 134}, {"x": 1606.5, "y": 102}, {"x": 1670.0, "y": 126}, {"x": 1734.0, "y": 94}, {"x": 1828.5, "y": 118}, {"x": 1880.0, "y": 86}, {"x": 1956.0, "y": 110}, {"x": 2050.5, "y": 78}, {"x": 2114.0, "y": 102}, {"x": 2178.0, "y": 70}, {"x": 2272.5, "y": 94}, {"x": 2324.0, "y": 62}, {"x": 2400.0, "y": 86}, {"x": 2494.5, "y": 54}, {"x": 2558.0, "y": 78}, {"x": 2622.0, "y": 46}, {"x": 2716.5, "y": 70}, {"x": 2768.0, "y": 38}, {"x": 2844.0, "y": 62}, {"x": 2938.5, "y": 30}, {"x": 3002.0, "y": 54}, {"x": 3066.0, "y": 22}, {"x": 3160.5, "y": 46}, {"x": 3212.0, "y": 19}, {"x": 3288.0, "y": 43}, {"x": 3382.5, "y": 19}, {"x": 3446.0, "y": 43}, {"x": 3510.0, "y": 19}, {"x": 3604.5, "y": 43}, {"x": 3656.0, "y": 19}, {"x": 3732.0, "y": 43}, {"x": 3826.5, "y": 19}, {"x": 3890.0, "y": 43}, {"x": 3954.0, "y": 19}, {"x": 4048.5, "y": 43}], "mushrooms": [{"x": 102.0, "y": 186}, {"x": 178.0, "y": 210}, {"x": 336.0, "y": 202}], "stars": [{"x": 400.0, "y": 170}, {"x": 546.0, "y": 162}, {"x": 622.0, "y": 186}, {"x": 780.0, "y": 178}], "enemies": [{"platformIdx": 3, "minX": 246, "maxX": 299, "x": 246, "dir": 1, "speed": 1.3}, {"platformIdx": 6, "minX": 468, "maxX": 521, "x": 468, "dir": 1, "speed": 1.3}, {"platformIdx": 9, "minX": 690, "maxX": 743, "x": 690, "dir": 1, "speed": 1.3}, {"platformIdx": 12, "minX": 912, "maxX": 965, "x": 912, "dir": 1, "speed": 1.3}, {"platformIdx": 15, "minX": 1134, "maxX": 1187, "x": 1134, "dir": 1, "speed": 1.3}, {"platformIdx": 18, "minX": 1356, "maxX": 1409, "x": 1356, "dir": 1, "speed": 1.3}, {"platformIdx": 21, "minX": 1578, "maxX": 1631, "x": 1578, "dir": 1, "speed": 1.3}, {"platformIdx": 24, "minX": 1800, "maxX": 1853, "x": 1800, "dir": 1, "speed": 1.3}, {"platformIdx": 27, "minX": 2022, "maxX": 2075, "x": 2022, "dir": 1, "speed": 1.3}, {"platformIdx": 30, "minX": 2244, "maxX": 2297, "x": 2244, "dir": 1, "speed": 1.3}, {"platformIdx": 33, "minX": 2466, "maxX": 2519, "x": 2466, "dir": 1, "speed": 1.3}, {"platformIdx": 36, "minX": 2688, "maxX": 2741, "x": 2688, "dir": 1, "speed": 1.3}, {"platformIdx": 39, "minX": 2910, "maxX": 2963, "x": 2910, "dir": 1, "speed": 1.3}, {"platformIdx": 42, "minX": 3132, "maxX": 3185, "x": 3132, "dir": 1, "speed": 1.3}], "flag": {"x": 4112, "y": 11}}, {"levelNum": 5, "width": 2609, "platforms": [{"x": 20, "y": 240, "w": 70, "h": 14, "long": false}, {"x": 73, "y": 218, "w": 92, "h": 14, "long": false}, {"x": 134, "y": 196, "w": 92, "h": 14, "long": false}, {"x": 187, "y": 166, "w": 117, "h": 14, "long": true}, {"x": 248, "y": 180, "w": 92, "h": 14, "long": false}, {"x": 301, "y": 158, "w": 92, "h": 14, "long": false}, {"x": 362, "y": 128, "w": 117, "h": 14, "long": true}, {"x": 415, "y": 106, "w": 92, "h": 14, "long": false}, {"x": 476, "y": 120, "w": 92, "h": 14, "long": false}, {"x": 529, "y": 90, "w": 117, "h": 14, "long": true}, {"x": 590, "y": 68, "w": 92, "h": 14, "long": false}, {"x": 643, "y": 46, "w": 92, "h": 14, "long": false}, {"x": 704, "y": 60, "w": 117, "h": 14, "long": true}, {"x": 757, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 818, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 871, "y": 45, "w": 117, "h": 14, "long": true}, {"x": 932, "y": 59, "w": 92, "h": 14, "long": false}, {"x": 985, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 1046, "y": 45, "w": 117, "h": 14, "long": true}, {"x": 1099, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 1160, "y": 59, "w": 92, "h": 14, "long": false}, {"x": 1213, "y": 45, "w": 117, "h": 14, "long": true}, {"x": 1274, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 1327, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 1388, "y": 59, "w": 117, "h": 14, "long": true}, {"x": 1441, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 1502, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 1555, "y": 45, "w": 117, "h": 14, "long": true}, {"x": 1616, "y": 59, "w": 92, "h": 14, "long": false}, {"x": 1669, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 1730, "y": 45, "w": 117, "h": 14, "long": true}, {"x": 1783, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 1844, "y": 59, "w": 92, "h": 14, "long": false}, {"x": 1897, "y": 45, "w": 117, "h": 14, "long": true}, {"x": 1958, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 2011, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 2072, "y": 59, "w": 117, "h": 14, "long": true}, {"x": 2125, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 2186, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 2239, "y": 45, "w": 117, "h": 14, "long": true}, {"x": 2300, "y": 59, "w": 92, "h": 14, "long": false}, {"x": 2353, "y": 45, "w": 92, "h": 14, "long": false}, {"x": 2414, "y": 45, "w": 117, "h": 14, "long": true}, {"x": 2467, "y": 45, "w": 92, "h": 14, "long": false}], "coins": [{"x": 111.0, "y": 192}, {"x": 172.0, "y": 170}, {"x": 237.5, "y": 140}, {"x": 286.0, "y": 154}, {"x": 339.0, "y": 132}, {"x": 412.5, "y": 102}, {"x": 453.0, "y": 80}, {"x": 514.0, "y": 94}, {"x": 579.5, "y": 64}, {"x": 628.0, "y": 42}, {"x": 681.0, "y": 20}, {"x": 754.5, "y": 34}, {"x": 795.0, "y": 19}, {"x": 856.0, "y": 19}, {"x": 921.5, "y": 19}, {"x": 970.0, "y": 33}, {"x": 1023.0, "y": 19}, {"x": 1096.5, "y": 19}, {"x": 1137.0, "y": 19}, {"x": 1198.0, "y": 33}, {"x": 1263.5, "y": 19}, {"x": 1312.0, "y": 19}, {"x": 1365.0, "y": 19}, {"x": 1438.5, "y": 33}, {"x": 1479.0, "y": 19}, {"x": 1540.0, "y": 19}, {"x": 1605.5, "y": 19}, {"x": 1654.0, "y": 33}, {"x": 1707.0, "y": 19}, {"x": 1780.5, "y": 19}, {"x": 1821.0, "y": 19}, {"x": 1882.0, "y": 33}, {"x": 1947.5, "y": 19}, {"x": 1996.0, "y": 19}, {"x": 2049.0, "y": 19}, {"x": 2122.5, "y": 33}, {"x": 2163.0, "y": 19}, {"x": 2224.0, "y": 19}, {"x": 2289.5, "y": 19}, {"x": 2338.0, "y": 33}, {"x": 2391.0, "y": 19}, {"x": 2464.5, "y": 19}], "mushrooms": [{"x": 109.0, "y": 196}, {"x": 170.0, "y": 174}, {"x": 284.0, "y": 158}, {"x": 337.0, "y": 136}], "stars": [{"x": 451.0, "y": 84}, {"x": 512.0, "y": 98}, {"x": 626.0, "y": 46}, {"x": 679.0, "y": 24}], "enemies": [{"platformIdx": 3, "minX": 191, "maxX": 280, "x": 191, "dir": 1, "speed": 0.75}, {"platformIdx": 6, "minX": 366, "maxX": 455, "x": 366, "dir": 1, "speed": 0.75}, {"platformIdx": 9, "minX": 533, "maxX": 622, "x": 533, "dir": 1, "speed": 0.75}, {"platformIdx": 12, "minX": 708, "maxX": 797, "x": 708, "dir": 1, "speed": 0.75}, {"platformIdx": 15, "minX": 875, "maxX": 964, "x": 875, "dir": 1, "speed": 0.75}, {"platformIdx": 18, "minX": 1050, "maxX": 1139, "x": 1050, "dir": 1, "speed": 0.75}, {"platformIdx": 21, "minX": 1217, "maxX": 1306, "x": 1217, "dir": 1, "speed": 0.75}, {"platformIdx": 24, "minX": 1392, "maxX": 1481, "x": 1392, "dir": 1, "speed": 0.75}, {"platformIdx": 27, "minX": 1559, "maxX": 1648, "x": 1559, "dir": 1, "speed": 0.75}], "flag": {"x": 2535, "y": 11}}];
+
+let avTotalAnswered = 0, avTotalCorrect = 0, avTotalStomps = 0, avBestLevel = 0;
+
+function renderJuego(){
+  if(isLocked('contnac_juego')){
+    renderLockedNotice('contnac_juego', 'la Aventura de Plataformas');
+    return;
+  }
+  const card = document.createElement('div');
+  card.className = 'actcard';
+  card.innerHTML = `
+    <h3>🐱 Aventura de Plataformas — 5 niveles</h3>
+    <div class="av-hud">
+      <span class="av-level-badge" id="avHudLevel">Nivel 1 / 5</span>
+      <span id="avHudLives">❤️❤️❤️</span>
+      <span id="avHudCoins">🪙 0</span>
+    </div>
+    <div class="gamebox" id="avGameBox">
+      <div class="av-overlay" id="avStartOverlay">
+        <h2>🐱 Aventura de Plataformas</h2>
+        <p>Usá las flechas para caminar y el botón de salto. Recolectá todas las monedas de cada nivel y llegá a la bandera 🚩. El hongo 🍄 te hace crecer, la estrella ⭐ te vuelve invencible. Si un fantasma te toca perdés una vida — respondé bien para recuperarla. ¡Saltale encima para eliminarlo!</p>
+        <button class="btn" id="avStartBtn">▶️ Comenzar</button>
+      </div>
+    </div>
+    <div class="av-controls">
+      <div class="av-dpad">
+        <button class="av-ctrlbtn" id="avLeftBtn">◀</button>
+        <button class="av-ctrlbtn" id="avRightBtn">▶</button>
+      </div>
+      <button class="av-jumpbtn" id="avJumpBtn">⬆️ SALTAR</button>
+    </div>
+  `;
+  pageEl.appendChild(card);
+  initAventuraGame();
+}
+
+function initAventuraGame(){
+  const gameBox = document.getElementById('avGameBox');
+  const worldEl = document.createElement('div');
+  worldEl.className = 'av-world';
+  gameBox.appendChild(worldEl);
+  const hudLives = document.getElementById('avHudLives');
+  const hudCoins = document.getElementById('avHudCoins');
+  const hudLevel = document.getElementById('avHudLevel');
+
+  let currentLevelIdx = 0;
+  let px, py, pvx, pvy, grounded, grown, invincible, invincibleUntil;
+  let lives, coinsCollected, coinsState, mushroomState, starState;
+  let enemies, enemyAlive, cameraX;
+  let running = false, paused = false, rafId;
+  let leftHeld=false, rightHeld=false;
+  let usedQ = [];
+
+  function currentLevel(){ return AV_LEVELS[currentLevelIdx]; }
+
+  function resetPlayerToStart(){
+    px = 30; py = 240-AV_PLAYER_SIZE; pvx=0; pvy=0; grounded=true;
+    cameraX = 0;
+  }
+
+  function loadLevel(idx){
+    currentLevelIdx = idx;
+    const lvl = currentLevel();
+    resetPlayerToStart();
+    coinsCollected = 0;
+    coinsState = lvl.coins.map(()=>true);
+    mushroomState = lvl.mushrooms.map(()=>true);
+    starState = lvl.stars.map(()=>true);
+    enemies = lvl.enemies.map(e=>({...e}));
+    enemyAlive = lvl.enemies.map(()=>true);
+    grown = false; invincible = false; invincibleUntil = 0;
+    updateHUD();
+    buildScene();
+    syncVisuals();
+  }
+
+  function updateHUD(){
+    const lvl = currentLevel();
+    hudLevel.textContent = 'Nivel ' + lvl.levelNum + ' / ' + AV_LEVELS.length;
+    hudLives.textContent = '❤️'.repeat(Math.max(lives,0)) + '🖤'.repeat(Math.max(3-lives,0));
+    hudCoins.textContent = '🪙 ' + coinsCollected + ' / ' + lvl.coins.length;
+  }
+
+  let playerEl, coinEls=[], enemyEls=[], mushroomEls=[], starEls=[], flagEl;
+
+  function buildScene(){
+    worldEl.innerHTML = '';
+    const lvl = currentLevel();
+    worldEl.style.width = lvl.width + 'px';
+
+    lvl.platforms.forEach(p=>{
+      const el = document.createElement('div');
+      el.className='av-platform';
+      el.style.left=p.x+'px'; el.style.top=p.y+'px'; el.style.width=p.w+'px'; el.style.height=p.h+'px';
+      worldEl.appendChild(el);
+    });
+
+    playerEl = document.createElement('div');
+    playerEl.className='av-player';
+    playerEl.textContent='🐱';
+    worldEl.appendChild(playerEl);
+
+    coinEls = lvl.coins.map(c=>{
+      const el = document.createElement('div');
+      el.className='av-coin'; el.textContent='🪙';
+      el.style.left=c.x+'px'; el.style.top=c.y+'px';
+      worldEl.appendChild(el);
+      return el;
+    });
+
+    mushroomEls = lvl.mushrooms.map(m=>{
+      const el = document.createElement('div');
+      el.className='av-powerup'; el.textContent='🍄';
+      el.style.left=m.x+'px'; el.style.top=m.y+'px';
+      worldEl.appendChild(el);
+      return el;
+    });
+
+    starEls = lvl.stars.map(s=>{
+      const el = document.createElement('div');
+      el.className='av-powerup'; el.textContent='⭐';
+      el.style.left=s.x+'px'; el.style.top=s.y+'px';
+      worldEl.appendChild(el);
+      return el;
+    });
+
+    flagEl = document.createElement('div');
+    flagEl.className='av-flag'; flagEl.textContent='🚩';
+    flagEl.style.left=lvl.flag.x+'px'; flagEl.style.top=lvl.flag.y+'px';
+    worldEl.appendChild(flagEl);
+
+    enemyEls = enemies.map(()=>{
+      const el = document.createElement('div');
+      el.className='av-enemy'; el.textContent='👻';
+      worldEl.appendChild(el);
+      return el;
+    });
+  }
+
+  function syncVisuals(){
+    const lvl = currentLevel();
+    cameraX = px - AV_GW/2 + AV_PLAYER_SIZE/2;
+    cameraX = Math.max(0, Math.min(lvl.width - AV_GW, cameraX));
+    worldEl.style.transform = 'translateX(' + (-cameraX) + 'px)';
+
+    playerEl.style.left = px+'px';
+    playerEl.style.top = py+'px';
+    playerEl.classList.toggle('grown', grown);
+    playerEl.classList.toggle('invincible', invincible);
+    playerEl.style.transform = (pvx < 0 ? 'scaleX(-1)' : 'scaleX(1)');
+
+    coinEls.forEach((el,i)=>{ el.style.display = coinsState[i] ? 'block' : 'none'; });
+    mushroomEls.forEach((el,i)=>{ el.style.display = mushroomState[i] ? 'block' : 'none'; });
+    starEls.forEach((el,i)=>{ el.style.display = starState[i] ? 'block' : 'none'; });
+
+    enemies.forEach((e,i)=>{
+      if(!enemyAlive[i]) return;
+      enemyEls[i].style.left = e.x + 'px';
+      enemyEls[i].style.top = (lvl.platforms[e.platformIdx].y - 22) + 'px';
+    });
+  }
+
+  function rectsOverlap(a,b){
+    return !(a.x+a.w < b.x || a.x > b.x+b.w || a.y+a.h < b.y || a.y > b.y+b.h);
+  }
+  function playerRect(){
+    const size = grown ? AV_PLAYER_SIZE*1.3 : AV_PLAYER_SIZE;
+    return {x:px, y:py, w:size, h:size};
+  }
+
+  function physicsStep(){
+    const lvl = currentLevel();
+    pvx = 0;
+    if(leftHeld) pvx = -AV_MOVE_SPEED;
+    if(rightHeld) pvx = AV_MOVE_SPEED;
+    px += pvx;
+    px = Math.max(0, Math.min(lvl.width-AV_PLAYER_SIZE, px));
+
+    pvy += AV_GRAVITY;
+    const prevY = py;
+    const nextY = py + pvy;
+
+    grounded = false;
+    for(const plat of lvl.platforms){
+      const withinX = px + AV_PLAYER_SIZE > plat.x && px < plat.x + plat.w;
+      const wasAbove = (prevY + AV_PLAYER_SIZE) <= plat.y + 2;
+      const willBeBelowOrAt = (nextY + AV_PLAYER_SIZE) >= plat.y;
+      if(withinX && wasAbove && willBeBelowOrAt && pvy >= 0){
+        py = plat.y - AV_PLAYER_SIZE;
+        pvy = 0;
+        grounded = true;
+        break;
+      }
+    }
+    if(!grounded){ py = nextY; }
+
+    if(py > AV_GH){ loseLife(); return; }
+    if(invincible && Date.now() > invincibleUntil){ invincible = false; }
+
+    moveEnemies();
+    checkCollisions(prevY);
+    syncVisuals();
+  }
+
+  function moveEnemies(){
+    enemies.forEach((e,i)=>{
+      if(!enemyAlive[i]) return;
+      e.x += e.dir * e.speed;
+      if(e.x < e.minX || e.x > e.maxX) e.dir *= -1;
+    });
+  }
+
+  function checkCollisions(prevY){
+    const lvl = currentLevel();
+    const pRect = playerRect();
+
+    coinsState.forEach((present,i)=>{
+      if(!present) return;
+      const c = lvl.coins[i];
+      if(rectsOverlap(pRect, {x:c.x,y:c.y,w:16,h:16})){
+        coinsState[i] = false;
+        coinsCollected++;
+        updateHUD();
+      }
+    });
+    mushroomState.forEach((present,i)=>{
+      if(!present) return;
+      const m = lvl.mushrooms[i];
+      if(rectsOverlap(pRect, {x:m.x,y:m.y,w:18,h:18})){
+        mushroomState[i] = false;
+        grown = true;
+      }
+    });
+    starState.forEach((present,i)=>{
+      if(!present) return;
+      const s = lvl.stars[i];
+      if(rectsOverlap(pRect, {x:s.x,y:s.y,w:18,h:18})){
+        starState[i] = false;
+        invincible = true;
+        invincibleUntil = Date.now() + 5000;
+      }
+    });
+    enemies.forEach((e,i)=>{
+      if(!enemyAlive[i]) return;
+      const eRect = {x:e.x, y:lvl.platforms[e.platformIdx].y-22, w:20, h:20};
+      if(!rectsOverlap(pRect, eRect)) return;
+      const fallingOntoTop = pvy > 0 && (prevY + AV_PLAYER_SIZE) <= eRect.y + 8;
+      if(fallingOntoTop){ stompEnemy(i); }
+      else if(invincible){ stompEnemy(i); }
+      else if(grown){ grown = false; px += (px < e.x) ? -14 : 14; }
+      else{ loseLife(); }
+    });
+    if(rectsOverlap(pRect, {x:lvl.flag.x,y:lvl.flag.y,w:20,h:26})){
+      if(coinsCollected >= lvl.coins.length){ onLevelComplete(); }
+    }
+  }
+
+  function stompEnemy(i){
+    enemyAlive[i] = false;
+    enemyEls[i].classList.add('av-squash');
+    setTimeout(()=>{ enemyEls[i].style.display='none'; }, 300);
+    pvy = AV_STOMP_BOUNCE;
+    avTotalStomps++;
+  }
+
+  function loseLife(){
+    if(paused) return;
+    paused = true;
+    lives--;
+    updateHUD();
+    if(lives <= 0){ showGameOver(); return; }
+    showQuestion();
+  }
+
+  function pickQuestion(){
+    const avail = AV_QUESTION_BANK.filter((_,i)=>!usedQ.includes(i));
+    const pool = avail.length?avail:AV_QUESTION_BANK;
+    const idx = AV_QUESTION_BANK.indexOf(pool[Math.floor(Math.random()*pool.length)]);
+    usedQ.push(idx);
+    if(usedQ.length>=AV_QUESTION_BANK.length) usedQ=[];
+    return AV_QUESTION_BANK[idx];
+  }
+
+  function showQuestion(){
+    const item = pickQuestion();
+    const overlay = document.createElement('div');
+    overlay.className='av-qoverlay';
+    const letters=['A','B','C'];
+    overlay.innerHTML = `<span class="qtag">💔 Perdiste una vida — respondé bien para recuperarla</span>
+      <div class="qtext">${item.q}</div><div class="opts"></div>`;
+    gameBox.appendChild(overlay);
+    const optsDiv = overlay.querySelector('.opts');
+    item.opts.forEach((optText,oi)=>{
+      const opt=document.createElement('div');
+      opt.className='opt';
+      opt.innerHTML=`<span class="letter">${letters[oi]}</span><span>${optText}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(overlay.dataset.answered) return;
+        overlay.dataset.answered='1';
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = oi===item.correct;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect) optsDiv.querySelectorAll('.opt')[item.correct].classList.add('reveal-correct');
+        avTotalAnswered++; if(isCorrect) avTotalCorrect++;
+        setTimeout(()=>{
+          overlay.remove();
+          if(isCorrect){ lives++; updateHUD(); }
+          paused=false;
+          resetPlayerToStart();
+          rafId = requestAnimationFrame(loop);
+        }, 1300);
+      });
+      optsDiv.appendChild(opt);
+    });
+  }
+
+  function guardarLogroJuego(){
+    avBestLevel = Math.max(avBestLevel, currentLevel().levelNum);
+    if(avTotalAnswered > 0){
+      saveProgress('contnac_juego', avTotalCorrect, avTotalAnswered);
+    } else {
+      saveProgress('contnac_juego', 1, 1);
+    }
+    if(sheetsReady() && studentName){
+      const nowIso = new Date().toISOString();
+      sheetPost('Progreso', [nowIso, studentName, 'contnac_juego_nivel', avBestLevel, AV_LEVELS.length]).catch(()=>{});
+      sheetPost('Progreso', [nowIso, studentName, 'contnac_juego_stomps', avTotalStomps, avTotalStomps]).catch(()=>{});
+    }
+  }
+
+  function showGameOver(){
+    running=false; paused=false;
+    const overlay = document.createElement('div');
+    overlay.className='av-overlay';
+    overlay.innerHTML = `<h2>💥 Sin vidas</h2>
+      <p>Llegaste al nivel ${currentLevel().levelNum} de ${AV_LEVELS.length} · Fantasmas eliminados: ${avTotalStomps} · Preguntas: ${avTotalAnswered} (${avTotalCorrect} correctas)</p>
+      <button class="btn" id="avRetryBtn">🔄 Reintentar desde el nivel 1</button>`;
+    gameBox.appendChild(overlay);
+    guardarLogroJuego();
+    maybeShowContinue();
+    document.getElementById('avRetryBtn').addEventListener('click', ()=>{
+      overlay.remove(); startGame();
+    });
+  }
+
+  function onLevelComplete(){
+    running=false; paused=true;
+    if(rafId) cancelAnimationFrame(rafId);
+    const isLastLevel = currentLevelIdx >= AV_LEVELS.length-1;
+    const overlay = document.createElement('div');
+    if(isLastLevel){
+      overlay.className = 'av-overlay win';
+      overlay.innerHTML = `<h2>🏆 ¡Completaste los ${AV_LEVELS.length} niveles!</h2>
+        <p>Fantasmas eliminados: ${avTotalStomps} · Preguntas: ${avTotalAnswered} (${avTotalCorrect} correctas)</p>
+        <button class="btn" id="avPlayAgainBtn">🔄 Jugar de nuevo</button>`;
+    } else {
+      overlay.className = 'av-overlay levelup';
+      overlay.innerHTML = `<h2>✅ ¡Nivel ${currentLevel().levelNum} completo!</h2>
+        <p>Preparate para el nivel ${currentLevel().levelNum+1}.</p>
+        <button class="btn" id="avNextLevelBtn">➡️ Siguiente nivel</button>`;
+    }
+    gameBox.appendChild(overlay);
+    guardarLogroJuego();
+    if(isLastLevel) maybeShowContinue();
+
+    if(isLastLevel){
+      document.getElementById('avPlayAgainBtn').addEventListener('click', ()=>{
+        overlay.remove(); startGame();
+      });
+    } else {
+      document.getElementById('avNextLevelBtn').addEventListener('click', ()=>{
+        overlay.remove();
+        loadLevel(currentLevelIdx+1);
+        running=true; paused=false;
+        rafId = requestAnimationFrame(loop);
+      });
+    }
+  }
+
+  function loop(){
+    if(!running || paused) return;
+    physicsStep();
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function startGame(){
+    lives = 3;
+    avTotalAnswered = 0; avTotalCorrect = 0; avTotalStomps = 0; usedQ = [];
+    loadLevel(0);
+    running = true; paused = false;
+    rafId = requestAnimationFrame(loop);
+  }
+
+  document.getElementById('avStartBtn').addEventListener('click', ()=>{
+    document.getElementById('avStartOverlay').remove();
+    startGame();
+  });
+
+  function bindHold(el, onDown, onUp){
+    el.addEventListener('mousedown', onDown);
+    el.addEventListener('mouseup', onUp);
+    el.addEventListener('mouseleave', onUp);
+    el.addEventListener('touchstart', e=>{ e.preventDefault(); onDown(); }, {passive:false});
+    el.addEventListener('touchend', e=>{ e.preventDefault(); onUp(); }, {passive:false});
+  }
+  bindHold(document.getElementById('avLeftBtn'), ()=>leftHeld=true, ()=>leftHeld=false);
+  bindHold(document.getElementById('avRightBtn'), ()=>rightHeld=true, ()=>rightHeld=false);
+  document.getElementById('avJumpBtn').addEventListener('click', ()=>{
+    if(grounded && running && !paused){ pvy = AV_JUMP_VELOCITY; grounded=false; }
+  });
+  const avKeyHandler = e=>{
+    if(!running||paused) return;
+    if(e.code==='ArrowLeft') leftHeld=true;
+    if(e.code==='ArrowRight') rightHeld=true;
+    if(e.code==='Space'||e.code==='ArrowUp'){ if(grounded){ pvy=AV_JUMP_VELOCITY; grounded=false; } }
+  };
+  const avKeyUpHandler = e=>{
+    if(e.code==='ArrowLeft') leftHeld=false;
+    if(e.code==='ArrowRight') rightHeld=false;
+  };
+  document.addEventListener('keydown', avKeyHandler);
+  document.addEventListener('keyup', avKeyUpHandler);
+}
+
+const RUBRICA = [
+  { ra:"RA1", desc:"Reconocer la importancia y el rol de la Contabilidad Nacional para el país.",
+    modules:["concepto"],
+    niveles:{
+      1:"No logrado: no identifica qué es la DGCN ni su rol dentro del Ministerio de Hacienda.",
+      2:"En proceso: reconoce que existe un órgano rector, pero confunde su función o alcance.",
+      3:"Logrado: explica con claridad qué es la DGCN y por qué es importante para las finanzas del Estado."
+    }
+  },
+  { ra:"RA2", desc:"Distinguir los lineamientos, decretos y normas (NICSP) emitidos por la Contabilidad Nacional para el sector público.",
+    modules:["normativa","principios","vf","tipos","contnac_juego"],
+    niveles:{
+      1:"No logrado: no distingue entre decretos, directrices y normas, ni su propósito.",
+      2:"En proceso: reconoce algunos conceptos normativos, pero comete errores frecuentes al aplicarlos.",
+      3:"Logrado: distingue con precisión los decretos, las directrices vigentes y las NICSP, y su relación entre sí."
+    }
+  },
+  { ra:"RA3", desc:"Aplicar el marco normativo de la Contabilidad Nacional para identificar la norma correcta en situaciones concretas.",
+    modules:["trabajo"],
+    niveles:{
+      1:"No logrado: no logra identificar qué norma o criterio aplica en una situación concreta.",
+      2:"En proceso: identifica la norma correcta en algunos casos, pero su justificación es incompleta.",
+      3:"Logrado: identifica y justifica con claridad la norma aplicable en distintas situaciones planteadas."
+    }
+  },
+];
+
+function competencyScore(mods){
   let sum=0, total=0, anyData=false;
-  comp.modules.forEach(mid=>{
+  mods.forEach(mid=>{
     const p = localProgress[mid];
     if(p){ sum+=p.score; total+=p.total; anyData=true; }
   });
@@ -1067,43 +1595,48 @@ function competencyScore(comp){
 }
 
 function competencyLevel(pctVal){
-  if(pctVal===null) return { label:"Sin evidencia", cls:"status-pending" };
-  if(pctVal<=50) return { label:"No logrado", cls:"status-bad" };
-  if(pctVal<=80) return { label:"En proceso", cls:"status-mid" };
-  return { label:"Logrado", cls:"status-ok" };
+  if(pctVal===null) return { label:"Sin evidencia", cls:"status-pending", n:0 };
+  if(pctVal<=50) return { label:"No logrado", cls:"status-bad", n:1 };
+  if(pctVal<=80) return { label:"En proceso", cls:"status-mid", n:2 };
+  return { label:"Logrado", cls:"status-ok", n:3 };
 }
 
 function renderCertificado(){
   const card = document.createElement('div');
   card.className = 'actcard';
 
-  let rows = '';
+  let rubricRows = '';
   let allLogrado = true;
-  COMPETENCIAS.forEach(comp=>{
-    const s = competencyScore(comp);
+  RUBRICA.forEach(item=>{
+    const s = competencyScore(item.modules);
     const lvl = competencyLevel(s.pct);
     if(lvl.label !== "Logrado") allLogrado = false;
-    rows += `<tr>
-      <td><span class="ra-tag">${comp.ra}</span><span class="competency-desc">${comp.text}</span></td>
-      <td class="center">${s.total>0 ? s.sum+' / '+s.total : '—'}</td>
-      <td class="center">${s.pct!==null ? s.pct+'%' : '—'}</td>
+    rubricRows += `<tr>
+      <td><span class="ra-tag">${item.ra}</span><span class="competency-desc">${item.desc}</span></td>
+      <td class="lvl1">${item.niveles[1]}</td>
+      <td class="lvl2">${item.niveles[2]}</td>
+      <td class="lvl3">${item.niveles[3]}</td>
       <td class="center"><span class="${lvl.cls}">${lvl.label}</span></td>
     </tr>`;
   });
+
   const antologiaOk = localProgress['antologia'] && localProgress['antologia'].score>0;
-  rows += `<tr><td><span class="ra-tag">Lectura</span><span class="competency-desc">Antología del tema (lectura previa obligatoria)</span></td><td class="center">—</td><td class="center">—</td><td class="center">${antologiaOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
   const casosOk = localProgress['casos'] && localProgress['casos'].score>0;
-  rows += `<tr><td><span class="ra-tag">Participación</span><span class="competency-desc">Módulo compartido de Casos y Debate</span></td><td class="center">—</td><td class="center">—</td><td class="center">${casosOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
   const miroOk = localProgress['miro'] && localProgress['miro'].score>0;
-  rows += `<tr><td><span class="ra-tag">Colaboración</span><span class="competency-desc">Lluvia de Ideas en Miro</span></td><td class="center">—</td><td class="center">—</td><td class="center">${miroOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>`;
   const finalOk = allLogrado && antologiaOk && casosOk && miroOk;
 
   card.innerHTML = `
-    <h3>Evaluación por competencias</h3>
-    <p style="font-size:11px;color:var(--muted);margin:-4px 0 10px;">Escala: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado. Basada en el Resultado de Aprendizaje de la unidad "Gestión pública" (Programa de Estudio DETCE-MEP, Undécimo año).</p>
+    <h3>Rúbrica de Evaluación por Competencias</h3>
+    <p style="font-size:11px;color:var(--muted);margin:-4px 0 10px;">Escala 1–3, según Resultados de Aprendizaje del programa de estudio (Gestión pública, Programa DETCE-MEP, Undécimo año). Nivel calculado automáticamente: 1 No logrado (0–50%) · 2 En proceso (51–80%) · 3 Logrado (81–100%).</p>
+    <table class="rubric-table">
+      <tr><th>Indicador (RA)</th><th>1 · No logrado</th><th>2 · En proceso</th><th>3 · Logrado</th><th>Tu nivel</th></tr>
+      ${rubricRows}
+    </table>
     <table class="progress-table">
-      <tr><th>Indicador</th><th>Puntaje</th><th>%</th><th>Nivel</th></tr>
-      ${rows}
+      <tr><th>Requisito adicional</th><th>Estado</th></tr>
+      <tr><td>Lectura de la Antología</td><td class="center">${antologiaOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>
+      <tr><td>Participación en Casos y Debate</td><td class="center">${casosOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>
+      <tr><td>Lluvia de Ideas colaborativa (Miro)</td><td class="center">${miroOk?'<span class="status-ok">Logrado</span>':'<span class="status-pending">Sin evidencia</span>'}</td></tr>
     </table>
     ${finalOk ? `
       <div class="certificate show" id="certBlock">
@@ -1116,7 +1649,7 @@ function renderCertificado(){
         <p style="margin-top:14px;font-size:10.5px;">Contabilidad · Gestión Empresarial para Contadores · Prof. Gerardo Gonzalez Gonzalez</p>
       </div>
       <button class="btn" style="margin-top:12px;" onclick="window.print()">Imprimir / Guardar como PDF</button>
-    ` : `<div class="locked-msg">🔒 El certificado se desbloquea cuando los tres indicadores alcanzan el nivel <strong>Logrado</strong> (81% o más) y se registró la lectura de la Antología, la participación en Casos y Debate, y en la Lluvia de Ideas.</div>`}
+    ` : `<div class="locked-msg">🔒 El certificado se desbloquea cuando los tres indicadores alcanzan el nivel <strong>3 · Logrado</strong> y se completaron la Antología, Casos y Debate, y la Lluvia de Ideas.</div>`}
   `;
   pageEl.appendChild(card);
 }
@@ -1163,44 +1696,99 @@ async function openTeacherPanel(){
       byStudent[name] = byStudent[name] || {};
       byStudent[name][mod] = { score:Number(r.Score), total:Number(r.Total) };
     });
-
     const names = Object.keys(byStudent).sort();
-    if(names.length===0){ content.innerHTML = '<p style="font-size:12.5px;color:var(--muted);">Todavía no hay estudiantes con progreso guardado.</p>'; return; }
-    const levelAbbrev = (pctVal)=>{
-      if(pctVal===null) return '—';
-      const lvl = competencyLevel(pctVal);
-      const short = {"Logrado":"✓ Logrado","En proceso":"◐ En proceso","No logrado":"✕ No logrado"}[lvl.label] || lvl.label;
-      return `<span class="${lvl.cls}">${short}</span>`;
-    };
-    let html = '<p style="font-size:10.5px;color:var(--muted);margin-top:0;">Nivel por indicador: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado.</p>';
-    html += '<table class="progress-table"><tr><th>Estudiante</th><th>Antología</th><th>RA1</th><th>RA2</th><th>RA3 Trabajo</th><th>Casos</th><th>Miro</th><th>Salidas</th></tr>';
-    names.forEach(n=>{
-      const d = byStudent[n];
-      const compPct = (mods)=>{
-        let sum=0,total=0,any=false;
-        mods.forEach(mid=>{ const x=d[mid]; if(x){ sum+=x.score; total+=x.total; any=true; } });
-        return any && total>0 ? Math.round((sum/total)*100) : null;
-      };
-      const okCell = (obj)=> obj ? (obj.score>0 ? '<span class="status-ok">✓ Logrado</span>' : '<span class="status-pending">Sin evidencia</span>') : '—';
-      const salidas = d.incidente_salida_pantalla ? d.incidente_salida_pantalla.score : 0;
-      const salidasCell = salidas > 0 ? `<span class="status-bad">⚠️ ${salidas}</span>` : '<span class="status-pending">0</span>';
-      html += `<tr>
-        <td>${escapeHtml(n)}</td>
-        <td class="center">${okCell(d.antologia)}</td>
-        <td class="center">${levelAbbrev(compPct(['concepto']))}</td>
-        <td class="center">${levelAbbrev(compPct(['normativa','principios','vf','tipos']))}</td>
-        <td class="center">${levelAbbrev(compPct(['trabajo']))}</td>
-        <td class="center">${okCell(d.casos)}</td>
-        <td class="center">${okCell(d.miro)}</td>
-        <td class="center">${salidasCell}</td>
-      </tr>`;
+
+    content.innerHTML = `
+      <div class="empresa-tabs" style="margin-bottom:12px;">
+        <div class="empresa-tab active" id="tpViewGeneral" style="cursor:pointer;">📊 Progreso general</div>
+        <div class="empresa-tab" id="tpViewJuego" style="cursor:pointer;">🐱 Aventura de Plataformas</div>
+      </div>
+      <div id="tpContentArea"></div>
+    `;
+    document.getElementById('tpViewGeneral').addEventListener('click', ()=>{
+      document.getElementById('tpViewGeneral').classList.add('active');
+      document.getElementById('tpViewJuego').classList.remove('active');
+      renderPanelGeneral(names, byStudent);
     });
-    html += '</table>';
-    content.innerHTML = html;
+    document.getElementById('tpViewJuego').addEventListener('click', ()=>{
+      document.getElementById('tpViewJuego').classList.add('active');
+      document.getElementById('tpViewGeneral').classList.remove('active');
+      renderPanelJuego(names, byStudent);
+    });
+
+    if(names.length===0){
+      document.getElementById('tpContentArea').innerHTML = '<p style="font-size:12.5px;color:var(--muted);">Todavía no hay estudiantes con progreso guardado.</p>';
+      return;
+    }
+    renderPanelGeneral(names, byStudent);
   }catch(e){
     content.innerHTML = '<p style="font-size:12.5px;color:var(--coral);">No se pudo cargar el panel (revisá la conexión a la hoja de datos).</p>';
   }
 }
+
+function renderPanelGeneral(names, byStudent){
+  const area = document.getElementById('tpContentArea');
+  const levelAbbrev = (pctVal)=>{
+    if(pctVal===null) return '—';
+    const lvl = competencyLevel(pctVal);
+    const short = {"Logrado":"✓ 3","En proceso":"◐ 2","No logrado":"✕ 1"}[lvl.label] || lvl.label;
+    return `<span class="${lvl.cls}">${short}</span>`;
+  };
+  let html = '<p style="font-size:10.5px;color:var(--muted);margin-top:0;">Nivel por indicador: 1 No logrado · 2 En proceso · 3 Logrado. El detalle de la Aventura de Plataformas está en su propia pestaña.</p>';
+  html += '<table class="progress-table"><tr><th>Estudiante</th><th>Antología</th><th>RA1</th><th>RA2</th><th>RA3 Trabajo</th><th>Casos</th><th>Miro</th><th>Salidas</th></tr>';
+  names.forEach(n=>{
+    const d = byStudent[n];
+    const compPct = (mods)=>{
+      let sum=0,total=0,any=false;
+      mods.forEach(mid=>{ const x=d[mid]; if(x){ sum+=x.score; total+=x.total; any=true; } });
+      return any && total>0 ? Math.round((sum/total)*100) : null;
+    };
+    const okCell = (obj)=> obj ? (obj.score>0 ? '<span class="status-ok">✓ Logrado</span>' : '<span class="status-pending">Sin evidencia</span>') : '—';
+    const salidas = d.incidente_salida_pantalla ? d.incidente_salida_pantalla.score : 0;
+    const salidasCell = salidas > 0 ? `<span class="status-bad">⚠️ ${salidas}</span>` : '<span class="status-pending">0</span>';
+    html += `<tr>
+      <td>${escapeHtml(n)}</td>
+      <td class="center">${okCell(d.antologia)}</td>
+      <td class="center">${levelAbbrev(compPct(['concepto']))}</td>
+      <td class="center">${levelAbbrev(compPct(['normativa','principios','vf','tipos']))}</td>
+      <td class="center">${levelAbbrev(compPct(['trabajo']))}</td>
+      <td class="center">${okCell(d.casos)}</td>
+      <td class="center">${okCell(d.miro)}</td>
+      <td class="center">${salidasCell}</td>
+    </tr>`;
+  });
+  html += '</table>';
+  area.innerHTML = html;
+}
+
+function renderPanelJuego(names, byStudent){
+  const area = document.getElementById('tpContentArea');
+  const jugadores = names.filter(n => byStudent[n]['contnac_juego_nivel'] || byStudent[n]['contnac_juego']);
+  if(jugadores.length===0){
+    area.innerHTML = '<div class="empty-state">Todavía nadie ha jugado la Aventura de Plataformas.</div>';
+    return;
+  }
+  let html = '<p style="font-size:10.5px;color:var(--muted);margin-top:0;">Evaluación independiente de esta actividad — no se mezcla con el resto del progreso del curso.</p>';
+  html += '<table class="progress-table"><tr><th>Estudiante</th><th>Preguntas</th><th>Nivel alcanzado</th><th>Fantasmas eliminados</th></tr>';
+  jugadores.forEach(n=>{
+    const d = byStudent[n];
+    const preg = d['contnac_juego'];
+    const pregCell = preg ? `${preg.score} / ${preg.total} correctas` : '—';
+    const nivel = d['contnac_juego_nivel'];
+    const nivelCell = nivel ? `${nivel.score} / ${nivel.total}${nivel.score>=nivel.total?' 🏆':''}` : '—';
+    const stomps = d['contnac_juego_stomps'];
+    const stompsCell = stomps ? stomps.score : 0;
+    html += `<tr>
+      <td>${escapeHtml(n)}</td>
+      <td class="center">${pregCell}</td>
+      <td class="center">${nivelCell}</td>
+      <td class="center">${stompsCell}</td>
+    </tr>`;
+  });
+  html += '</table>';
+  area.innerHTML = html;
+}
+
 document.getElementById('teacherModalClose').addEventListener('click', ()=>{
   document.getElementById('teacherModalBg').classList.remove('show');
 });
