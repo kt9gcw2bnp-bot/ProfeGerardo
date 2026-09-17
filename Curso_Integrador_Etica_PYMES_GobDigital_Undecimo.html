@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curso · Ética Pública, PYMES y Gobierno Digital (Integrador)</title>
+<style>
+:root{
+  --navy:#1c1f24; --navy2:#2a2f38; --gold:#B8863C; --gold2:#e3b94a;
+  --teal:#2FC2AD; --coral:#e0665c; --muted:#6b7280; --line:#e3e6ea; --bg:#f4f5f7;
+  --mono:'DejaVu Sans Mono',monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:#1a1a1a;}
+.topbar{background:var(--navy);color:#fff;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.topbar h1{font-size:15px;margin:0 0 2px;}
+.topbar p{font-size:10.5px;margin:0;opacity:.75;font-family:var(--mono);letter-spacing:.03em;}
+.teacherBtn{background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;cursor:pointer;}
+.namebar{background:#fff;padding:12px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;}
+.namebar label{font-size:11px;color:var(--muted);font-family:var(--mono);}
+.namebar input{flex:1;padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:13px;}
+#nameStatus{font-size:10.5px;color:var(--teal);font-family:var(--mono);white-space:nowrap;}
+.wrap{max-width:720px;margin:0 auto;padding:16px;}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:14px;}
+.antologia{border-left:4px solid var(--gold);}
+.antologia h2{margin-top:0;font-size:16px;color:var(--navy);}
+.antologia h3{font-size:13px;color:var(--gold);margin:16px 0 6px;}
+.antologia p{font-size:13px;line-height:1.6;color:#333;}
+.sectionHead{background:var(--navy);color:#fff;padding:9px 14px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;margin-bottom:2px;}
+.sectionSub{font-size:10.5px;color:var(--muted);margin:4px 0 10px;}
+.qtag{display:inline-block;font-size:9.5px;font-family:var(--mono);color:var(--muted);background:#f2f3f5;padding:2px 8px;border-radius:5px;margin-bottom:6px;}
+.qtext{font-size:13px;font-weight:600;margin-bottom:10px;color:#1a1a1a;}
+.opts{display:flex;flex-direction:column;gap:6px;}
+.opt{border:1px solid var(--line);border-radius:8px;padding:9px 12px;font-size:12.5px;cursor:pointer;display:flex;gap:8px;align-items:flex-start;transition:.15s;}
+.opt:hover{background:#f7f8f9;}
+.opt .letter{font-family:var(--mono);font-weight:700;color:var(--navy);}
+.opt.correct-fb{background:#e7f5f1;border-color:var(--teal);}
+.opt.incorrect-fb{background:#fbebea;border-color:var(--coral);}
+.opt.locked{pointer-events:none;}
+.fb{margin-top:8px;font-size:11.5px;padding:8px 10px;border-radius:6px;display:none;}
+.fb.show{display:block;}
+.fb.ok{background:#e7f5f1;color:#0a6b3d;}
+.fb.bad{background:#fbebea;color:#8a1f1f;}
+.match-table{width:100%;border-collapse:collapse;margin:10px 0;font-size:12.5px;}
+.match-table td{padding:6px 4px;border-bottom:1px solid var(--line);}
+.match-table select{width:100%;padding:6px;border:1px solid var(--line);border-radius:6px;font-size:12px;}
+.bank{background:#f7f8f9;border-radius:8px;padding:10px 12px;font-size:11.5px;color:#444;margin-top:6px;}
+.complete-input{width:140px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;font-size:12.5px;font-family:var(--mono);}
+.caso-text{font-size:12.5px;line-height:1.6;background:#f7f8f9;border-radius:8px;padding:12px;margin-bottom:10px;}
+.caso-input{width:100%;min-height:110px;padding:10px;border:1px solid var(--line);border-radius:8px;font-size:12.5px;font-family:inherit;resize:vertical;}
+.btn{background:var(--navy);color:#fff;border:none;border-radius:8px;padding:11px 20px;font-size:13px;font-weight:600;cursor:pointer;}
+.btn:disabled{opacity:.5;cursor:default;}
+.btn.secondary{background:#eceef1;color:var(--navy);}
+.nivel-badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:10.5px;font-weight:700;font-family:var(--mono);}
+.nivel-1{background:#fbebea;color:#8a1f1f;}
+.nivel-2{background:#fff3e0;color:#7a5200;}
+.nivel-3{background:#e7f5f1;color:#0a6b3d;}
+.locked-msg{text-align:center;color:var(--muted);font-size:12.5px;padding:24px 20px;background:#fff;border:1px dashed var(--line);border-radius:8px;}
+.exitBanner{display:none;background:var(--coral);color:#fff;text-align:center;padding:8px;font-size:12px;font-weight:600;}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:50;align-items:center;justify-content:center;padding:16px;}
+.modal-bg.show{display:flex;}
+.modal{background:#fff;border-radius:12px;padding:22px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;position:relative;}
+.modal h3{margin-top:0;}
+.close{position:absolute;top:14px;right:16px;cursor:pointer;font-size:18px;color:var(--muted);}
+.progress-table{width:100%;border-collapse:collapse;font-size:12px;}
+.progress-table th,.progress-table td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;}
+.progress-table th{background:var(--navy);color:#fff;font-size:10px;font-family:var(--mono);text-transform:uppercase;}
+.progress-table td.center,.progress-table th.center{text-align:center;}
+#pinModalBg input{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font-size:16px;text-align:center;letter-spacing:.3em;margin:10px 0;}
+#pinError{color:var(--coral);font-size:11.5px;display:none;text-align:center;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <h1>⚖️ Curso Integrador: Ética Pública, PYMES y Gobierno Digital</h1>
+    <p>CTP MERCEDES NORTE · GESTIÓN PÚBLICA · UNDÉCIMO AÑO</p>
+  </div>
+  <button class="teacherBtn" id="teacherBtnOpen">👩‍🏫 Panel docente</button>
+</div>
+
+<div class="namebar">
+  <label>Tu nombre:</label>
+  <input type="text" id="studentName" placeholder="Nombre completo">
+  <span id="nameStatus"></span>
+</div>
+
+<div class="exitBanner" id="exitBanner">⚠️ Se detectó que saliste de la pantalla. Esta acción queda registrada.</div>
+
+<div class="wrap">
+  <div class="card antologia">
+    <h2>📖 Antología — Ética e Integridad Pública</h2>
+    <p>La <strong>Ley N.° 8422, Ley contra la Corrupción y el Enriquecimiento Ilícito en la Función Pública</strong>, es el marco legal que regula la conducta ética de quienes ejercen cargos públicos en Costa Rica. Su propósito es prevenir la corrupción, sancionar el uso indebido de recursos y posiciones públicas, y fortalecer la confianza de la ciudadanía en las instituciones del Estado.</p>
+
+    <h3>Los principios de la ética pública</h3>
+    <p>La <strong>probidad</strong> es el deber de todo funcionario de actuar con rectitud y honradez en el ejercicio de su cargo, anteponiendo el interés público al interés particular. La <strong>transparencia</strong> implica que la información sobre la gestión pública debe ser accesible a la ciudadanía, salvo las excepciones que la ley establece. La <strong>rendición de cuentas</strong> es el deber de las autoridades de informar y justificar sus decisiones y el uso de los recursos públicos ante la ciudadanía y los entes de control. Finalmente, el principio de <strong>legalidad</strong> exige que toda actuación de un funcionario público se apegue estrictamente a lo que la ley permite.</p>
+
+    <h3>Ética aplicada: SICOP, PYMES y Gobierno Digital</h3>
+    <p>Estos principios no son abstractos: se aplican directamente en los temas que ya trabajaste. Un funcionario que gestiona un proceso de contratación en <strong>SICOP</strong> debe evitar cualquier conflicto de interés al evaluar ofertas de <strong>PYMES</strong> proveedoras del Estado — por ejemplo, favorecer a una empresa por relación personal o familiar sería una violación directa a la probidad. Las plataformas de <strong>Gobierno Digital</strong>, precisamente, fortalecen la transparencia de estos procesos: al quedar todo registrado electrónicamente, es más difícil ocultar decisiones indebidas y más fácil para la ciudadanía y los entes de control fiscalizar la gestión pública.</p>
+  </div>
+
+  <div id="activityWrap"></div>
+</div>
+
+<div class="modal-bg" id="pinModalBg">
+  <div class="modal" style="max-width:320px;">
+    <span class="close" id="pinModalClose">✕</span>
+    <h3 style="text-align:center;">Panel docente</h3>
+    <input type="password" id="pinInput" maxlength="6" placeholder="PIN">
+    <p id="pinError">PIN incorrecto.</p>
+    <button class="btn" id="pinSubmit" style="width:100%;">Entrar</button>
+  </div>
+</div>
+
+<div class="modal-bg" id="teacherModalBg">
+  <div class="modal">
+    <span class="close" id="teacherModalClose">✕</span>
+    <h3>Panel docente — resultados del grupo</h3>
+    <div id="teacherContent">Cargando...</div>
+  </div>
+</div>
+
+<script>
+const TEACHER_PIN = "9986";
+const MODULE_ID = "curso_integrador_etica_pymes_gobdigital_undecimo";
+const CASO_KEY = MODULE_ID + '_caso';
+
+let studentName = "";
+let completed = false;
+
+const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbzMGf_Gpf6UWswFPSqEBMdq-93GxGkrURsT4jtO9Jaz8yT5gyMMtp1btlcDZjRCeuAb/exec";
+function sheetsReady(){ return SHEET_API_URL && !SHEET_API_URL.startsWith('REEMPLAZAR'); }
+let jsonpCounter = 0;
+function jsonpRequest(url){
+  return new Promise((resolve, reject)=>{
+    const cbName = 'jsonp_cb_' + (jsonpCounter++) + '_' + Date.now();
+    const script = document.createElement('script');
+    let settled = false;
+    const cleanup = ()=>{ delete window[cbName]; if(script.parentNode) script.parentNode.removeChild(script); };
+    window[cbName] = (data)=>{ settled = true; cleanup(); resolve(data); };
+    script.onerror = ()=>{ if(!settled){ cleanup(); reject(new Error('Error de red')); } };
+    script.src = url + (url.includes('?') ? '&' : '?') + 'callback=' + cbName;
+    document.body.appendChild(script);
+    setTimeout(()=>{ if(!settled){ cleanup(); reject(new Error('Tiempo de espera agotado')); } }, 10000);
+  });
+}
+async function sheetGet(sheetName){
+  const data = await jsonpRequest(SHEET_API_URL + '?sheet=' + encodeURIComponent(sheetName));
+  return data.rows || [];
+}
+async function sheetPost(sheetName, row){
+  await fetch(SHEET_API_URL, { method:'POST', mode:'no-cors', body: JSON.stringify({ sheet: sheetName, row }) });
+  return { ok:true };
+}
+async function sheetDelete(sheetName, match){
+  await fetch(SHEET_API_URL, { method:'POST', mode:'no-cors', body: JSON.stringify({ action:'delete', sheet: sheetName, match }) });
+  return { ok:true };
+}
+function escapeHtml(s){ return (s+"").replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function nivelInfo(n){
+  if(n<=1) return { label:'Nivel 1 — No logrado', cls:'nivel-1' };
+  if(n===2) return { label:'Nivel 2 — En proceso', cls:'nivel-2' };
+  return { label:'Nivel 3 — Logrado', cls:'nivel-3' };
+}
+
+/* ============================================================
+   BANCO DE ACTIVIDADES — orden: Complete → Selección única → Trivia integradora → Asocie mixto → Caso integrador
+   ============================================================ */
+const MC = [
+  { q:"¿Qué ley regula la ética y probidad en la función pública en Costa Rica?", opts:["Ley N.° 9986","Ley N.° 8262","Ley N.° 8422"], correct:2, just:"La Ley N.° 8422 es la Ley contra la Corrupción y el Enriquecimiento Ilícito en la Función Pública." },
+  { q:"¿Qué significa actuar con probidad en un cargo público?", opts:["Actuar con rectitud y honradez, anteponiendo el interés público","Actuar según el criterio personal sin ninguna restricción","Delegar todas las decisiones en un superior"], correct:0, just:"La probidad exige rectitud y honradez, priorizando el interés público sobre el particular." },
+  { q:"¿Qué implica la rendición de cuentas?", opts:["No informar sobre las decisiones tomadas","El deber de informar y justificar las decisiones y el uso de recursos públicos","Delegar la responsabilidad en otra institución"], correct:1, just:"La rendición de cuentas es el deber de informar y justificar decisiones ante la ciudadanía y los entes de control." },
+  { q:"¿Qué principio exige que los funcionarios actúen conforme a lo que la ley permite?", opts:["Legalidad","Flexibilidad","Discrecionalidad total"], correct:0, just:"El principio de legalidad exige que toda actuación pública se apegue estrictamente a la ley." },
+];
+
+const COMPLETE = [
+  { text:"La Ley N.° _____ regula la ética y probidad en la función pública costarricense.", answer:"8422" },
+  { text:"Actuar con honradez y rectitud en el ejercicio de un cargo público se conoce como _____.", answer:"probidad" },
+  { text:"El deber de informar y justificar las decisiones tomadas se llama rendición de _____.", answer:"cuentas" },
+  { text:"El principio de _____ exige que toda actuación pública se apegue a la ley.", answer:"legalidad" },
+];
+
+const TRIVIA = [
+  { q:"¿Cuál de estos es uno de los principios centrales de la ética pública?", opts:["La transparencia","La discrecionalidad absoluta","El secretismo"], correct:0, just:"La transparencia es uno de los principios centrales de la ética pública, junto a probidad, legalidad y rendición de cuentas." },
+  { q:"¿Qué busca prevenir la Ley N.° 8422?", opts:["La corrupción y el enriquecimiento ilícito en la función pública","La creación de nuevas empresas","El comercio internacional"], correct:0, just:"La Ley N.° 8422 busca prevenir la corrupción y el enriquecimiento ilícito de quienes ejercen la función pública." },
+  { q:"¿Qué institución clasifica a las PYMES en Costa Rica?", opts:["El MEIC","El BCCR","La CCSS"], correct:0, just:"El Ministerio de Economía, Industria y Comercio (MEIC) es el ente rector de la clasificación de PYMES." },
+  { q:"¿Qué es el BATNA en una negociación?", opts:["La mejor alternativa si no se llega a un acuerdo negociado","El precio final de un contrato","Un tipo de impuesto"], correct:0, just:"El BATNA es la mejor alternativa disponible fuera de la mesa de negociación." },
+  { q:"¿Cuál es un ejemplo de plataforma de Gobierno Digital en Costa Rica?", opts:["SICOP","Netflix","Instagram"], correct:0, just:"SICOP es la plataforma oficial de compras públicas electrónicas del Estado costarricense." },
+  { q:"¿Qué busca reducir la ciudadanía digital con equidad social?", opts:["La brecha digital entre distintos grupos de la población","El número de funcionarios públicos","El precio de internet en general"], correct:0, just:"La ciudadanía digital con equidad busca que la tecnología no profundice las desigualdades existentes." },
+];
+
+const ASOCIE = {
+  terms: ["Probidad","Rendición de cuentas","PYME","BATNA","Gobierno Abierto","Brecha digital"],
+  defs: [
+    "Modelo de gestión pública basado en transparencia, participación y colaboración",
+    "Desigualdad de acceso a internet, dispositivos y habilidades tecnológicas",
+    "Actuar con rectitud y honradez en el ejercicio de la función pública",
+    "Deber de informar y justificar las decisiones y el uso de recursos públicos",
+    "Empresa clasificada según su personal ocupado, ventas anuales y activos",
+    "Mejor alternativa disponible si no se llega a un acuerdo negociado"
+  ],
+  correct: [2,3,4,5,0,1]
+};
+
+const CASO_TEXT = "Un funcionario público debe seleccionar, a través de SICOP, a la PYME proveedora de materiales de oficina para su institución. Uno de los oferentes es una empresa familiar de un primo cercano del funcionario. El sistema de Gobierno Digital permite completar todo el proceso en línea, pero el funcionario nota que podría \"ayudar\" a su familiar ajustando ligeramente algunos criterios de evaluación sin que quede muy visible en el sistema. Analice la situación considerando: (a) qué principios éticos de la Ley N.° 8422 se verían comprometidos si el funcionario favorece a su familiar, (b) qué ventaja ofrece el Gobierno Digital para la transparencia de este tipo de procesos, y (c) qué debería hacer el funcionario para actuar correctamente.";
+
+let scores = { trivia:0, asocie:0, complete:0, mc:0 };
+let casoTexto = '';
+
+function render(){
+  const wrap = document.getElementById('activityWrap');
+  wrap.innerHTML = '';
+
+  addHead(wrap, "1. COMPLETE", "Complete la frase con la palabra clave");
+  renderComplete(wrap);
+
+  addHead(wrap, "2. SELECCIÓN ÚNICA", "Elija la opción correcta");
+  renderMC(wrap, MC, 'mc', false);
+
+  addHead(wrap, "3. TRIVIA INTEGRADORA", "Repaso rápido: Ética, PYMES y Gobierno Digital");
+  renderMC(wrap, TRIVIA, 'trivia', true);
+
+  addHead(wrap, "4. ASOCIE", "Relacione cada término (de los tres temas) con su definición");
+  renderAsocie(wrap);
+
+  addHead(wrap, "5. ESTUDIO DE CASO INTEGRADOR", "Análisis práctico — su docente revisará esta respuesta");
+  renderCaso(wrap);
+
+  const finishCard = document.createElement('div');
+  finishCard.className = 'card';
+  finishCard.style.textAlign = 'center';
+  finishCard.innerHTML = `<button class="btn" id="finalizarBtn">✅ Finalizar módulo</button>`;
+  wrap.appendChild(finishCard);
+  document.getElementById('finalizarBtn').addEventListener('click', finalizarModulo);
+}
+
+function addHead(wrap, title, sub){
+  const card = document.createElement('div');
+  card.innerHTML = `<div class="sectionHead"><span>${title}</span></div><div class="sectionSub">${sub}</div>`;
+  wrap.appendChild(card);
+}
+
+function renderMC(wrap, bank, key, isTrivia){
+  const letters=['A','B','C'];
+  const card = document.createElement('div');
+  card.className = 'card';
+  bank.forEach((item,qi)=>{
+    const q = document.createElement('div');
+    q.style.marginBottom = qi<bank.length-1 ? '18px' : '0';
+    q.innerHTML = `<div class="qtag">${isTrivia?'Trivia':'Selección única'}</div><div class="qtext">${qi+1}. ${item.q}</div><div class="opts"></div><div class="fb"></div>`;
+    const optsDiv = q.querySelector('.opts');
+    item.opts.forEach((ot,oi)=>{
+      const opt = document.createElement('div');
+      opt.className = 'opt';
+      opt.innerHTML = `<span class="letter">${letters[oi]}</span><span>${ot}</span>`;
+      opt.addEventListener('click', ()=>{
+        if(opt.classList.contains('locked')) return;
+        const isCorrect = oi===item.correct;
+        optsDiv.querySelectorAll('.opt').forEach(o=>o.classList.add('locked'));
+        opt.classList.add(isCorrect?'correct-fb':'incorrect-fb');
+        if(!isCorrect) optsDiv.children[item.correct].classList.add('correct-fb');
+        const fb = q.querySelector('.fb');
+        fb.classList.add('show', isCorrect?'ok':'bad');
+        fb.textContent = (isCorrect?'✓ ':'✕ ') + item.just;
+        if(isCorrect) scores[key]++;
+      });
+      optsDiv.appendChild(opt);
+    });
+    card.appendChild(q);
+  });
+  wrap.appendChild(card);
+}
+
+function renderAsocie(wrap){
+  const letters=['A','B','C','D'];
+  const card = document.createElement('div');
+  card.className = 'card';
+  let rows='';
+  ASOCIE.terms.forEach((t,i)=>{
+    rows += `<tr><td>${i+1}. ${t}</td><td><select data-i="${i}" id="asocie_${i}"><option value="">— Seleccione —</option>${ASOCIE.defs.map((d,j)=>`<option value="${j}">${letters[j]}</option>`).join('')}</select></td></tr>`;
+  });
+  card.innerHTML = `<table class="match-table"><tbody>${rows}</tbody></table>
+    <div class="bank"><b>Opciones:</b><br>${ASOCIE.defs.map((d,j)=>`${letters[j]}. ${d}`).join('<br>')}</div>
+    <button class="btn secondary" id="asocieCheck" style="margin-top:10px;">Comprobar</button>
+    <div class="fb" id="asocieFb"></div>`;
+  wrap.appendChild(card);
+  document.getElementById('asocieCheck').addEventListener('click', function(){
+    if(this.disabled) return;
+    let correct=0;
+    ASOCIE.terms.forEach((t,i)=>{
+      const sel = document.getElementById('asocie_'+i);
+      if(parseInt(sel.value,10)===ASOCIE.correct[i]) correct++;
+      sel.disabled = true;
+    });
+    scores.asocie = correct;
+    this.disabled = true;
+    const fb = document.getElementById('asocieFb');
+    fb.classList.add('show','ok');
+    fb.textContent = `Obtuviste ${correct} de ${ASOCIE.terms.length} relaciones correctas.`;
+  });
+}
+
+function renderComplete(wrap){
+  const card = document.createElement('div');
+  card.className = 'card';
+  COMPLETE.forEach((item,i)=>{
+    const row = document.createElement('div');
+    row.style.marginBottom = '12px';
+    row.innerHTML = `<div class="qtext" style="font-weight:500;">${i+1}. ${item.text}</div><input type="text" class="complete-input" id="complete_${i}" placeholder="Respuesta">`;
+    card.appendChild(row);
+  });
+  const btn = document.createElement('button');
+  btn.className = 'btn secondary';
+  btn.textContent = 'Comprobar';
+  btn.style.marginTop = '6px';
+  card.appendChild(btn);
+  const fb = document.createElement('div');
+  fb.className = 'fb';
+  card.appendChild(fb);
+  wrap.appendChild(card);
+
+  btn.addEventListener('click', ()=>{
+    if(btn.disabled) return;
+    let correct = 0;
+    COMPLETE.forEach((item,i)=>{
+      const input = document.getElementById('complete_'+i);
+      const val = input.value.trim().toLowerCase().replace(/[.,;]/g,'');
+      const ok = val === item.answer.toLowerCase();
+      input.style.borderColor = ok ? 'var(--teal)' : 'var(--coral)';
+      input.disabled = true;
+      if(ok) correct++;
+    });
+    scores.complete = correct;
+    btn.disabled = true;
+    fb.classList.add('show','ok');
+    fb.textContent = `Obtuviste ${correct} de ${COMPLETE.length} respuestas correctas.`;
+  });
+}
+
+function renderCaso(wrap){
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `<div class="caso-text">${CASO_TEXT}</div>
+    <textarea class="caso-input" id="casoInput" placeholder="Escribí tu propuesta de negociación aquí..."></textarea>`;
+  wrap.appendChild(card);
+}
+
+async function finalizarModulo(){
+  if(completed) return;
+  if(!studentName){ alert('Escribí tu nombre arriba antes de finalizar.'); return; }
+  const btn = document.getElementById('finalizarBtn');
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+
+  document.querySelectorAll('.opt:not(.locked)').forEach(o=>o.classList.add('locked'));
+  if(!document.getElementById('asocieCheck').disabled) document.getElementById('asocieCheck').click();
+  const completeBtn = [...document.querySelectorAll('.btn.secondary')].find(b=>b.textContent==='Comprobar' && !b.disabled);
+  if(completeBtn) completeBtn.click();
+
+  casoTexto = document.getElementById('casoInput').value.trim();
+  document.getElementById('casoInput').disabled = true;
+
+  const totalItems = TRIVIA.length + ASOCIE.terms.length + COMPLETE.length + MC.length;
+  const totalCorrect = scores.trivia + scores.asocie + scores.complete + scores.mc;
+  const pct = Math.round((totalCorrect/totalItems)*100);
+  const nivel = pct<=50 ? 1 : (pct<=80 ? 2 : 3);
+
+  if(studentName && sheetsReady()){
+    try{
+      const nowIso = new Date().toISOString();
+      await sheetPost('Progreso', [nowIso, studentName, MODULE_ID, nivel, 3]);
+      if(casoTexto.length>0) await sheetPost('Casos', [nowIso, CASO_KEY, studentName, casoTexto]);
+    }catch(e){}
+  }
+  completed = true;
+  const info = nivelInfo(nivel);
+  document.getElementById('activityWrap').appendChild(
+    Object.assign(document.createElement('div'), {
+      className: 'card',
+      style: 'text-align:center;',
+      innerHTML: `<h3>Módulo completado</h3><p style="font-size:14px;">Nivel de competencia obtenido: <span class="nivel-badge ${info.cls}">${info.label}</span></p><p style="font-size:11px;color:var(--muted);">Tu docente puede ajustar este nivel tras revisar tu estudio de caso.</p>`
+    })
+  );
+  btn.closest('.card').remove();
+}
+
+/* ============================================================
+   ANTI-REINTENTO
+   ============================================================ */
+async function checkExisting(){
+  if(!studentName || !sheetsReady()) return null;
+  try{
+    const rows = await sheetGet('Progreso');
+    const mine = rows.filter(r => r.Estudiante === studentName && r.Modulo === MODULE_ID);
+    if(mine.length===0) return null;
+    return mine[mine.length-1];
+  }catch(e){ return null; }
+}
+
+async function initModule(){
+  const wrap = document.getElementById('activityWrap');
+  wrap.innerHTML = `<div class="card" style="text-align:center;"><button class="btn" id="comenzarBtn">▶️ Comenzar módulo</button></div>`;
+  document.getElementById('comenzarBtn').addEventListener('click', async ()=>{
+    if(!studentName){ alert('Escribí tu nombre arriba antes de comenzar.'); return; }
+    const btn = document.getElementById('comenzarBtn');
+    btn.disabled = true;
+    btn.textContent = 'Verificando...';
+    const existing = await checkExisting();
+    if(existing){
+      const nivel = Number(existing.Score);
+      const info = nivelInfo(nivel);
+      wrap.innerHTML = `<div class="locked-msg">✅ Ya completaste este módulo. Nivel obtenido: <span class="nivel-badge ${info.cls}">${info.label}</span></div>`;
+      completed = true;
+      return;
+    }
+    render();
+  });
+}
+
+/* ============================================================
+   NOMBRE DEL ESTUDIANTE
+   ============================================================ */
+document.getElementById('studentName').addEventListener('input', function(){
+  studentName = this.value.trim();
+  document.getElementById('nameStatus').textContent = studentName ? '● identificado' : '';
+});
+
+(function prefillFromLink(){
+  const params = new URLSearchParams(window.location.search);
+  const nombreParam = params.get('nombre');
+  if(nombreParam){
+    studentName = nombreParam;
+    document.getElementById('studentName').value = nombreParam;
+    document.getElementById('nameStatus').textContent = '● identificado';
+  }
+})();
+
+initModule();
+
+/* ============================================================
+   PANEL DOCENTE
+   ============================================================ */
+document.getElementById('teacherBtnOpen').addEventListener('click', ()=>{
+  document.getElementById('pinInput').value = '';
+  document.getElementById('pinError').style.display = 'none';
+  document.getElementById('pinModalBg').classList.add('show');
+  document.getElementById('pinInput').focus();
+});
+document.getElementById('pinModalClose').addEventListener('click', ()=>{
+  document.getElementById('pinModalBg').classList.remove('show');
+});
+document.getElementById('pinSubmit').addEventListener('click', checkPin);
+document.getElementById('pinInput').addEventListener('keydown', e=>{ if(e.key==='Enter') checkPin(); });
+async function checkPin(){
+  const val = document.getElementById('pinInput').value.trim();
+  if(val !== TEACHER_PIN){ document.getElementById('pinError').style.display = 'block'; return; }
+  document.getElementById('pinModalBg').classList.remove('show');
+  await openTeacherPanel();
+}
+document.getElementById('teacherModalClose').addEventListener('click', ()=>{
+  document.getElementById('teacherModalBg').classList.remove('show');
+});
+
+function cssId(name){ return name.replace(/[^a-zA-Z0-9]/g,'_'); }
+
+async function openTeacherPanel(){
+  document.getElementById('teacherModalBg').classList.add('show');
+  const content = document.getElementById('teacherContent');
+  content.innerHTML = 'Cargando...';
+  if(!sheetsReady()){ content.innerHTML = '<p style="color:var(--coral);font-size:12.5px;">⚠️ Falta configurar la conexión a la hoja de datos.</p>'; return; }
+  try{
+    const [rows, casosRows, notasRows] = await Promise.all([sheetGet('Progreso'), sheetGet('Casos'), sheetGet('NotasManual')]);
+    const mine = rows.filter(r => r.Modulo === MODULE_ID);
+    if(mine.length===0){ content.innerHTML = '<p style="color:var(--muted);font-size:12.5px;">Todavía no hay resultados guardados.</p>'; return; }
+
+    const casos = {};
+    casosRows.filter(r => r.CasoId === CASO_KEY).forEach(r=>{ casos[r.Nombre] = r.Texto; });
+
+    const manual = {};
+    notasRows.filter(r => r.Modulo === MODULE_ID).forEach(r=>{ manual[r.Estudiante] = Number(r.Nota); });
+
+    let html = '<p style="font-size:10.5px;color:var(--muted);margin-top:0;">Tocá "Revisar caso" para leer la respuesta del estudio de caso y ajustar el nivel de competencia si es necesario.</p>';
+    html += '<table class="progress-table"><tr><th>Estudiante</th><th>Nivel</th><th>Caso</th><th>Repetir</th></tr>';
+    mine.forEach(r=>{
+      const name = r.Estudiante;
+      const nivel = manual[name] !== undefined ? manual[name] : Number(r.Score);
+      const info = nivelInfo(nivel);
+      html += `<tr id="tr-${cssId(name)}">
+        <td>${escapeHtml(name)}</td>
+        <td class="center" id="nivel-${cssId(name)}"><span class="nivel-badge ${info.cls}">${info.label}</span></td>
+        <td class="center"><button class="btn secondary" style="padding:4px 10px;font-size:10.5px;" data-name="${escapeHtml(name)}" onclick="toggleCaso(this)">Revisar caso</button></td>
+        <td class="center"><button class="btn secondary" style="padding:4px 10px;font-size:10.5px;color:var(--coral);" data-name="${escapeHtml(name)}" onclick="repetirModulo(this)">🔄 Repetir</button></td>
+      </tr>
+      <tr id="row-${cssId(name)}" style="display:none;">
+        <td colspan="4" style="background:#f7f8f6;text-align:left;">
+          <div style="font-size:12px;margin-bottom:10px;"><b>Respuesta de ${escapeHtml(name)}:</b><br>${casos[name] ? escapeHtml(casos[name]) : '<i>(no entregó respuesta)</i>'}</div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <label style="font-size:11px;color:var(--muted);">Nivel:</label>
+            <select id="select-${cssId(name)}">
+              <option value="1" ${nivel===1?'selected':''}>Nivel 1 — No logrado</option>
+              <option value="2" ${nivel===2?'selected':''}>Nivel 2 — En proceso</option>
+              <option value="3" ${nivel===3?'selected':''}>Nivel 3 — Logrado</option>
+            </select>
+            <button class="btn" style="padding:6px 14px;font-size:11px;" data-name="${escapeHtml(name)}" onclick="guardarNivel(this)">Guardar</button>
+          </div>
+        </td>
+      </tr>`;
+    });
+    html += '</table>';
+    content.innerHTML = html;
+    window.__teacherData = { mine };
+  }catch(e){
+    content.innerHTML = '<p style="color:var(--coral);font-size:12.5px;">No se pudo cargar el panel.</p>';
+  }
+}
+
+function toggleCaso(btn){
+  const name = btn.dataset.name;
+  const row = document.getElementById('row-'+cssId(name));
+  row.style.display = row.style.display==='none' ? 'table-row' : 'none';
+}
+
+async function guardarNivel(btn){
+  const name = btn.dataset.name;
+  const nivel = parseInt(document.getElementById('select-'+cssId(name)).value,10);
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+  try{
+    await sheetPost('NotasManual', [new Date().toISOString(), MODULE_ID, name, 'caso', nivel]);
+    const info = nivelInfo(nivel);
+    document.getElementById('nivel-'+cssId(name)).innerHTML = `<span class="nivel-badge ${info.cls}">${info.label}</span>`;
+    btn.textContent = '✓ Guardado';
+    setTimeout(()=>{ btn.disabled=false; btn.textContent='Guardar'; }, 1500);
+  }catch(e){
+    alert('No se pudo guardar.');
+    btn.disabled = false;
+    btn.textContent = 'Guardar';
+  }
+}
+
+async function repetirModulo(btn){
+  const name = btn.dataset.name;
+  if(!confirm(`¿Borrar el intento de "${name}" para que pueda repetir el módulo?`)) return;
+  btn.disabled = true;
+  btn.textContent = 'Borrando...';
+  try{
+    await sheetDelete('Progreso', { Estudiante: name, Modulo: MODULE_ID });
+    await sheetDelete('Casos', { Nombre: name, CasoId: CASO_KEY });
+    await sheetDelete('NotasManual', { Estudiante: name, Modulo: MODULE_ID });
+    document.getElementById('tr-'+cssId(name)).remove();
+    document.getElementById('row-'+cssId(name)).remove();
+  }catch(e){
+    alert('No se pudo borrar.');
+    btn.disabled = false;
+    btn.textContent = '🔄 Repetir';
+  }
+}
+
+/* ============================================================
+   MONITOREO DE SALIDA DE PANTALLA
+   ============================================================ */
+let salidaCount = 0;
+function logSalida(){
+  salidaCount++;
+  document.getElementById('exitBanner').style.display = 'block';
+  if(studentName && sheetsReady()){
+    sheetPost('Progreso', [new Date().toISOString(), studentName, 'incidente_salida_pantalla_integrador_etica', salidaCount, salidaCount]).catch(()=>{});
+  }
+}
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden) logSalida(); });
+</script>
+</body>
+</html>
