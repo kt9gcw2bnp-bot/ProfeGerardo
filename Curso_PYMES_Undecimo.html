@@ -78,6 +78,15 @@ canvas{background:#fff;border:2px solid #cbd5e1;border-radius:10px;display:block
   body.printing-cert .paso-wrap > *:not(#certContainer){display:none !important;}
   body.printing-cert .nav-footer, body.printing-cert #btnCert{display:none !important;}
 }
+.progress-table{width:100%;border-collapse:collapse;margin:10px 0 18px;font-size:.88rem;}
+.progress-table th,.progress-table td{border:1px solid #e2e8f0;padding:8px 10px;text-align:left;}
+.progress-table th{background:#f1f5f9;}
+.progress-table td.center{text-align:center;}
+.status-ok{color:#0f9d78;font-weight:700;}
+.status-mid{color:#b8863c;font-weight:700;}
+.status-bad{color:#d9534f;font-weight:700;}
+.status-pending{color:#7f8fb8;font-weight:600;}
+.rubrica-nota{font-size:.78rem;color:#7f8fb8;margin:-4px 0 12px;}
 
 </style>
 </head>
@@ -101,6 +110,13 @@ const CONFIG = {
     {key:'dino', label:'Corre y responde'},
     {key:'aventura', label:'Aventura'},
     {key:'cert', label:'Certificado'}
+  ],
+  rubrica: [
+    {ra:'Lectura', texto:'Lectura previa de la antología del tema (obligatoria)', steps:['antologia']},
+    {ra:'RA1', texto:'Explicar el rol de las PYMES en la contratación pública y los beneficios de su certificación ante el MEIC en SICOP', steps:['mc']},
+    {ra:'RA2', texto:'Manejar los conceptos y el vocabulario de negociación (BATNA, comunicación asertiva, contrato)', steps:['asocie','complete','sopa','cruci']},
+    {ra:'RA3', texto:'Aplicar la negociación y el análisis de BATNA a una situación real entre una PYME y la administración pública', steps:['caso']},
+    {ra:'Refuerzo', texto:'Reforzamiento lúdico de los contenidos del curso', steps:['dino','aventura']}
   ],
   antologia: {
     titulo: "Las PYMES y su relación con la Gestión Pública",
@@ -168,11 +184,11 @@ const CONFIG = {
   cruci: {
     size: {rows:10, cols:10},
     words: [
-      {num:1, word:"SICOP", row:0, col:0, dir:'h', clue:"Plataforma de compras públicas del Estado costarricense"},
-      {num:2, word:"MEIC", row:0, col:2, dir:'v', clue:"Ministerio rector en apoyo a las PYMES"},
-      {num:3, word:"BATNA", row:2, col:2, dir:'h', clue:"Mejor alternativa a un acuerdo negociado"},
-      {num:4, word:"MERCADO", row:4, col:0, dir:'h', clue:"Espacio donde confluyen oferta y demanda"},
-      {num:5, word:"CONTRATO", row:0, col:6, dir:'v', clue:"Documento que formaliza derechos y obligaciones"}
+      {num:1, word:"MEIC", row:0, col:1, dir:'v', clue:"Ministerio rector en apoyo a las PYMES"},
+      {num:1, word:"MERCADO", row:0, col:1, dir:'h', clue:"Espacio donde confluyen oferta y demanda"},
+      {num:2, word:"SICOP", row:2, col:0, dir:'h', clue:"Plataforma de compras públicas del Estado costarricense"},
+      {num:3, word:"CONTRATO", row:2, col:2, dir:'v', clue:"Documento que formaliza derechos y obligaciones"},
+      {num:4, word:"BATNA", row:7, col:1, dir:'h', clue:"Mejor alternativa a un acuerdo negociado"}
     ]
   },
   caso: {
@@ -305,14 +321,16 @@ function renderProgBar(){
 
 function allDone(){ return STEPS.filter(s=>s.key!=='cert').every(s=>progress[s.key]); }
 
-function markDone(key){
-  progress[key] = true;
+function markDone(key, score, total){
+  if(score===undefined) score = 1;
+  if(total===undefined) total = 1;
+  progress[key] = { done:true, score, total };
   renderProgBar();
   sheetPost('Progreso', {
     Timestamp: new Date().toISOString(),
     Estudiante: studentName,
     Modulo: MODULE_ID + '_' + key + '_paso',
-    Score: 'ok', Total: '1'
+    Score: String(score), Total: String(total)
   });
   if(allDone()){
     sheetPost('Progreso', {
@@ -326,6 +344,45 @@ function markDone(key){
 }
 
 function idxOf(key){ return STEPS.findIndex(s=>s.key===key); }
+
+/* ---------- Rúbrica de evaluación por Resultado de Aprendizaje ---------- */
+function getRubrica(){
+  if(CONFIG.rubrica && CONFIG.rubrica.length) return CONFIG.rubrica;
+  // Respaldo automático: un indicador por cada paso del curso (si el curso no define CONFIG.rubrica)
+  return STEPS.filter(s=>s.key!=='cert').map(s=>({ra:s.label, texto:s.label, steps:[s.key]}));
+}
+function rubricaScoreLocal(item){
+  let sum=0, total=0, any=false;
+  item.steps.forEach(k=>{
+    const p = progress[k];
+    if(p && typeof p==='object'){ sum+=p.score; total+=p.total; any=true; }
+  });
+  return { sum, total, pct: any && total>0 ? Math.round((sum/total)*100) : null };
+}
+function competencyLevel(pctVal){
+  if(pctVal===null) return { label:'Sin evidencia', cls:'status-pending' };
+  if(pctVal<=50) return { label:'No logrado', cls:'status-bad' };
+  if(pctVal<=80) return { label:'En proceso', cls:'status-mid' };
+  return { label:'Logrado', cls:'status-ok' };
+}
+function renderRubricaTableLocal(){
+  const rows = getRubrica().map(item=>{
+    const s = rubricaScoreLocal(item);
+    const lvl = competencyLevel(s.pct);
+    return `<tr>
+      <td><strong>${item.ra}</strong><br><span style="font-weight:400;font-size:.82rem;color:#7f8fb8;">${item.texto}</span></td>
+      <td class="center">${s.total>0 ? s.sum+' / '+s.total : '—'}</td>
+      <td class="center">${s.pct!==null ? s.pct+'%' : '—'}</td>
+      <td class="center"><span class="${lvl.cls}">${lvl.label}</span></td>
+    </tr>`;
+  }).join('');
+  return `<h3>Avance por resultado de aprendizaje</h3>
+    <p class="rubrica-nota">Escala: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado.</p>
+    <table class="progress-table">
+      <tr><th>Indicador</th><th>Puntaje</th><th>%</th><th>Nivel</th></tr>
+      ${rows}
+    </table>`;
+}
 
 function showStep(key){
   currentIdx = idxOf(key);
@@ -401,7 +458,7 @@ function renderMcStep(wrap){
     });
     const pct = Math.round((correctas/CONFIG.mc.length)*100);
     document.getElementById('mcResultado').textContent = `Resultado: ${correctas}/${CONFIG.mc.length} correctas (${pct}%).`;
-    if(pct>=60){ markDone('mc'); document.getElementById('mcResultado').textContent += ' ¡Aprobado! Puede continuar.'; }
+    if(pct>=60){ markDone('mc', correctas, CONFIG.mc.length); document.getElementById('mcResultado').textContent += ' ¡Aprobado! Puede continuar.'; }
     else { document.getElementById('mcResultado').textContent += ' Necesita al menos 60% para continuar. Revise el material y vuelva a intentarlo.'; }
   });
 }
@@ -429,7 +486,7 @@ function renderAsocieStep(wrap){
     inputs.forEach(inp=>{ if(parseInt(inp.value,10)===parseInt(inp.dataset.correct,10)) correctas++; });
     const pct = Math.round((correctas/inputs.length)*100);
     document.getElementById('asocieResultado').textContent = `Resultado: ${correctas}/${inputs.length} correctas (${pct}%).`;
-    if(pct>=60){ markDone('asocie'); document.getElementById('asocieResultado').textContent += ' ¡Aprobado!'; }
+    if(pct>=60){ markDone('asocie', correctas, inputs.length); document.getElementById('asocieResultado').textContent += ' ¡Aprobado!'; }
     else { document.getElementById('asocieResultado').textContent += ' Necesita al menos 60%. Intente de nuevo.'; }
   });
 }
@@ -453,7 +510,7 @@ function renderCompleteStep(wrap){
     inputs.forEach(inp=>{ if(inp.value.trim().toLowerCase()===inp.dataset.correct) correctas++; });
     const pct = Math.round((correctas/inputs.length)*100);
     document.getElementById('completeResultado').textContent = `Resultado: ${correctas}/${inputs.length} correctas (${pct}%).`;
-    if(pct>=60){ markDone('complete'); document.getElementById('completeResultado').textContent += ' ¡Aprobado!'; }
+    if(pct>=60){ markDone('complete', correctas, inputs.length); document.getElementById('completeResultado').textContent += ' ¡Aprobado!'; }
     else { document.getElementById('completeResultado').textContent += ' Necesita al menos 60%. Intente de nuevo.'; }
   });
 }
@@ -632,7 +689,7 @@ function renderCruciStep(wrap){
     });
     const pct = Math.round((correctas/total)*100);
     document.getElementById('cruciResultado').textContent = `Casillas correctas: ${correctas}/${total} (${pct}%).`;
-    if(correctas===total){ markDone('cruci'); document.getElementById('cruciResultado').textContent += ' ¡Crucigrama completo!'; }
+    if(correctas===total){ markDone('cruci', correctas, total); document.getElementById('cruciResultado').textContent += ' ¡Crucigrama completo!'; }
   });
 }
 
@@ -1471,11 +1528,23 @@ function renderAventuraStepRica(wrap){
 /* ---------- 10. Certificado ---------- */
 function renderCertStep(wrap){
   if(!allDone()){
-    wrap.innerHTML = `<h2>Certificado</h2><p>Debe completar todas las actividades para desbloquear el certificado.</p>`;
+    const pendientes = STEPS.filter(s=>s.key!=='cert' && !progress[s.key]);
+    const primerPendiente = pendientes[0];
+    const listaPendientes = pendientes.map(s=>`<li>${s.label}</li>`).join('');
+    wrap.innerHTML = `<h2>Certificado</h2>
+      <p>Debe completar todas las actividades para desbloquear el certificado.</p>
+      <p>Actividades pendientes:</p>
+      <ul>${listaPendientes}</ul>
+      ${renderRubricaTableLocal()}
+      <button id="btnVolverPendiente" class="btn-primario">← Volver a mis actividades</button>`;
+    document.getElementById('btnVolverPendiente').addEventListener('click', ()=>{
+      showStep(primerPendiente ? primerPendiente.key : STEPS[0].key);
+    });
     return;
   }
   wrap.innerHTML = `<h2>¡Curso completado!</h2>
     <p>Felicidades, ${studentName}. Ha finalizado todas las actividades de <strong>${CONFIG.titulo}</strong>.</p>
+    ${renderRubricaTableLocal()}
     <button id="btnCert" class="btn-primario">Ver y descargar mi certificado</button>
     <div id="certContainer" class="cert-container" style="display:none">
       <div class="cert">
@@ -1519,23 +1588,53 @@ function openTeacherPanel(){
     <div id="listaEstudiantes">Cargando...</div>`;
   document.getElementById('btnVolverPortada').addEventListener('click', initModule);
   Promise.all([sheetGet('Progreso'), sheetGet('Casos')]).then(([prog, casos])=>{
-    const completos = prog.filter(r=> String(r.Modulo).trim()===MODULE_ID);
-    const nombres = [...new Set(completos.map(r=>r.Estudiante))];
+    const pasoSuffix = '_paso';
+    const byStudent = {};
+    prog.forEach(r=>{
+      const mod = String(r.Modulo||'').trim();
+      const name = r.Estudiante;
+      if(!name || !mod.startsWith(MODULE_ID)) return;
+      byStudent[name] = byStudent[name] || {};
+      if(mod === MODULE_ID){
+        byStudent[name].__completo = true;
+      } else if(mod.startsWith(MODULE_ID+'_') && mod.endsWith(pasoSuffix)){
+        const stepKey = mod.slice(MODULE_ID.length+1, mod.length-pasoSuffix.length);
+        byStudent[name][stepKey] = { score:Number(r.Score)||0, total:Number(r.Total)||1 };
+      }
+    });
+    const nombres = Object.keys(byStudent).sort();
     const box = document.getElementById('listaEstudiantes');
-    if(nombres.length===0){ box.innerHTML = '<p>Aún no hay estudiantes que hayan completado el curso.</p>'; return; }
-    box.innerHTML = nombres.map(n=>{
+    if(nombres.length===0){ box.innerHTML = '<p>Aún no hay estudiantes con avance guardado.</p>'; return; }
+    const rubrica = getRubrica();
+    const pctFor = (stepsMap, keys)=>{
+      let sum=0,total=0,any=false;
+      keys.forEach(k=>{ const x=stepsMap[k]; if(x){ sum+=x.score; total+=x.total; any=true; } });
+      return any && total>0 ? Math.round((sum/total)*100) : null;
+    };
+    const levelCell = (pctVal)=>{
+      const lvl = competencyLevel(pctVal);
+      return `<span class="${lvl.cls}">${lvl.label}</span>`;
+    };
+    let html = '<p class="rubrica-nota">Nivel por indicador: 0–50% No logrado · 51–80% En proceso · 81–100% Logrado.</p>';
+    html += '<table class="progress-table"><tr><th>Estudiante</th>' + rubrica.map(r=>`<th>${r.ra}</th>`).join('') + '<th>Curso completo</th><th>Caso</th><th>Acciones</th></tr>';
+    nombres.forEach(n=>{
+      const stepsMap = byStudent[n];
       const casoRow = casos.find(c=> String(c.CasoId).trim()===caseKey() && c.Nombre===n);
-      return `<div class="docente-fila">
-        <strong>${n}</strong>
-        <button class="btn-secundario btn-ver-caso" data-n="${n}">Ver caso</button>
-        <button class="btn-secundario btn-repetir" data-n="${n}">🔄 Repetir</button>
-        <div class="docente-detalle" id="detalle-${cssId(n)}" style="display:none">${casoRow? casoRow.Texto : '(sin respuesta registrada)'}</div>
-      </div>`;
-    }).join('');
+      html += `<tr>
+        <td>${n}</td>
+        ${rubrica.map(r=> `<td class="center">${levelCell(pctFor(stepsMap, r.steps))}</td>`).join('')}
+        <td class="center">${stepsMap.__completo ? '<span class="status-ok">✓ Completo</span>' : '<span class="status-pending">En curso</span>'}</td>
+        <td class="center">${casoRow ? `<button class="btn-secundario btn-ver-caso" data-n="${n}">Ver</button>` : '—'}</td>
+        <td class="center"><button class="btn-secundario btn-repetir" data-n="${n}">🔄 Repetir</button></td>
+      </tr>
+      <tr id="detalle-row-${cssId(n)}" style="display:none"><td colspan="${rubrica.length+4}"><div class="docente-detalle">${casoRow ? casoRow.Texto : '(sin respuesta registrada)'}</div></td></tr>`;
+    });
+    html += '</table>';
+    box.innerHTML = html;
     box.querySelectorAll('.btn-ver-caso').forEach(btn=>{
       btn.addEventListener('click', ()=>{
-        const d = document.getElementById('detalle-'+cssId(btn.dataset.n));
-        d.style.display = d.style.display==='none' ? 'block':'none';
+        const row = document.getElementById('detalle-row-'+cssId(btn.dataset.n));
+        row.style.display = row.style.display==='none' ? 'table-row':'none';
       });
     });
     box.querySelectorAll('.btn-repetir').forEach(btn=>{
