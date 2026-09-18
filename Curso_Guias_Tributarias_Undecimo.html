@@ -86,6 +86,8 @@ canvas{background:#fff;border:2px solid #cbd5e1;border-radius:10px;display:block
 <script>
 const CONFIG = {
   moduleId: "curso_guias_tributarias_undecimo_v1",
+  aventuraRica: true,
+  dinoRica: true,
   titulo: "Guías Tributarias y Ayudas Audiovisuales",
   subtitulo: "Curso interactivo — 11° nivel, Gestión Tributaria — CTP Mercedes Norte",
   steps: [
@@ -329,7 +331,9 @@ function showStep(key){
   const renderers = {
     antologia: renderAntologiaStep, mc: renderMcStep, asocie: renderAsocieStep,
     complete: renderCompleteStep, sopa: renderSopaStep, cruci: renderCruciStep,
-    caso: renderCasoStep, dino: renderDinoStep, aventura: renderAventuraStep,
+    caso: renderCasoStep,
+    dino: (w)=> (CONFIG.dinoRica ? renderDinoStepRica(w) : renderDinoStep(w)),
+    aventura: (w)=> (CONFIG.aventuraRica ? renderAventuraStepRica(w) : renderAventuraStep(w)),
     cert: renderCertStep
   };
   renderers[step.type || key](wrap);
@@ -775,6 +779,224 @@ function renderDinoStep(wrap){
   loop();
 }
 
+/* ---------- 8b. Juego del dinosaurio (versión rica: dificultad progresiva + meta 1000 pts) ---------- */
+function renderDinoStepRica(wrap){
+  const nStep = idxOf('dino')+1;
+  wrap.innerHTML = `
+  <style>
+  .dino2-hud{display:flex;justify-content:space-between;align-items:center;margin:10px 0 8px;}
+  .dino2-hud .dino2-score{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;color:#0E1B3D;}
+  .dino2-hud .dino2-best{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5B6470;}
+  .dino2-gamebox{position:relative;width:100%;max-width:700px;height:220px;background:linear-gradient(180deg,#dfe9f0 0%,#f3f5f4 70%);border:2px solid #0E1B3D;border-radius:10px;overflow:hidden;touch-action:none;cursor:pointer;-webkit-user-select:none;user-select:none;}
+  .dino2-ground{position:absolute;bottom:0;left:0;right:0;height:3px;background:#0E1B3D;}
+  .dino2-ground::after{content:"";position:absolute;bottom:-2px;left:0;right:0;height:1px;background:repeating-linear-gradient(90deg,#5B6470 0 12px, transparent 12px 24px);}
+  .dino2-player{position:absolute;bottom:3px;left:40px;font-size:34px;line-height:1;transform:scaleX(-1) translateY(0);transition:transform .08s linear;z-index:5;}
+  .dino2-player.jump{transition:transform .5s cubic-bezier(.22,.9,.4,1.1);}
+  .dino2-obstacle{position:absolute;bottom:3px;font-size:30px;line-height:1;z-index:4;}
+  .dino2-obstacle.dino2-colon{font-weight:800;color:#B8863C;-webkit-text-stroke:1px #0E1B3D;}
+  .dino2-startOverlay,.dino2-qOverlay,.dino2-overOverlay,.dino2-winOverlay{position:absolute;inset:0;background:rgba(14,27,61,.92);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;gap:10px;z-index:10;}
+  .dino2-winOverlay{background:rgba(184,134,60,.95);}
+  .dino2-startOverlay h2,.dino2-overOverlay h3,.dino2-winOverlay h2{margin:0;}
+  .dino2-startOverlay p,.dino2-overOverlay p,.dino2-winOverlay p{font-size:11.5px;color:rgba(255,255,255,.8);margin:0;max-width:380px;}
+  .dino2-bigbtn{padding:10px 22px;background:#B8863C;color:#0A1230;border:none;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;}
+  .dino2-bigbtn:hover{background:#F4DD7A;}
+  .dino2-qOverlay{gap:8px;padding:14px;}
+  .dino2-qtag{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#F4DD7A;text-transform:uppercase;letter-spacing:.5px;}
+  .dino2-qtext{font-size:13px;font-weight:600;max-width:420px;}
+  .dino2-opts{display:flex;flex-direction:column;gap:6px;width:100%;max-width:420px;}
+  .dino2-opt{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 12px;border-radius:8px;font-size:12px;cursor:pointer;text-align:left;}
+  .dino2-opt:hover{background:rgba(255,255,255,.16);}
+  .dino2-opt.locked{cursor:default;}
+  .dino2-opt.chosen-correct{background:rgba(47,194,173,.35);border-color:#2FC2AD;}
+  .dino2-opt.chosen-incorrect{background:rgba(239,106,91,.35);border-color:#EF6A5B;}
+  .dino2-opt.reveal-correct{background:rgba(47,194,173,.35);border-color:#2FC2AD;}
+  .dino2-controls-hint{font-size:10.5px;color:#5B6470;text-align:center;margin-top:6px;font-family:'IBM Plex Mono',monospace;}
+  </style>
+  <h2>${nStep}. Juego: Corre y responde</h2>
+  <p>Toque la pantalla o presione ESPACIO para saltar los obstáculos. La velocidad aumenta con el puntaje. Si choca, deberá responder una pregunta correctamente para seguir — si falla, se reinicia el intento.</p>
+  <div class="dino2-hud">
+    <span class="dino2-score" id="dino2Score">Puntos: 0</span>
+    <span class="dino2-best" id="dino2Best">Mejor: 0</span>
+  </div>
+  <div class="dino2-gamebox" id="dino2Box">
+    <div class="dino2-ground"></div>
+    <div class="dino2-player" id="dino2Player">🦖</div>
+    <div class="dino2-startOverlay" id="dino2StartOverlay">
+      <h2>🏃 Corre y Responde</h2>
+      <p>Toque o presione ESPACIO para saltar los obstáculos. Si choca, responda bien para seguir — si falla, se reinicia el intento.</p>
+      <button class="dino2-bigbtn" id="dino2StartBtn">▶️ Comenzar</button>
+    </div>
+  </div>
+  <p class="dino2-controls-hint">Toque la pantalla / Espacio = saltar</p>
+  <p id="dinoResultado" class="resultado"></p>`;
+
+  const WIN_SCORE = 1000;
+  let running=false, paused=false, score=0, best=0, speed=4.2, spawnTimer=0, spawnInterval=90, jumping=false;
+  let obstacles=[], usedQuestions=[], animFrame=null;
+  let totalCorrect=0, totalAnswered=0;
+
+  const gameBox = wrap.querySelector('#dino2Box');
+  const player = wrap.querySelector('#dino2Player');
+  const scoreDisplay = wrap.querySelector('#dino2Score');
+  const bestDisplay = wrap.querySelector('#dino2Best');
+  const startOverlay = wrap.querySelector('#dino2StartOverlay');
+  const dinoResultado = wrap.querySelector('#dinoResultado');
+
+  function updateHUD(){
+    scoreDisplay.textContent = 'Puntos: ' + Math.floor(score);
+    bestDisplay.textContent = 'Mejor: ' + Math.floor(best);
+  }
+  function resetGameState(){
+    score=0; speed=4.2; spawnInterval=90; spawnTimer=0;
+    obstacles.forEach(o=>o.el.remove()); obstacles=[];
+    updateHUD();
+  }
+  wrap.querySelector('#dino2StartBtn').addEventListener('click', ()=>{
+    startOverlay.style.display='none';
+    resetGameState();
+    running=true; paused=false;
+    loop();
+  });
+  function doJump(){
+    if(!running||paused||jumping) return;
+    jumping=true;
+    player.classList.add('jump');
+    player.style.transform='scaleX(-1) translateY(-70px)';
+    setTimeout(()=>{
+      player.style.transform='scaleX(-1) translateY(0)';
+      setTimeout(()=>{ jumping=false; player.classList.remove('jump'); },480);
+    },260);
+  }
+  gameBox.addEventListener('mousedown', doJump);
+  gameBox.addEventListener('touchstart', e=>{ e.preventDefault(); doJump(); }, {passive:false});
+  const dino2Keydown = e=>{
+    if(e.code==='Space' && running && !paused){ e.preventDefault(); doJump(); }
+  };
+  document.addEventListener('keydown', dino2Keydown);
+
+  function spawnObstacle(){
+    const el=document.createElement('div');
+    const isColon = Math.random()<0.5;
+    el.className='dino2-obstacle'+(isColon?' dino2-colon':'');
+    el.textContent = isColon ? '₡' : '💲';
+    el.style.right='-30px';
+    gameBox.appendChild(el);
+    obstacles.push({el, x: gameBox.clientWidth+10});
+  }
+  function rectsOverlap(a,b){ return !(a.right<b.left || a.left>b.right || a.bottom<b.top || a.top>b.bottom); }
+
+  function loop(){
+    if(!running||paused) return;
+    score += 0.12;
+    if(score>=WIN_SCORE){ score=WIN_SCORE; showWin(); return; }
+    speed = Math.min(16, 4.2+score*0.012);
+    spawnTimer++;
+    if(spawnTimer>spawnInterval){
+      spawnTimer=0;
+      spawnInterval = Math.max(48, 90-score*0.3);
+      spawnObstacle();
+    }
+    const boxRect = gameBox.getBoundingClientRect();
+    const playerRect = player.getBoundingClientRect();
+    const playerBox = { left:playerRect.left-boxRect.left+6, right:playerRect.right-boxRect.left-6, top:playerRect.top-boxRect.top+4, bottom:playerRect.bottom-boxRect.top };
+    for(let i=obstacles.length-1;i>=0;i--){
+      const o=obstacles[i];
+      o.x -= speed;
+      o.el.style.right='auto';
+      o.el.style.left=o.x+'px';
+      if(o.x<-40){ o.el.remove(); obstacles.splice(i,1); continue; }
+      const oRect=o.el.getBoundingClientRect();
+      const oBox={ left:oRect.left-boxRect.left+4, right:oRect.right-boxRect.left-4, top:oRect.top-boxRect.top+4, bottom:oRect.bottom-boxRect.top };
+      if(!jumping && rectsOverlap(playerBox,oBox)){ handleCollision(); return; }
+    }
+    updateHUD();
+    animFrame = requestAnimationFrame(loop);
+  }
+  function handleCollision(){
+    paused=true;
+    if(animFrame) cancelAnimationFrame(animFrame);
+    best=Math.max(best,score);
+    updateHUD();
+    showQuestion();
+  }
+  function pickQuestion(){
+    const pool = CONFIG.gameQuestions;
+    const available = pool.filter((_,i)=>!usedQuestions.includes(i));
+    const list = available.length ? available : pool;
+    const chosen = list[Math.floor(Math.random()*list.length)];
+    const idx = pool.indexOf(chosen);
+    usedQuestions.push(idx);
+    if(usedQuestions.length>=pool.length) usedQuestions=[];
+    return chosen;
+  }
+  function showQuestion(){
+    const item = pickQuestion();
+    const overlay=document.createElement('div');
+    overlay.className='dino2-qOverlay';
+    overlay.innerHTML = `<span class="dino2-qtag">⚠️ Chocaste — respondé bien para revivir</span>
+      <div class="dino2-qtext">${item.q}</div><div class="dino2-opts"></div>`;
+    gameBox.appendChild(overlay);
+    const optsDiv = overlay.querySelector('.dino2-opts');
+    item.opciones.forEach((optText,oi)=>{
+      const opt=document.createElement('div');
+      opt.className='dino2-opt';
+      opt.textContent=optText;
+      opt.addEventListener('click', ()=>{
+        if(overlay.dataset.answered) return;
+        overlay.dataset.answered='1';
+        optsDiv.querySelectorAll('.dino2-opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = oi===item.correcta;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect) optsDiv.querySelectorAll('.dino2-opt')[item.correcta].classList.add('reveal-correct');
+        totalAnswered++; if(isCorrect) totalCorrect++;
+        setTimeout(()=>{
+          overlay.remove();
+          if(isCorrect){ resumeAfterCorrect(); } else { showGameOver(); }
+        },1300);
+      });
+      optsDiv.appendChild(opt);
+    });
+  }
+  function resumeAfterCorrect(){
+    obstacles.forEach(o=>o.el.remove()); obstacles=[];
+    spawnTimer=0; paused=false;
+    animFrame=requestAnimationFrame(loop);
+  }
+  function showWin(){
+    running=false; paused=false;
+    if(animFrame) cancelAnimationFrame(animFrame);
+    best=Math.max(best,score);
+    updateHUD();
+    const overlay=document.createElement('div');
+    overlay.className='dino2-winOverlay';
+    overlay.innerHTML=`<h2>🏆 ¡Meta alcanzada!</h2>
+      <p>Llegaste a ${WIN_SCORE} puntos. Preguntas respondidas: ${totalAnswered} · Correctas: ${totalCorrect}</p>`;
+    gameBox.appendChild(overlay);
+    dinoResultado.textContent = '¡Meta alcanzada! Actividad completada.';
+    markDone('dino');
+  }
+  function showGameOver(){
+    running=false; paused=false;
+    const overlay=document.createElement('div');
+    overlay.className='dino2-overOverlay';
+    overlay.innerHTML=`<h3>💥 Fin del intento</h3>
+      <p>Puntaje: <strong>${Math.floor(score)}</strong> · Mejor: <strong>${Math.floor(best)}</strong></p>
+      <button class="dino2-bigbtn" id="dino2RetryBtn">🔄 Reintentar</button>`;
+    gameBox.appendChild(overlay);
+    overlay.querySelector('#dino2RetryBtn').addEventListener('click', ()=>{
+      overlay.remove(); resetGameState(); running=true; paused=false; loop();
+    });
+  }
+
+  updateHUD();
+
+  // Test/debug hook (used by the automated test suite to reach the win condition without a full real-time playthrough)
+  window.__dinoRicaDebug = {
+    forceWin: ()=>{ score=WIN_SCORE; showWin(); },
+    getState: ()=>({score,best,running,paused}),
+  };
+}
+
 /* ---------- 9. Juego de aventura (plataformas) ---------- */
 function renderAventuraStep(wrap){
   const nStep = idxOf('aventura')+1;
@@ -890,6 +1112,353 @@ function renderAventuraStep(wrap){
     requestAnimationFrame(loop);
   }
   loop();
+}
+
+/* ---------- 9b. Juego de aventura — versión rica (5 niveles, plataformas, power-ups, fantasmas) ---------- */
+function renderAventuraStepRica(wrap){
+  const nStep = idxOf('aventura')+1;
+  wrap.innerHTML = `<h2>${nStep}. Juego de aventura</h2>
+  <div class="av2-wrap">
+  <style>
+  .av2-wrap{--av2-navy:#0E1B3D;--av2-navy-deep:#0A1230;--av2-gold:#B8863C;--av2-gold-light:#F4DD7A;--av2-teal:#2FC2AD;--av2-coral:#EF6A5B;--av2-sky:#bfe3f2;}
+  .av2-wrap{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;max-width:460px;margin:0 auto;}
+  .av2-wrap .av2-hint{font-size:13px;color:#555;margin:0 0 12px;}
+  .av2-hud{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-family:'DejaVu Sans Mono',Menlo,Consolas,monospace;font-size:13px;color:var(--av2-navy);flex-wrap:wrap;gap:6px;}
+  .av2-hud .av2-lives{font-size:16px;}
+  .av2-hud .av2-level-badge{background:var(--av2-navy);color:#fff;padding:3px 10px;border-radius:10px;font-size:12px;}
+  .av2-gamebox{position:relative;width:100%;height:300px;background:linear-gradient(180deg,var(--av2-sky) 0%,#eaf6ee 75%);border:2px solid var(--av2-navy);border-radius:10px;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;}
+  .av2-world{position:absolute;top:0;left:0;height:100%;}
+  .av2-platform{position:absolute;background:#7a5230;border-top:4px solid #3f9142;border-radius:3px;}
+  .av2-player{position:absolute;font-size:26px;line-height:1;z-index:6;}
+  .av2-player.av2-grown{font-size:36px;}
+  .av2-player.av2-invincible{animation:av2sparkle .3s infinite alternate;}
+  @keyframes av2sparkle{ from{filter:drop-shadow(0 0 4px gold);} to{filter:drop-shadow(0 0 10px gold) brightness(1.3);} }
+  .av2-coin{position:absolute;font-size:18px;z-index:4;}
+  .av2-enemy{position:absolute;font-size:22px;z-index:5;}
+  .av2-powerup{position:absolute;font-size:20px;z-index:4;}
+  .av2-flag{position:absolute;font-size:28px;z-index:4;}
+  .av2-squash{animation:av2squash .3s;}
+  @keyframes av2squash{ 0%{transform:scaleY(1);} 40%{transform:scaleY(.2);} 100%{transform:scaleY(1);opacity:0;} }
+  .av2-controls{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px;}
+  .av2-dpad{display:flex;gap:8px;}
+  .av2-ctrlbtn{width:52px;height:44px;background:var(--av2-navy);color:#fff;border:none;border-radius:10px;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;-webkit-user-select:none;user-select:none;cursor:pointer;}
+  .av2-ctrlbtn:active{background:var(--av2-navy-deep);}
+  .av2-jumpbtn{width:80px;height:44px;background:var(--av2-gold);color:var(--av2-navy-deep);border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;}
+  .av2-jumpbtn:active{background:var(--av2-gold-light);}
+  .av2-overlay{position:absolute;inset:0;background:rgba(14,27,61,.93);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;gap:8px;z-index:20;}
+  .av2-overlay h3{font-size:16px;margin:0;}
+  .av2-overlay p{font-size:12px;color:rgba(255,255,255,.8);margin:0;max-width:380px;}
+  .av2-overlay.av2-win{background:rgba(184,134,60,.95);}
+  .av2-overlay.av2-levelup{background:rgba(47,194,173,.95);}
+  .av2-btn{display:inline-block;padding:9px 18px;background:var(--av2-gold);color:var(--av2-navy-deep);border:none;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;}
+  .av2-qoverlay{position:absolute;inset:0;background:rgba(14,27,61,.94);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:14px;gap:7px;z-index:20;}
+  .av2-qoverlay .av2-qtag{font-family:'DejaVu Sans Mono',monospace;font-size:10px;color:var(--av2-gold-light);text-transform:uppercase;}
+  .av2-qoverlay .av2-qtext{font-size:13px;font-weight:600;max-width:380px;}
+  .av2-qoverlay .av2-opts{display:flex;flex-direction:column;gap:5px;width:100%;max-width:380px;}
+  .av2-qoverlay .av2-opt{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);color:#fff;padding:7px 10px;border-radius:8px;font-size:12px;cursor:pointer;text-align:left;display:flex;gap:7px;}
+  .av2-qoverlay .av2-opt.av2-locked{cursor:default;}
+  .av2-qoverlay .av2-opt.av2-chosen-correct{background:rgba(47,194,173,.35);border-color:var(--av2-teal);}
+  .av2-qoverlay .av2-opt.av2-chosen-incorrect{background:rgba(239,106,91,.35);border-color:var(--av2-coral);}
+  .av2-qoverlay .av2-opt.av2-reveal-correct{background:rgba(47,194,173,.35);border-color:var(--av2-teal);}
+  </style>
+  <p class="av2-hint">Use las flechas ← → (o los botones) para caminar y ↑ / ESPACIO / el botón de salto para saltar. Recolecte todas las monedas de cada nivel y llegue a la bandera 🚩. El hongo 🍄 lo hace crecer (aguanta un golpe extra), la estrella ⭐ lo vuelve invencible. Si choca contra un fantasma pierde una vida (responda una pregunta para recuperarla) — pero si le salta <strong>encima</strong>, ¡lo elimina!</p>
+  <div class="av2-hud">
+    <span class="av2-level-badge" id="av2HudLevel">Nivel 1 / 5</span>
+    <span class="av2-lives" id="av2HudLives">❤️❤️❤️</span>
+    <span id="av2HudCoins">🪙 0 / 5</span>
+  </div>
+  <div class="av2-gamebox" id="av2GameBox">
+    <div class="av2-overlay" id="av2StartOverlay">
+      <h3>🐱 Aventura de Plataformas</h3>
+      <p>5 niveles · pisá a los fantasmas para eliminarlos.</p>
+      <button class="av2-btn" id="av2StartBtn">▶️ Comenzar</button>
+    </div>
+  </div>
+  <div class="av2-controls">
+    <div class="av2-dpad">
+      <button class="av2-ctrlbtn" id="av2LeftBtn" type="button">◀</button>
+      <button class="av2-ctrlbtn" id="av2RightBtn" type="button">▶</button>
+    </div>
+    <button class="av2-jumpbtn" id="av2JumpBtn" type="button">⬆️ SALTAR</button>
+  </div>
+  <p id="avResultado" class="resultado"></p>
+  </div>`;
+
+  const GW = 360, GH = 300;
+  const GRAVITY = 0.55, MOVE_SPEED = 2.6, JUMP_VELOCITY = -10.5, PLAYER_SIZE = 26, STOMP_BOUNCE = -6.5;
+
+  const LEVELS = [{"levelNum":1,"width":2474,"platforms":[{"x":20,"y":260,"w":70,"h":14},{"x":75,"y":228,"w":88,"h":14},{"x":139,"y":252,"w":88,"h":14},{"x":194,"y":220,"w":88,"h":14},{"x":258,"y":244,"w":113,"h":14},{"x":313,"y":212,"w":88,"h":14},{"x":377,"y":236,"w":88,"h":14},{"x":432,"y":204,"w":88,"h":14},{"x":496,"y":228,"w":113,"h":14},{"x":551,"y":196,"w":88,"h":14},{"x":615,"y":220,"w":88,"h":14},{"x":670,"y":188,"w":88,"h":14},{"x":734,"y":212,"w":113,"h":14},{"x":789,"y":180,"w":88,"h":14},{"x":853,"y":204,"w":88,"h":14},{"x":908,"y":172,"w":88,"h":14},{"x":972,"y":196,"w":113,"h":14},{"x":1027,"y":164,"w":88,"h":14},{"x":1091,"y":188,"w":88,"h":14},{"x":1146,"y":156,"w":88,"h":14},{"x":1210,"y":180,"w":113,"h":14},{"x":1265,"y":148,"w":88,"h":14},{"x":1329,"y":172,"w":88,"h":14},{"x":1384,"y":140,"w":88,"h":14},{"x":1448,"y":164,"w":113,"h":14},{"x":1503,"y":132,"w":88,"h":14},{"x":1567,"y":156,"w":88,"h":14},{"x":1622,"y":124,"w":88,"h":14},{"x":1686,"y":148,"w":113,"h":14},{"x":1741,"y":116,"w":88,"h":14},{"x":1805,"y":140,"w":88,"h":14},{"x":1860,"y":108,"w":88,"h":14},{"x":1924,"y":132,"w":113,"h":14},{"x":1979,"y":100,"w":88,"h":14},{"x":2043,"y":124,"w":88,"h":14},{"x":2098,"y":92,"w":88,"h":14},{"x":2162,"y":116,"w":113,"h":14},{"x":2217,"y":84,"w":88,"h":14},{"x":2281,"y":108,"w":88,"h":14},{"x":2336,"y":76,"w":88,"h":14}],"coins":[{"x":111,"y":202},{"x":175,"y":226},{"x":230,"y":194},{"x":306.5,"y":218},{"x":349,"y":186},{"x":413,"y":210},{"x":468,"y":178},{"x":544.5,"y":202},{"x":587,"y":170},{"x":651,"y":194},{"x":706,"y":162},{"x":782.5,"y":186},{"x":825,"y":154},{"x":889,"y":178},{"x":944,"y":146},{"x":1020.5,"y":170},{"x":1063,"y":138},{"x":1127,"y":162},{"x":1182,"y":130},{"x":1258.5,"y":154},{"x":1301,"y":122},{"x":1365,"y":146},{"x":1420,"y":114},{"x":1496.5,"y":138},{"x":1539,"y":106},{"x":1603,"y":130},{"x":1658,"y":98},{"x":1734.5,"y":122},{"x":1777,"y":90},{"x":1841,"y":114},{"x":1896,"y":82},{"x":1972.5,"y":106},{"x":2015,"y":74},{"x":2079,"y":98},{"x":2134,"y":66},{"x":2210.5,"y":90},{"x":2253,"y":58},{"x":2317,"y":82}],"mushrooms":[{"x":109,"y":206},{"x":173,"y":230},{"x":228,"y":198}],"stars":[{"x":347,"y":190},{"x":411,"y":214},{"x":466,"y":182}],"enemies":[{"platformIdx":4,"minX":262,"maxX":347,"x":262,"dir":1,"speed":0.85},{"platformIdx":8,"minX":500,"maxX":585,"x":500,"dir":1,"speed":0.85},{"platformIdx":12,"minX":738,"maxX":823,"x":738,"dir":1,"speed":0.85},{"platformIdx":16,"minX":976,"maxX":1061,"x":976,"dir":1,"speed":0.85},{"platformIdx":20,"minX":1214,"maxX":1299,"x":1214,"dir":1,"speed":0.85},{"platformIdx":24,"minX":1452,"maxX":1537,"x":1452,"dir":1,"speed":0.85}],"flag":{"x":2400,"y":42}},{"levelNum":2,"width":3286,"platforms":[{"x":20,"y":260,"w":70,"h":14},{"x":80,"y":228,"w":78,"h":14},{"x":152,"y":252,"w":78,"h":14},{"x":212,"y":220,"w":78,"h":14},{"x":284,"y":244,"w":103,"h":14},{"x":344,"y":212,"w":78,"h":14},{"x":422,"y":236,"w":78,"h":14},{"x":482,"y":204,"w":78,"h":14},{"x":554,"y":228,"w":103,"h":14},{"x":614,"y":196,"w":78,"h":14},{"x":686,"y":220,"w":78,"h":14},{"x":746,"y":188,"w":78,"h":14},{"x":824,"y":212,"w":103,"h":14},{"x":884,"y":180,"w":78,"h":14},{"x":956,"y":204,"w":78,"h":14},{"x":1016,"y":172,"w":78,"h":14},{"x":1088,"y":196,"w":103,"h":14},{"x":1148,"y":164,"w":78,"h":14},{"x":1226,"y":188,"w":78,"h":14},{"x":1286,"y":156,"w":78,"h":14},{"x":1358,"y":180,"w":103,"h":14},{"x":1418,"y":148,"w":78,"h":14},{"x":1490,"y":172,"w":78,"h":14},{"x":1550,"y":140,"w":78,"h":14},{"x":1628,"y":164,"w":103,"h":14},{"x":1688,"y":132,"w":78,"h":14},{"x":1760,"y":156,"w":78,"h":14},{"x":1820,"y":124,"w":78,"h":14},{"x":1892,"y":148,"w":103,"h":14},{"x":1952,"y":116,"w":78,"h":14},{"x":2030,"y":140,"w":78,"h":14},{"x":2090,"y":108,"w":78,"h":14},{"x":2162,"y":132,"w":103,"h":14},{"x":2222,"y":100,"w":78,"h":14},{"x":2294,"y":124,"w":78,"h":14},{"x":2354,"y":92,"w":78,"h":14},{"x":2432,"y":116,"w":103,"h":14},{"x":2492,"y":84,"w":78,"h":14},{"x":2564,"y":108,"w":78,"h":14},{"x":2624,"y":76,"w":78,"h":14},{"x":2696,"y":100,"w":103,"h":14},{"x":2756,"y":68,"w":78,"h":14},{"x":2834,"y":92,"w":78,"h":14},{"x":2894,"y":65,"w":78,"h":14},{"x":2966,"y":89,"w":103,"h":14},{"x":3026,"y":65,"w":78,"h":14},{"x":3098,"y":89,"w":78,"h":14},{"x":3158,"y":65,"w":78,"h":14}],"coins":[{"x":111,"y":202},{"x":183,"y":226},{"x":243,"y":194},{"x":327.5,"y":218},{"x":375,"y":186},{"x":453,"y":210},{"x":513,"y":178},{"x":597.5,"y":202},{"x":645,"y":170},{"x":717,"y":194},{"x":777,"y":162},{"x":867.5,"y":186},{"x":915,"y":154},{"x":987,"y":178},{"x":1047,"y":146},{"x":1131.5,"y":170},{"x":1179,"y":138},{"x":1257,"y":162},{"x":1317,"y":130},{"x":1401.5,"y":154},{"x":1449,"y":122},{"x":1521,"y":146},{"x":1581,"y":114},{"x":1671.5,"y":138},{"x":1719,"y":106},{"x":1791,"y":130},{"x":1851,"y":98},{"x":1935.5,"y":122},{"x":1983,"y":90},{"x":2061,"y":114},{"x":2121,"y":82},{"x":2205.5,"y":106},{"x":2253,"y":74},{"x":2325,"y":98},{"x":2385,"y":66},{"x":2475.5,"y":90},{"x":2523,"y":58},{"x":2595,"y":82},{"x":2655,"y":50},{"x":2739.5,"y":74},{"x":2787,"y":42},{"x":2865,"y":66},{"x":2925,"y":39},{"x":3009.5,"y":63},{"x":3057,"y":39},{"x":3129,"y":63}],"mushrooms":[{"x":109,"y":206},{"x":181,"y":230},{"x":241,"y":198}],"stars":[{"x":373,"y":190},{"x":451,"y":214},{"x":511,"y":182}],"enemies":[{"platformIdx":4,"minX":288,"maxX":363,"x":288,"dir":1,"speed":1.0},{"platformIdx":8,"minX":558,"maxX":633,"x":558,"dir":1,"speed":1.0},{"platformIdx":12,"minX":828,"maxX":903,"x":828,"dir":1,"speed":1.0},{"platformIdx":16,"minX":1092,"maxX":1167,"x":1092,"dir":1,"speed":1.0},{"platformIdx":20,"minX":1362,"maxX":1437,"x":1362,"dir":1,"speed":1.0},{"platformIdx":24,"minX":1632,"maxX":1707,"x":1632,"dir":1,"speed":1.0},{"platformIdx":28,"minX":1896,"maxX":1971,"x":1896,"dir":1,"speed":1.0},{"platformIdx":32,"minX":2166,"maxX":2241,"x":2166,"dir":1,"speed":1.0},{"platformIdx":36,"minX":2436,"maxX":2511,"x":2436,"dir":1,"speed":1.0}],"flag":{"x":3212,"y":31}},{"levelNum":3,"width":3223,"platforms":[{"x":20,"y":260,"w":70,"h":14},{"x":79,"y":238,"w":74,"h":14},{"x":147,"y":216,"w":74,"h":14},{"x":206,"y":186,"w":99,"h":14},{"x":274,"y":200,"w":74,"h":14},{"x":348,"y":178,"w":74,"h":14},{"x":416,"y":148,"w":99,"h":14},{"x":475,"y":126,"w":74,"h":14},{"x":543,"y":140,"w":74,"h":14},{"x":602,"y":110,"w":99,"h":14},{"x":676,"y":88,"w":74,"h":14},{"x":735,"y":66,"w":74,"h":14},{"x":803,"y":80,"w":99,"h":14},{"x":862,"y":65,"w":74,"h":14},{"x":930,"y":65,"w":74,"h":14},{"x":1004,"y":65,"w":99,"h":14},{"x":1072,"y":79,"w":74,"h":14},{"x":1131,"y":65,"w":74,"h":14},{"x":1199,"y":65,"w":99,"h":14},{"x":1258,"y":65,"w":74,"h":14},{"x":1332,"y":79,"w":74,"h":14},{"x":1391,"y":65,"w":99,"h":14},{"x":1459,"y":65,"w":74,"h":14},{"x":1518,"y":65,"w":74,"h":14},{"x":1586,"y":79,"w":99,"h":14},{"x":1660,"y":65,"w":74,"h":14},{"x":1728,"y":65,"w":74,"h":14},{"x":1787,"y":65,"w":99,"h":14},{"x":1855,"y":79,"w":74,"h":14},{"x":1914,"y":65,"w":74,"h":14},{"x":1988,"y":65,"w":99,"h":14},{"x":2047,"y":65,"w":74,"h":14},{"x":2115,"y":79,"w":74,"h":14},{"x":2174,"y":65,"w":99,"h":14},{"x":2242,"y":65,"w":74,"h":14},{"x":2316,"y":65,"w":74,"h":14},{"x":2384,"y":79,"w":99,"h":14},{"x":2443,"y":65,"w":74,"h":14},{"x":2511,"y":65,"w":74,"h":14},{"x":2570,"y":65,"w":99,"h":14},{"x":2644,"y":79,"w":74,"h":14},{"x":2703,"y":65,"w":74,"h":14},{"x":2771,"y":65,"w":99,"h":14},{"x":2830,"y":65,"w":74,"h":14},{"x":2898,"y":79,"w":74,"h":14},{"x":2972,"y":65,"w":99,"h":14},{"x":3040,"y":65,"w":74,"h":14},{"x":3099,"y":65,"w":74,"h":14}],"coins":[{"x":108,"y":212},{"x":176,"y":190},{"x":247.5,"y":160},{"x":303,"y":174},{"x":377,"y":152},{"x":457.5,"y":122},{"x":504,"y":100},{"x":572,"y":114},{"x":643.5,"y":84},{"x":705,"y":62},{"x":764,"y":40},{"x":844.5,"y":54},{"x":891,"y":39},{"x":959,"y":39},{"x":1045.5,"y":39},{"x":1101,"y":53},{"x":1160,"y":39},{"x":1240.5,"y":39},{"x":1287,"y":39},{"x":1361,"y":53},{"x":1432.5,"y":39},{"x":1488,"y":39},{"x":1547,"y":39},{"x":1627.5,"y":53},{"x":1689,"y":39},{"x":1757,"y":39},{"x":1828.5,"y":39},{"x":1884,"y":53},{"x":1943,"y":39},{"x":2029.5,"y":39},{"x":2076,"y":39},{"x":2144,"y":53},{"x":2215.5,"y":39},{"x":2271,"y":39},{"x":2345,"y":39},{"x":2425.5,"y":53},{"x":2472,"y":39},{"x":2540,"y":39},{"x":2611.5,"y":39},{"x":2673,"y":53},{"x":2732,"y":39},{"x":2812.5,"y":39},{"x":2859,"y":39},{"x":2927,"y":53},{"x":3013.5,"y":39},{"x":3069,"y":39}],"mushrooms":[{"x":106,"y":216},{"x":174,"y":194},{"x":301,"y":178}],"stars":[{"x":375,"y":156},{"x":502,"y":104},{"x":570,"y":118},{"x":703,"y":66}],"enemies":[{"platformIdx":3,"minX":210,"maxX":281,"x":210,"dir":1,"speed":1.05},{"platformIdx":6,"minX":420,"maxX":491,"x":420,"dir":1,"speed":1.05},{"platformIdx":9,"minX":606,"maxX":677,"x":606,"dir":1,"speed":1.05},{"platformIdx":12,"minX":807,"maxX":878,"x":807,"dir":1,"speed":1.05},{"platformIdx":15,"minX":1008,"maxX":1079,"x":1008,"dir":1,"speed":1.05},{"platformIdx":18,"minX":1203,"maxX":1274,"x":1203,"dir":1,"speed":1.05},{"platformIdx":21,"minX":1395,"maxX":1466,"x":1395,"dir":1,"speed":1.05},{"platformIdx":24,"minX":1590,"maxX":1661,"x":1590,"dir":1,"speed":1.05},{"platformIdx":27,"minX":1791,"maxX":1862,"x":1791,"dir":1,"speed":1.05},{"platformIdx":30,"minX":1992,"maxX":2063,"x":1992,"dir":1,"speed":1.05},{"platformIdx":33,"minX":2178,"maxX":2249,"x":2178,"dir":1,"speed":1.05}],"flag":{"x":3149,"y":31}},{"levelNum":4,"width":4186,"platforms":[{"x":20,"y":260,"w":70,"h":14},{"x":84,"y":228,"w":56,"h":14},{"x":160,"y":252,"w":56,"h":14},{"x":242,"y":220,"w":81,"h":14},{"x":318,"y":244,"w":56,"h":14},{"x":382,"y":212,"w":56,"h":14},{"x":464,"y":236,"w":81,"h":14},{"x":528,"y":204,"w":56,"h":14},{"x":604,"y":228,"w":56,"h":14},{"x":686,"y":196,"w":81,"h":14},{"x":762,"y":220,"w":56,"h":14},{"x":826,"y":188,"w":56,"h":14},{"x":908,"y":212,"w":81,"h":14},{"x":972,"y":180,"w":56,"h":14},{"x":1048,"y":204,"w":56,"h":14},{"x":1130,"y":172,"w":81,"h":14},{"x":1206,"y":196,"w":56,"h":14},{"x":1270,"y":164,"w":56,"h":14},{"x":1352,"y":188,"w":81,"h":14},{"x":1416,"y":156,"w":56,"h":14},{"x":1492,"y":180,"w":56,"h":14},{"x":1574,"y":148,"w":81,"h":14},{"x":1650,"y":172,"w":56,"h":14},{"x":1714,"y":140,"w":56,"h":14},{"x":1796,"y":164,"w":81,"h":14},{"x":1860,"y":132,"w":56,"h":14},{"x":1936,"y":156,"w":56,"h":14},{"x":2018,"y":124,"w":81,"h":14},{"x":2094,"y":148,"w":56,"h":14},{"x":2158,"y":116,"w":56,"h":14},{"x":2240,"y":140,"w":81,"h":14},{"x":2304,"y":108,"w":56,"h":14},{"x":2380,"y":132,"w":56,"h":14},{"x":2462,"y":100,"w":81,"h":14},{"x":2538,"y":124,"w":56,"h":14},{"x":2602,"y":92,"w":56,"h":14},{"x":2684,"y":116,"w":81,"h":14},{"x":2748,"y":84,"w":56,"h":14},{"x":2824,"y":108,"w":56,"h":14},{"x":2906,"y":76,"w":81,"h":14},{"x":2982,"y":100,"w":56,"h":14},{"x":3046,"y":68,"w":56,"h":14},{"x":3128,"y":92,"w":81,"h":14},{"x":3192,"y":65,"w":56,"h":14},{"x":3268,"y":89,"w":56,"h":14},{"x":3350,"y":65,"w":81,"h":14},{"x":3426,"y":89,"w":56,"h":14},{"x":3490,"y":65,"w":56,"h":14},{"x":3572,"y":89,"w":81,"h":14},{"x":3636,"y":65,"w":56,"h":14},{"x":3712,"y":89,"w":56,"h":14},{"x":3794,"y":65,"w":81,"h":14},{"x":3870,"y":89,"w":56,"h":14},{"x":3934,"y":65,"w":56,"h":14},{"x":4016,"y":89,"w":81,"h":14},{"x":4080,"y":65,"w":56,"h":14}],"coins":[{"x":104,"y":202},{"x":180,"y":226},{"x":274.5,"y":194},{"x":338,"y":218},{"x":402,"y":186},{"x":496.5,"y":210},{"x":548,"y":178},{"x":624,"y":202},{"x":718.5,"y":170},{"x":782,"y":194},{"x":846,"y":162},{"x":940.5,"y":186},{"x":992,"y":154},{"x":1068,"y":178},{"x":1162.5,"y":146},{"x":1226,"y":170},{"x":1290,"y":138},{"x":1384.5,"y":162},{"x":1436,"y":130},{"x":1512,"y":154},{"x":1606.5,"y":122},{"x":1670,"y":146},{"x":1734,"y":114},{"x":1828.5,"y":138},{"x":1880,"y":106},{"x":1956,"y":130},{"x":2050.5,"y":98},{"x":2114,"y":122},{"x":2178,"y":90},{"x":2272.5,"y":114},{"x":2324,"y":82},{"x":2400,"y":106},{"x":2494.5,"y":74},{"x":2558,"y":98},{"x":2622,"y":66},{"x":2716.5,"y":90},{"x":2768,"y":58},{"x":2844,"y":82},{"x":2938.5,"y":50},{"x":3002,"y":74},{"x":3066,"y":42},{"x":3160.5,"y":66},{"x":3212,"y":39},{"x":3288,"y":63},{"x":3382.5,"y":39},{"x":3446,"y":63},{"x":3510,"y":39},{"x":3604.5,"y":63},{"x":3656,"y":39},{"x":3732,"y":63},{"x":3826.5,"y":39},{"x":3890,"y":63},{"x":3954,"y":39},{"x":4048.5,"y":63}],"mushrooms":[{"x":102,"y":206},{"x":178,"y":230},{"x":336,"y":222}],"stars":[{"x":400,"y":190},{"x":546,"y":182},{"x":622,"y":206},{"x":780,"y":198}],"enemies":[{"platformIdx":3,"minX":246,"maxX":299,"x":246,"dir":1,"speed":1.3},{"platformIdx":6,"minX":468,"maxX":521,"x":468,"dir":1,"speed":1.3},{"platformIdx":9,"minX":690,"maxX":743,"x":690,"dir":1,"speed":1.3},{"platformIdx":12,"minX":912,"maxX":965,"x":912,"dir":1,"speed":1.3},{"platformIdx":15,"minX":1134,"maxX":1187,"x":1134,"dir":1,"speed":1.3},{"platformIdx":18,"minX":1356,"maxX":1409,"x":1356,"dir":1,"speed":1.3},{"platformIdx":21,"minX":1578,"maxX":1631,"x":1578,"dir":1,"speed":1.3},{"platformIdx":24,"minX":1800,"maxX":1853,"x":1800,"dir":1,"speed":1.3},{"platformIdx":27,"minX":2022,"maxX":2075,"x":2022,"dir":1,"speed":1.3},{"platformIdx":30,"minX":2244,"maxX":2297,"x":2244,"dir":1,"speed":1.3},{"platformIdx":33,"minX":2466,"maxX":2519,"x":2466,"dir":1,"speed":1.3},{"platformIdx":36,"minX":2688,"maxX":2741,"x":2688,"dir":1,"speed":1.3},{"platformIdx":39,"minX":2910,"maxX":2963,"x":2910,"dir":1,"speed":1.3},{"platformIdx":42,"minX":3132,"maxX":3185,"x":3132,"dir":1,"speed":1.3}],"flag":{"x":4112,"y":31}},{"levelNum":5,"width":2609,"platforms":[{"x":20,"y":260,"w":70,"h":14},{"x":73,"y":238,"w":92,"h":14},{"x":134,"y":216,"w":92,"h":14},{"x":187,"y":186,"w":117,"h":14},{"x":248,"y":200,"w":92,"h":14},{"x":301,"y":178,"w":92,"h":14},{"x":362,"y":148,"w":117,"h":14},{"x":415,"y":126,"w":92,"h":14},{"x":476,"y":140,"w":92,"h":14},{"x":529,"y":110,"w":117,"h":14},{"x":590,"y":88,"w":92,"h":14},{"x":643,"y":66,"w":92,"h":14},{"x":704,"y":80,"w":117,"h":14},{"x":757,"y":65,"w":92,"h":14},{"x":818,"y":65,"w":92,"h":14},{"x":871,"y":65,"w":117,"h":14},{"x":932,"y":79,"w":92,"h":14},{"x":985,"y":65,"w":92,"h":14},{"x":1046,"y":65,"w":117,"h":14},{"x":1099,"y":65,"w":92,"h":14},{"x":1160,"y":79,"w":92,"h":14},{"x":1213,"y":65,"w":117,"h":14},{"x":1274,"y":65,"w":92,"h":14},{"x":1327,"y":65,"w":92,"h":14},{"x":1388,"y":79,"w":117,"h":14},{"x":1441,"y":65,"w":92,"h":14},{"x":1502,"y":65,"w":92,"h":14},{"x":1555,"y":65,"w":117,"h":14},{"x":1616,"y":79,"w":92,"h":14},{"x":1669,"y":65,"w":92,"h":14},{"x":1730,"y":65,"w":117,"h":14},{"x":1783,"y":65,"w":92,"h":14},{"x":1844,"y":79,"w":92,"h":14},{"x":1897,"y":65,"w":117,"h":14},{"x":1958,"y":65,"w":92,"h":14},{"x":2011,"y":65,"w":92,"h":14},{"x":2072,"y":79,"w":117,"h":14},{"x":2125,"y":65,"w":92,"h":14},{"x":2186,"y":65,"w":92,"h":14},{"x":2239,"y":65,"w":117,"h":14},{"x":2300,"y":79,"w":92,"h":14},{"x":2353,"y":65,"w":92,"h":14},{"x":2414,"y":65,"w":117,"h":14},{"x":2467,"y":65,"w":92,"h":14}],"coins":[{"x":111,"y":212},{"x":172,"y":190},{"x":237.5,"y":160},{"x":286,"y":174},{"x":339,"y":152},{"x":412.5,"y":122},{"x":453,"y":100},{"x":514,"y":114},{"x":579.5,"y":84},{"x":628,"y":62},{"x":681,"y":40},{"x":754.5,"y":54},{"x":795,"y":39},{"x":856,"y":39},{"x":921.5,"y":39},{"x":970,"y":53},{"x":1023,"y":39},{"x":1096.5,"y":39},{"x":1137,"y":39},{"x":1198,"y":53},{"x":1263.5,"y":39},{"x":1312,"y":39},{"x":1365,"y":39},{"x":1438.5,"y":53},{"x":1479,"y":39},{"x":1540,"y":39},{"x":1605.5,"y":39},{"x":1654,"y":53},{"x":1707,"y":39},{"x":1780.5,"y":39},{"x":1821,"y":39},{"x":1882,"y":53},{"x":1947.5,"y":39},{"x":1996,"y":39},{"x":2049,"y":39},{"x":2122.5,"y":53},{"x":2163,"y":39},{"x":2224,"y":39},{"x":2289.5,"y":39},{"x":2338,"y":53},{"x":2391,"y":39},{"x":2464.5,"y":39}],"mushrooms":[{"x":109,"y":216},{"x":170,"y":194},{"x":284,"y":178},{"x":337,"y":156}],"stars":[{"x":451,"y":104},{"x":512,"y":118},{"x":626,"y":66},{"x":679,"y":44}],"enemies":[{"platformIdx":3,"minX":191,"maxX":280,"x":191,"dir":1,"speed":0.75},{"platformIdx":6,"minX":366,"maxX":455,"x":366,"dir":1,"speed":0.75},{"platformIdx":9,"minX":533,"maxX":622,"x":533,"dir":1,"speed":0.75},{"platformIdx":12,"minX":708,"maxX":797,"x":708,"dir":1,"speed":0.75},{"platformIdx":15,"minX":875,"maxX":964,"x":875,"dir":1,"speed":0.75},{"platformIdx":18,"minX":1050,"maxX":1139,"x":1050,"dir":1,"speed":0.75},{"platformIdx":21,"minX":1217,"maxX":1306,"x":1217,"dir":1,"speed":0.75},{"platformIdx":24,"minX":1392,"maxX":1481,"x":1392,"dir":1,"speed":0.75},{"platformIdx":27,"minX":1559,"maxX":1648,"x":1559,"dir":1,"speed":0.75}],"flag":{"x":2535,"y":31}}];
+
+  let currentLevelIdx = 0;
+  let px, py, pvx, pvy, grounded, grown, invincible, invincibleUntil;
+  let lives, coinsCollected, coinsState, mushroomState, starState;
+  let enemies, enemyAlive, cameraX;
+  let running = false, paused = false, rafId;
+  let leftHeld=false, rightHeld=false;
+  let totalStomps=0;
+  let usedQ = [];
+
+  const gameBox = wrap.querySelector('#av2GameBox');
+  const worldEl = document.createElement('div');
+  worldEl.className = 'av2-world';
+  gameBox.appendChild(worldEl);
+  const hudLives = wrap.querySelector('#av2HudLives');
+  const hudCoins = wrap.querySelector('#av2HudCoins');
+  const hudLevel = wrap.querySelector('#av2HudLevel');
+  const avResultado = wrap.querySelector('#avResultado');
+
+  function currentLevel(){ return LEVELS[currentLevelIdx]; }
+  function resetPlayerToStart(){ px=30; py=260-PLAYER_SIZE; pvx=0; pvy=0; grounded=true; cameraX=0; }
+
+  function loadLevel(idx){
+    currentLevelIdx = idx;
+    const lvl = currentLevel();
+    resetPlayerToStart();
+    coinsCollected = 0;
+    coinsState = lvl.coins.map(()=>true);
+    mushroomState = lvl.mushrooms.map(()=>true);
+    starState = lvl.stars.map(()=>true);
+    enemies = lvl.enemies.map(e=>({...e}));
+    enemyAlive = lvl.enemies.map(()=>true);
+    grown=false; invincible=false; invincibleUntil=0;
+    updateHUD(); buildScene(); syncVisuals();
+  }
+  function updateHUD(){
+    const lvl = currentLevel();
+    hudLevel.textContent = 'Nivel ' + lvl.levelNum + ' / ' + LEVELS.length;
+    hudLives.textContent = '❤️'.repeat(Math.max(lives,0)) + '🖤'.repeat(Math.max(3-lives,0));
+    hudCoins.textContent = '🪙 ' + coinsCollected + ' / ' + lvl.coins.length;
+  }
+
+  let playerEl, coinEls=[], enemyEls=[], mushroomEls=[], starEls=[], flagEl;
+
+  function buildScene(){
+    worldEl.innerHTML = '';
+    const lvl = currentLevel();
+    worldEl.style.width = lvl.width + 'px';
+    lvl.platforms.forEach(p=>{
+      const el=document.createElement('div'); el.className='av2-platform';
+      el.style.left=p.x+'px'; el.style.top=p.y+'px'; el.style.width=p.w+'px'; el.style.height=p.h+'px';
+      worldEl.appendChild(el);
+    });
+    playerEl = document.createElement('div'); playerEl.className='av2-player'; playerEl.textContent='🐱';
+    worldEl.appendChild(playerEl);
+    coinEls = lvl.coins.map(c=>{
+      const el=document.createElement('div'); el.className='av2-coin'; el.textContent='🪙';
+      el.style.left=c.x+'px'; el.style.top=c.y+'px'; worldEl.appendChild(el); return el;
+    });
+    mushroomEls = lvl.mushrooms.map(m=>{
+      const el=document.createElement('div'); el.className='av2-powerup'; el.textContent='🍄';
+      el.style.left=m.x+'px'; el.style.top=m.y+'px'; worldEl.appendChild(el); return el;
+    });
+    starEls = lvl.stars.map(s=>{
+      const el=document.createElement('div'); el.className='av2-powerup'; el.textContent='⭐';
+      el.style.left=s.x+'px'; el.style.top=s.y+'px'; worldEl.appendChild(el); return el;
+    });
+    flagEl = document.createElement('div'); flagEl.className='av2-flag'; flagEl.textContent='🚩';
+    flagEl.style.left=lvl.flag.x+'px'; flagEl.style.top=lvl.flag.y+'px'; worldEl.appendChild(flagEl);
+    enemyEls = enemies.map(()=>{
+      const el=document.createElement('div'); el.className='av2-enemy'; el.textContent='👻';
+      worldEl.appendChild(el); return el;
+    });
+  }
+
+  function syncVisuals(){
+    const lvl = currentLevel();
+    cameraX = px - GW/2 + PLAYER_SIZE/2;
+    cameraX = Math.max(0, Math.min(lvl.width-GW, cameraX));
+    worldEl.style.transform = 'translateX(' + (-cameraX) + 'px)';
+    playerEl.style.left = px+'px'; playerEl.style.top = py+'px';
+    playerEl.classList.toggle('av2-grown', grown);
+    playerEl.classList.toggle('av2-invincible', invincible);
+    playerEl.style.transform = (pvx<0 ? 'scaleX(-1)' : 'scaleX(1)');
+    coinEls.forEach((el,i)=>{ el.style.display = coinsState[i]?'block':'none'; });
+    mushroomEls.forEach((el,i)=>{ el.style.display = mushroomState[i]?'block':'none'; });
+    starEls.forEach((el,i)=>{ el.style.display = starState[i]?'block':'none'; });
+    enemies.forEach((e,i)=>{
+      if(!enemyAlive[i]) return;
+      enemyEls[i].style.left = e.x+'px';
+      enemyEls[i].style.top = (lvl.platforms[e.platformIdx].y-22)+'px';
+    });
+  }
+
+  function rectsOverlap(a,b){ return !(a.x+a.w<b.x || a.x>b.x+b.w || a.y+a.h<b.y || a.y>b.y+b.h); }
+  function playerRect(){ const size = grown?PLAYER_SIZE*1.3:PLAYER_SIZE; return {x:px,y:py,w:size,h:size}; }
+
+  function physicsStep(){
+    const lvl = currentLevel();
+    pvx=0; if(leftHeld) pvx=-MOVE_SPEED; if(rightHeld) pvx=MOVE_SPEED;
+    px += pvx; px = Math.max(0, Math.min(lvl.width-PLAYER_SIZE, px));
+    pvy += GRAVITY;
+    const prevY = py; const nextY = py+pvy;
+    grounded = false;
+    for(const plat of lvl.platforms){
+      const withinX = px+PLAYER_SIZE>plat.x && px<plat.x+plat.w;
+      const wasAbove = (prevY+PLAYER_SIZE) <= plat.y+2;
+      const willBeBelowOrAt = (nextY+PLAYER_SIZE) >= plat.y;
+      if(withinX && wasAbove && willBeBelowOrAt && pvy>=0){ py=plat.y-PLAYER_SIZE; pvy=0; grounded=true; break; }
+    }
+    if(!grounded) py = nextY;
+    if(py > GH){ loseLife(); return; }
+    if(invincible && Date.now()>invincibleUntil) invincible=false;
+    moveEnemies(); checkCollisions(prevY); syncVisuals();
+  }
+  function moveEnemies(){
+    enemies.forEach((e,i)=>{ if(!enemyAlive[i]) return; e.x += e.dir*e.speed; if(e.x<e.minX || e.x>e.maxX) e.dir*=-1; });
+  }
+  function checkCollisions(prevY){
+    const lvl = currentLevel();
+    const pRect = playerRect();
+    coinsState.forEach((present,i)=>{
+      if(!present) return;
+      const c = lvl.coins[i];
+      if(rectsOverlap(pRect,{x:c.x,y:c.y,w:16,h:16})){ coinsState[i]=false; coinsCollected++; updateHUD(); }
+    });
+    mushroomState.forEach((present,i)=>{
+      if(!present) return;
+      const m = lvl.mushrooms[i];
+      if(rectsOverlap(pRect,{x:m.x,y:m.y,w:18,h:18})){ mushroomState[i]=false; grown=true; }
+    });
+    starState.forEach((present,i)=>{
+      if(!present) return;
+      const s = lvl.stars[i];
+      if(rectsOverlap(pRect,{x:s.x,y:s.y,w:18,h:18})){ starState[i]=false; invincible=true; invincibleUntil=Date.now()+5000; }
+    });
+    enemies.forEach((e,i)=>{
+      if(!enemyAlive[i]) return;
+      const eRect = {x:e.x, y:lvl.platforms[e.platformIdx].y-22, w:20, h:20};
+      if(!rectsOverlap(pRect,eRect)) return;
+      const fallingOntoTop = pvy>0 && (prevY+PLAYER_SIZE) <= eRect.y+8;
+      if(fallingOntoTop){ stompEnemy(i); }
+      else if(invincible){ stompEnemy(i); }
+      else if(grown){ grown=false; px += (px<e.x)?-14:14; }
+      else { loseLife(); }
+    });
+    if(rectsOverlap(pRect,{x:lvl.flag.x,y:lvl.flag.y,w:20,h:26})){
+      if(coinsCollected >= lvl.coins.length) onLevelComplete();
+    }
+  }
+  function stompEnemy(i){
+    enemyAlive[i]=false; enemyEls[i].classList.add('av2-squash');
+    setTimeout(()=>{ enemyEls[i].style.display='none'; }, 300);
+    pvy = STOMP_BOUNCE; totalStomps++;
+  }
+  function loseLife(){
+    if(paused) return;
+    paused = true; lives--; updateHUD();
+    if(lives<=0){ showGameOver(); return; }
+    showQuestion();
+  }
+  function pickQuestion(){
+    const bank = CONFIG.gameQuestions;
+    const avail = bank.filter((_,i)=>!usedQ.includes(i));
+    const pool = avail.length?avail:bank;
+    const idx = bank.indexOf(pool[Math.floor(Math.random()*pool.length)]);
+    usedQ.push(idx);
+    if(usedQ.length>=bank.length) usedQ=[];
+    return bank[idx];
+  }
+  function showQuestion(){
+    const item = pickQuestion();
+    const overlay = document.createElement('div');
+    overlay.className='av2-qoverlay';
+    overlay.innerHTML = `<span class="av2-qtag">💔 Perdiste una vida — respondé bien para recuperarla</span>
+      <div class="av2-qtext">${item.q}</div><div class="av2-opts"></div>`;
+    gameBox.appendChild(overlay);
+    const optsDiv = overlay.querySelector('.av2-opts');
+    item.opciones.forEach((optText,oi)=>{
+      const opt=document.createElement('div'); opt.className='av2-opt';
+      opt.textContent = optText;
+      opt.addEventListener('click', ()=>{
+        if(overlay.dataset.answered) return;
+        overlay.dataset.answered='1';
+        optsDiv.querySelectorAll('.av2-opt').forEach(o=>o.classList.add('av2-locked'));
+        const isCorrect = oi===item.correcta;
+        opt.classList.add(isCorrect?'av2-chosen-correct':'av2-chosen-incorrect');
+        if(!isCorrect) optsDiv.querySelectorAll('.av2-opt')[item.correcta].classList.add('av2-reveal-correct');
+        setTimeout(()=>{
+          overlay.remove();
+          if(isCorrect){ lives++; updateHUD(); }
+          paused=false; resetPlayerToStart();
+          rafId = requestAnimationFrame(loop);
+        }, 1300);
+      });
+      optsDiv.appendChild(opt);
+    });
+  }
+  function showGameOver(){
+    running=false; paused=false;
+    const overlay = document.createElement('div');
+    overlay.className='av2-overlay';
+    overlay.innerHTML = `<h3>💥 Sin vidas</h3>
+      <p>Llegaste al nivel ${currentLevel().levelNum} de ${LEVELS.length} · Fantasmas eliminados: ${totalStomps}</p>
+      <button class="av2-btn" id="av2RetryBtn">🔄 Reintentar desde el nivel 1</button>`;
+    gameBox.appendChild(overlay);
+    overlay.querySelector('#av2RetryBtn').addEventListener('click', ()=>{ overlay.remove(); startGame(); });
+  }
+  function onLevelComplete(){
+    running=false; paused=true;
+    if(rafId) cancelAnimationFrame(rafId);
+    const isLastLevel = currentLevelIdx >= LEVELS.length-1;
+    const overlay = document.createElement('div');
+    if(isLastLevel){
+      overlay.className='av2-overlay av2-win';
+      overlay.innerHTML = `<h3>🏆 ¡Completaste los ${LEVELS.length} niveles!</h3>
+        <p>Fantasmas eliminados: ${totalStomps}</p>
+        <button class="av2-btn" id="av2PlayAgainBtn">🔄 Jugar de nuevo</button>`;
+    } else {
+      overlay.className='av2-overlay av2-levelup';
+      overlay.innerHTML = `<h3>✅ ¡Nivel ${currentLevel().levelNum} completo!</h3>
+        <p>Preparate para el nivel ${currentLevel().levelNum+1}.</p>
+        <button class="av2-btn" id="av2NextLevelBtn">➡️ Siguiente nivel</button>`;
+    }
+    gameBox.appendChild(overlay);
+    if(isLastLevel){
+      avResultado.textContent = '¡Meta alcanzada en los 5 niveles! Actividad completada.';
+      markDone('aventura');
+      overlay.querySelector('#av2PlayAgainBtn').addEventListener('click', ()=>{ overlay.remove(); startGame(); });
+    } else {
+      overlay.querySelector('#av2NextLevelBtn').addEventListener('click', ()=>{
+        overlay.remove(); loadLevel(currentLevelIdx+1); running=true; paused=false;
+        rafId = requestAnimationFrame(loop);
+      });
+    }
+  }
+  function loop(){ if(!running||paused) return; physicsStep(); rafId = requestAnimationFrame(loop); }
+  function startGame(){
+    lives=3; totalStomps=0; usedQ=[];
+    loadLevel(0); running=true; paused=false;
+    rafId = requestAnimationFrame(loop);
+  }
+
+  wrap.querySelector('#av2StartBtn').addEventListener('click', ()=>{
+    wrap.querySelector('#av2StartOverlay').remove();
+    startGame();
+  });
+  function bindHold(el,onDown,onUp){
+    el.addEventListener('mousedown',onDown); el.addEventListener('mouseup',onUp); el.addEventListener('mouseleave',onUp);
+    el.addEventListener('touchstart', e=>{ e.preventDefault(); onDown(); }, {passive:false});
+    el.addEventListener('touchend', e=>{ e.preventDefault(); onUp(); }, {passive:false});
+  }
+  bindHold(wrap.querySelector('#av2LeftBtn'), ()=>leftHeld=true, ()=>leftHeld=false);
+  bindHold(wrap.querySelector('#av2RightBtn'), ()=>rightHeld=true, ()=>rightHeld=false);
+  wrap.querySelector('#av2JumpBtn').addEventListener('click', ()=>{ if(grounded && running && !paused){ pvy=JUMP_VELOCITY; grounded=false; } });
+  const av2Keydown = e=>{
+    if(!running||paused) return;
+    if(e.code==='ArrowLeft') leftHeld=true;
+    if(e.code==='ArrowRight') rightHeld=true;
+    if(e.code==='Space'||e.code==='ArrowUp'){ e.preventDefault && e.code==='Space' && e.preventDefault(); if(grounded){ pvy=JUMP_VELOCITY; grounded=false; } }
+  };
+  const av2Keyup = e=>{ if(e.code==='ArrowLeft') leftHeld=false; if(e.code==='ArrowRight') rightHeld=false; };
+  document.addEventListener('keydown', av2Keydown);
+  document.addEventListener('keyup', av2Keyup);
+
+  // Test/debug hook (used by the automated test suite to verify all 5 levels + markDone without a full manual playthrough)
+  window.__avRicaDebug = {
+    start: ()=> startGame(),
+    forceCompleteLevel: ()=>{ coinsState = coinsState.map(()=>false); coinsCollected = currentLevel().coins.length; onLevelComplete(); },
+    getState: ()=>({ currentLevelIdx, lives, running, paused }),
+  };
 }
 
 /* ---------- 10. Certificado ---------- */
