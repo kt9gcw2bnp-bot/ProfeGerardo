@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gobierno Digital y Ciudadanía Digital</title>
+<title>Curso Integrador de Gestión Pública</title>
 <style>
 :root{
   --azul:#1d4ed8; --azul-osc:#1e3a8a; --verde:#16a34a; --rojo:#dc2626; --gris:#64748b; --fondo:#f8fafc;
@@ -85,105 +85,109 @@ canvas{background:#fff;border:2px solid #cbd5e1;border-radius:10px;display:block
 <div id="app"></div>
 <script>
 const CONFIG = {
-  moduleId: "curso_gobierno_digital_undecimo_v2",
+  moduleId: "curso_integrador_gestion_publica_undecimo_v2",
   aventuraRica: true,
-  titulo: "Gobierno Digital y Ciudadanía Digital",
-  subtitulo: "Curso interactivo — 11° nivel, especialidad de Contabilidad — CTP Mercedes Norte",
+  titulo: "Curso Integrador de Gestión Pública",
+  subtitulo: "Los 6 temas: SICOP · Gobierno Digital · Tesorería · Contabilidad Nacional · PYMES · Ética Pública — 11° nivel, Contabilidad, CTP Mercedes Norte",
   steps: [
     {key:'antologia', label:'Antología'},
-    {key:'complete', label:'Complete'},
     {key:'mc', label:'Selección única'},
-    {key:'sopa', label:'Sopa de letras'},
+    {key:'complete', label:'Complete'},
     {key:'asocie', label:'Asocie'},
+    {key:'sopa', label:'Sopa de letras'},
     {key:'cruci', label:'Crucigrama'},
-    {key:'dino', label:'Corre y responde'},
     {key:'caso', label:'Estudio de caso'},
     {key:'aventura', label:'Aventura'},
+    {key:'dino', label:'Corre y responde'},
     {key:'cert', label:'Certificado'}
   ],
   antologia: {
-    titulo: "Gobierno Digital, Gobierno Abierto y Ciudadanía Digital",
+    titulo: "Síntesis integradora: los 6 temas de Gestión Pública",
     html: `
-    <h3>1. ¿Qué es el Gobierno Digital?</h3>
-    <p>El <strong>Gobierno Digital</strong> es el uso de las tecnologías de información y comunicación (TIC) por parte del Estado para mejorar la prestación de servicios públicos, la gestión interna de las instituciones y la relación entre el gobierno y la ciudadanía. En Costa Rica, la rectoría de esta materia recae en el <strong>Ministerio de Ciencia, Innovación, Tecnología y Telecomunicaciones (MICITT)</strong>, en coordinación con la Presidencia de la República a través de su Dirección de Gobernanza Digital.</p>
-    <p>La <strong>Estrategia de Transformación Digital</strong> del país busca que cada vez más trámites y servicios públicos puedan realizarse en línea, reduciendo tiempos, costos y desplazamientos innecesarios para las personas usuarias.</p>
-    <h3>2. Gobierno Abierto: los cuatro pilares</h3>
-    <p>El <strong>Gobierno Abierto</strong> es un modelo de gestión pública basado en cuatro pilares fundamentales:</p>
-    <ul>
-      <li><strong>Transparencia</strong>: la información pública debe estar disponible y ser accesible para toda la ciudadanía.</li>
-      <li><strong>Rendición de cuentas</strong>: las autoridades e instituciones deben explicar y justificar sus decisiones y el uso de los recursos públicos.</li>
-      <li><strong>Participación ciudadana</strong>: las personas tienen derecho a involucrarse en el diseño, ejecución y evaluación de las políticas públicas.</li>
-      <li><strong>Colaboración</strong>: el trabajo conjunto entre gobierno, sociedad civil, academia y sector privado para resolver problemas públicos.</li>
-    </ul>
-    <h3>3. Plataformas digitales del Estado costarricense</h3>
-    <p>Costa Rica cuenta con varias <strong>plataformas digitales</strong> que materializan el Gobierno Digital, entre ellas: SICOP (compras públicas), el Sistema Nacional de Trámites, la Ventanilla Única de Inversión, el expediente digital de la CCSS (EDUS), y portales de transparencia institucional donde se publican presupuestos, contrataciones y planillas.</p>
-    <h3>4. Trámites digitales frente a trámites presenciales</h3>
-    <p>Un <strong>trámite digital</strong> es aquel que la persona ciudadana puede realizar completamente en línea (por ejemplo, solicitar una certificación, presentar una declaración o consultar el estado de un proceso), sin necesidad de desplazarse físicamente a una oficina pública. Los trámites presenciales, en cambio, siguen requiriendo la asistencia física de la persona usuaria. La transformación digital busca migrar progresivamente trámites presenciales hacia modalidades digitales, sin dejar a nadie fuera del proceso.</p>
-    <h3>5. Brecha digital y equidad</h3>
-    <p>La <strong>brecha digital</strong> es la desigualdad de acceso a las tecnologías digitales (conectividad, dispositivos, conocimientos) entre distintos grupos de la población: zonas urbanas frente a rurales, personas jóvenes frente a personas adultas mayores, o distintos niveles socioeconómicos. Una política pública de Gobierno Digital responsable debe incorporar la <strong>equidad</strong> como principio: garantizar que la digitalización no excluya a quienes tienen menor acceso a la tecnología, manteniendo siempre alternativas presenciales o asistidas para estos grupos.</p>
-    <h3>6. Ciudadanía digital</h3>
-    <p>La <strong>ciudadanía digital</strong> se refiere al ejercicio responsable de derechos y deberes en los entornos digitales: proteger los datos personales, usar de forma segura las plataformas del Estado, verificar la veracidad de la información y participar de forma constructiva en los espacios digitales de consulta pública. Fortalecer la ciudadanía digital es tan importante como ampliar la infraestructura tecnológica, porque de nada sirve tener más trámites en línea si la población no cuenta con las competencias digitales para utilizarlos con confianza.</p>`
+    <p>Este curso integra y repasa, en un solo recorrido final, los seis resultados de aprendizaje trabajados durante la unidad de Gestión Pública. No presenta contenido nuevo aislado: retoma lo ya estudiado en los cursos de <strong>SICOP</strong>, <strong>Gobierno Digital</strong>, <strong>Tesorería</strong>, <strong>Contabilidad Nacional</strong> y <strong>PYMES</strong>, y agrega el eje transversal de <strong>Ética e Integridad Pública</strong> que conecta a todos los anteriores.</p>
+    <h3>1. Contratación Administrativa y SICOP</h3>
+    <p>La <strong>Ley N.º 9986</strong>, vigente desde el 1° de diciembre de 2022, rige actualmente la contratación pública en Costa Rica y derogó a la antigua Ley 7494. Todo proceso de compra pública se tramita mediante el <strong>SICOP</strong> (Sistema Integrado de Compras Públicas), bajo principios rectores como la <strong>igualdad y libre competencia</strong>, la <strong>buena fe</strong> y la <strong>rendición de cuentas</strong>. Los procedimientos ordinarios se clasifican hoy en licitación de escala mayor, menor o reducida según el monto estimado, mientras que la <strong>contratación directa</strong> es una excepción taxativa que solo puede usarse en los casos que la ley enumera expresamente —nunca por conveniencia administrativa fuera de esos supuestos.</p>
+    <h3>2. Gobierno Digital y Ciudadanía Digital</h3>
+    <p>El <strong>Gobierno Digital</strong> emplea las TIC para acercar los servicios del Estado a la ciudadanía, bajo la rectoría del MICITT. Su marco de referencia es el <strong>Gobierno Abierto</strong>, sostenido en cuatro pilares: transparencia, rendición de cuentas, participación ciudadana y colaboración. SICOP es, de hecho, uno de los ejemplos más claros de plataforma de Gobierno Digital aplicada a la contratación pública. Todo proceso de digitalización debe cuidar la <strong>equidad</strong>, evitando que la <strong>brecha digital</strong> excluya a personas con menor acceso a la tecnología.</p>
+    <h3>3. Tesorería</h3>
+    <p>La <strong>tesorería</strong> administra el efectivo de una organización —pública o privada— para asegurar la liquidez necesaria en sus operaciones. Su <strong>ciclo de cobros y pagos</strong> incluye entradas (cobros a clientes o beneficiarios) y salidas (pagos a proveedores, planillas e impuestos). Instrumentos como el <strong>libro de caja</strong> y el <strong>presupuesto de tesorería</strong> permiten registrar y proyectar esos flujos. En el sector público, una tesorería institucional bien gestionada es también un ejercicio de rendición de cuentas frente a la ciudadanía sobre el uso del dinero público.</p>
+    <h3>4. Contabilidad Nacional</h3>
+    <p>La <strong>Dirección General de Contabilidad Nacional (DGCN)</strong>, dentro del Ministerio de Hacienda, es el órgano rector de la contabilidad del sector público costarricense. Su objetivo es unificar y estandarizar el registro contable de todas las instituciones públicas (Gobierno Central, instituciones autónomas, municipalidades y empresas públicas) bajo las <strong>NICSP</strong> (Normas Internacionales de Contabilidad para el Sector Público), que se actualizan mediante directrices que deben consultarse siempre en su versión vigente.</p>
+    <h3>5. PYMES y contratación pública</h3>
+    <p>Las <strong>PYMES</strong>, calificadas por el <strong>MEIC</strong> bajo la Ley N.º 8262, cuentan con medidas de fomento dentro de SICOP: márgenes de calificación adicionales, reserva de carteles y fraccionamiento de contrataciones. Negociar con el Estado como PYME exige conocer el propio <strong>BATNA</strong> y buscar relaciones <strong>ganar-ganar</strong> sostenidas en el tiempo, formalizadas siempre mediante un <strong>contrato</strong> derivado del cartel y la oferta adjudicada.</p>
+    <h3>6. Ética e Integridad Pública (eje transversal)</h3>
+    <p>La <strong>ética pública</strong> no es un tema aislado, sino el hilo conductor de los cinco anteriores: exige que quien participa en SICOP actúe con probidad y evite conflictos de interés; que la transformación digital se use para ampliar el acceso a servicios, no para excluir; que los recursos de tesorería se manejen con transparencia; que la Contabilidad Nacional refleje la realidad financiera sin manipulación; y que una PYME negocie de buena fe con el Estado. La <strong>probidad</strong> es el deber de todo funcionario y proveedor público de actuar con honestidad, transparencia y apego a la legalidad; la <strong>rendición de cuentas</strong> y la <strong>transparencia</strong> son, en última instancia, mecanismos para sostener la confianza pública en las seis áreas.</p>`
   },
   mc: [
-    {q:"El Gobierno Digital consiste en:", opciones:["Eliminar todos los trámites presenciales de inmediato","El uso de TIC para mejorar servicios públicos y la relación con la ciudadanía","Un partido político","Un tipo de moneda digital"], correcta:1},
-    {q:"En Costa Rica, la rectoría en materia digital del Estado recae principalmente en:", opciones:["El MICITT","El Ministerio de Salud","El MOPT","El ICE exclusivamente"], correcta:0},
-    {q:"¿Cuáles son los cuatro pilares del Gobierno Abierto?", opciones:["Transparencia, rendición de cuentas, participación ciudadana y colaboración","Impuestos, aranceles, subsidios y multas","Educación, salud, vivienda y transporte","Exportación, importación, producción y consumo"], correcta:0},
-    {q:"La transparencia como pilar del Gobierno Abierto implica:", opciones:["Ocultar la información sensible siempre","Que la información pública esté disponible y accesible","Solo informar a la prensa","Publicar información una vez al año"], correcta:1},
-    {q:"La rendición de cuentas se refiere a:", opciones:["Justificar decisiones y el uso de recursos públicos","No responder ante ninguna autoridad","Un trámite exclusivamente financiero","Evitar auditorías"], correcta:0},
-    {q:"Un ejemplo de plataforma digital del Estado costarricense es:", opciones:["SICOP","Una red social privada extranjera","Un banco comercial","Una tienda en línea privada"], correcta:0},
-    {q:"Un trámite digital se caracteriza por:", opciones:["Requerir desplazamiento físico obligatorio","Poder realizarse completamente en línea","Ser más lento que el trámite presencial","No tener validez legal"], correcta:1},
-    {q:"La brecha digital se define como:", opciones:["La desigualdad de acceso a las tecnologías digitales entre grupos de población","Un error técnico en una plataforma","Un tipo de impuesto","La velocidad máxima de internet"], correcta:0},
-    {q:"La equidad en Gobierno Digital implica:", opciones:["Excluir a quienes no tienen acceso a tecnología","Garantizar que la digitalización no excluya a nadie, manteniendo alternativas","Eliminar los servicios presenciales de una vez","Aumentar el costo de los trámites"], correcta:1},
-    {q:"La ciudadanía digital incluye:", opciones:["Ignorar la protección de datos personales","El ejercicio responsable de derechos y deberes en entornos digitales","Compartir contraseñas públicamente","Evitar cualquier trámite en línea"], correcta:1},
-    {q:"La participación ciudadana como pilar del Gobierno Abierto permite:", opciones:["Involucrarse en el diseño y evaluación de políticas públicas","Votar únicamente cada cuatro años","Prohibir el acceso a la información","Delegar todas las decisiones al sector privado"], correcta:0},
-    {q:"La colaboración en Gobierno Abierto se refiere a:", opciones:["El trabajo conjunto entre gobierno, sociedad civil, academia y sector privado","La competencia entre instituciones públicas","La privatización de servicios públicos","El aislamiento institucional"], correcta:0},
-    {q:"Migrar un trámite presencial a digital sin dejar a nadie fuera implica:", opciones:["Eliminar de inmediato la atención presencial","Mantener alternativas para personas con menor acceso digital","Aumentar los requisitos del trámite","Cobrar más por la versión digital"], correcta:1},
-    {q:"EDUS es un ejemplo de:", opciones:["Expediente digital de la CCSS","Un impuesto municipal","Una ley de contratación","Un examen de admisión"], correcta:0},
-    {q:"La Ventanilla Única de Inversión busca:", opciones:["Complicar los procesos de inversión","Simplificar y centralizar trámites relacionados con inversión","Eliminar la inversión extranjera","Aumentar aranceles"], correcta:1}
+    {q:"¿Qué ley rige actualmente la contratación pública en Costa Rica?", opciones:["Ley 7494","Ley 9986","Ley 8511","Ley 8262"], correcta:1},
+    {q:"¿En qué sistema electrónico se tramitan las contrataciones públicas costarricenses?", opciones:["SINPE","AplicaMEP","SICOP","EDUS"], correcta:2},
+    {q:"La contratación directa en Costa Rica es:", opciones:["Un procedimiento ordinario más","Una excepción taxativa aplicable solo en los casos que la ley enumera","Un sinónimo de licitación mayor","Un trámite exclusivo para PYMES"], correcta:1},
+    {q:"¿Cuáles son los cuatro pilares del Gobierno Abierto?", opciones:["Transparencia, rendición de cuentas, participación ciudadana y colaboración","Impuestos, aranceles, subsidios y multas","Ingresos, egresos, activos y pasivos","Oferta, demanda, precio y mercado"], correcta:0},
+    {q:"La brecha digital se define como:", opciones:["Un error técnico en una plataforma","La desigualdad de acceso a las tecnologías digitales entre grupos de población","Un tipo de contrato administrativo","Un impuesto municipal"], correcta:1},
+    {q:"¿Cuál es la función principal de la tesorería?", opciones:["Elaborar únicamente los estados financieros anuales","Planificar y controlar los flujos de efectivo asegurando liquidez","Fijar los precios de venta de los productos","Calcular el tipo de cambio"], correcta:1},
+    {q:"El presupuesto de tesorería sirve para:", opciones:["Fijar el salario de los empleados","Proyectar ingresos y egresos de efectivo y anticipar necesidades de liquidez","Calcular el impuesto de renta anual","Registrar activos fijos"], correcta:1},
+    {q:"¿Qué institución es el órgano rector de la Contabilidad Nacional en Costa Rica?", opciones:["La Contraloría General de la República","El Banco Central de Costa Rica","La Dirección General de Contabilidad Nacional (Ministerio de Hacienda)","El MEIC"], correcta:2},
+    {q:"¿Qué significan las siglas NICSP?", opciones:["Normas Internacionales de Contabilidad para el Sector Público","Nuevo Instructivo de Cierre del Sector Público","Normas Internas de Control del Sector Privado","Norma Interna de Contratación del Sector Público"], correcta:0},
+    {q:"¿Cuál institución costarricense es rectora en apoyo a las PYMES?", opciones:["El Ministerio de Hacienda","El MEIC","El MICITT","La CCSS"], correcta:1},
+    {q:"Una medida de fomento a las PYMES en SICOP es:", opciones:["Eliminar los carteles de licitación","Otorgar un margen de calificación adicional","Prohibir su participación en licitaciones mayores","Duplicar sus plazos de pago"], correcta:1},
+    {q:"El BATNA se define como:", opciones:["La mejor alternativa disponible si la negociación fracasa","Un tipo de garantía bancaria","El monto mínimo de una oferta en SICOP","Un principio de la Ley 9986"], correcta:0},
+    {q:"La probidad en la función pública implica:", opciones:["Actuar con honestidad, transparencia y apego a la legalidad","Priorizar intereses personales sobre los institucionales","Evitar cualquier control externo","Aplicar solo cuando conviene al funcionario"], correcta:0},
+    {q:"El principio de igualdad y libre competencia en contratación pública busca:", opciones:["Que todos los oferentes compitan bajo las mismas reglas","Favorecer siempre a la empresa más grande","Eliminar la competencia entre oferentes","Reducir el número de participantes"], correcta:0},
+    {q:"La ética pública, como eje transversal, se relaciona con los otros cinco temas porque:", opciones:["Es un tema aislado sin relación con SICOP, tesorería o contabilidad","Exige probidad y transparencia en la contratación, la digitalización, las finanzas públicas y la relación con las PYMES","Solo aplica a los funcionarios de más alto rango","No tiene relación con la rendición de cuentas"], correcta:1},
+    {q:"El ciclo de cobros y pagos de una institución incluye:", opciones:["Únicamente los cobros, sin considerar pagos","Entradas de efectivo por cobros y salidas por pagos a proveedores, planillas e impuestos","Solo el pago de impuestos anuales","Solamente las transferencias entre bancos estatales"], correcta:1},
+    {q:"Las normas contables del sector público (NICSP) se actualizan mediante:", opciones:["Decretos que nunca cambian una vez emitidos","Directrices que deben consultarse en su versión vigente","Acuerdos verbales entre instituciones","Resoluciones judiciales"], correcta:1},
+    {q:"Una relación comercial 'ganar-ganar' entre una PYME y una institución pública busca:", opciones:["Que una parte obtenga todo el beneficio a costa de la otra","Un resultado favorable y sostenible para ambas partes","Terminar la relación comercial lo antes posible","Evitar cualquier tipo de contrato formal"], correcta:1},
+    {q:"El SICOP es también un ejemplo de:", opciones:["Plataforma de Gobierno Digital aplicada a la contratación pública","Un instrumento exclusivo de tesorería","Una norma de Contabilidad Nacional","Un tipo de sociedad mercantil"], correcta:0},
+    {q:"La rendición de cuentas, en el contexto de los seis temas integrados, sirve principalmente para:", opciones:["Ocultar el uso de los recursos públicos","Sostener la confianza pública mediante la transparencia en el uso de recursos y procesos","Reemplazar la fiscalización de la Contraloría","Eliminar la necesidad de contratos"], correcta:1}
   ],
   asocie: [
-    {concepto:"Gobierno Abierto", definicion:"Modelo de gestión pública basado en transparencia, rendición de cuentas, participación y colaboración."},
-    {concepto:"Trámite digital", definicion:"Gestión que la persona ciudadana puede realizar completamente en línea."},
+    {concepto:"SICOP", definicion:"Sistema donde se tramitan electrónicamente las contrataciones públicas de Costa Rica."},
+    {concepto:"Ley 9986", definicion:"Ley vigente que rige actualmente la contratación pública costarricense."},
+    {concepto:"Gobierno Abierto", definicion:"Modelo basado en transparencia, rendición de cuentas, participación y colaboración."},
     {concepto:"Brecha digital", definicion:"Desigualdad de acceso a las tecnologías digitales entre grupos de población."},
-    {concepto:"Transparencia", definicion:"Principio que exige que la información pública esté disponible y accesible."},
-    {concepto:"Rendición de cuentas", definicion:"Justificación de decisiones y del uso de los recursos públicos."},
-    {concepto:"Participación ciudadana", definicion:"Derecho de la población a involucrarse en el diseño de políticas públicas."},
-    {concepto:"Colaboración", definicion:"Trabajo conjunto entre gobierno, sociedad civil, academia y sector privado."},
-    {concepto:"SICOP", definicion:"Plataforma digital de compras públicas del Estado costarricense."}
+    {concepto:"DGCN", definicion:"Órgano rector de la Contabilidad Nacional dentro del Ministerio de Hacienda."},
+    {concepto:"NICSP", definicion:"Normas contables internacionales aplicadas al sector público."},
+    {concepto:"MEIC", definicion:"Ministerio rector en apoyo y calificación de las PYMES."},
+    {concepto:"BATNA", definicion:"Mejor alternativa disponible si una negociación fracasa."},
+    {concepto:"Presupuesto de tesorería", definicion:"Proyección de ingresos y egresos de efectivo para anticipar liquidez."},
+    {concepto:"Probidad", definicion:"Deber de actuar con honestidad, transparencia y apego a la legalidad en la función pública."}
   ],
   complete: [
-    {frase:"El ___ es el ministerio rector en materia de transformación digital en Costa Rica.", respuesta:"MICITT"},
-    {frase:"El Gobierno Abierto se basa en cuatro pilares: transparencia, rendición de cuentas, participación ciudadana y ___.", respuesta:"colaboración"},
-    {frase:"La desigualdad de acceso a la tecnología entre distintos grupos de población se llama brecha ___.", respuesta:"digital"},
-    {frase:"Un trámite que puede realizarse completamente en línea se llama trámite ___.", respuesta:"digital"},
-    {frase:"El ejercicio responsable de derechos y deberes en entornos digitales se llama ___ digital.", respuesta:"ciudadanía"},
-    {frase:"El expediente digital de la CCSS se conoce con las siglas ___.", respuesta:"EDUS"},
-    {frase:"La plataforma obligatoria de compras públicas del Estado costarricense es ___.", respuesta:"SICOP"},
-    {frase:"Garantizar que la digitalización no excluya a nadie es aplicar el principio de ___.", respuesta:"equidad"}
+    {frase:"La Ley N.º ___ rige actualmente la contratación pública en Costa Rica.", respuesta:"9986"},
+    {frase:"El sistema electrónico de compras públicas de Costa Rica se llama ___.", respuesta:"SICOP"},
+    {frase:"Las siglas NICSP significan Normas Internacionales de Contabilidad para el Sector ___.", respuesta:"público"},
+    {frase:"El ministerio rector en apoyo a las PYMES en Costa Rica es el ___.", respuesta:"MEIC"},
+    {frase:"La mejor alternativa disponible si una negociación fracasa se conoce como ___.", respuesta:"BATNA"},
+    {frase:"El órgano rector de la Contabilidad Nacional es la Dirección General de Contabilidad ___.", respuesta:"Nacional"},
+    {frase:"El deber de actuar con honestidad y apego a la legalidad en la función pública se llama ___.", respuesta:"probidad"},
+    {frase:"El ___ de tesorería proyecta ingresos y egresos de efectivo futuros.", respuesta:"presupuesto"},
+    {frase:"La desigualdad de acceso a la tecnología entre grupos de población se llama brecha ___.", respuesta:"digital"},
+    {frase:"El Gobierno Abierto se sostiene en transparencia, rendición de cuentas, participación ciudadana y ___.", respuesta:"colaboración"}
   ],
-  sopa: { size: 12, words: ["GOBIERNO","DIGITAL","SICOP","TRAMITE","BRECHA","ABIERTO","EQUIDAD","CIUDADANIA"] },
+  sopa: { size: 13, words: ["SICOP","TESORERIA","NICSP","MEIC","BATNA","PROBIDAD","GOBIERNO","DIGITAL","CONTRATO","PYME"] },
   cruci: {
-    size: {rows:10, cols:12},
+    size: {rows:11, cols:13},
     words: [
-      {num:1, word:"SICOP", row:0, col:0, dir:'h', clue:"Plataforma de compras públicas del Estado"},
-      {num:2, word:"CIUDADANIA", row:0, col:2, dir:'v', clue:"Ejercicio de derechos y deberes en la sociedad digital"},
-      {num:3, word:"PLATAFORMA", row:0, col:4, dir:'v', clue:"Sistema digital donde se gestionan servicios del Estado"},
-      {num:4, word:"BRECHA", row:5, col:0, dir:'h', clue:"Desigualdad de acceso a las tecnologías digitales"},
-      {num:5, word:"TRAMITE", row:7, col:0, dir:'h', clue:"Gestión que puede hacerse en línea o presencialmente"}
+      {num:1, word:"SICOP", row:0, col:0, dir:'h', clue:"Sistema donde se tramitan las contrataciones públicas"},
+      {num:2, word:"PROBIDAD", row:0, col:2, dir:'v', clue:"Actuar con honestidad y apego a la legalidad"},
+      {num:3, word:"TESORERIA", row:2, col:0, dir:'h', clue:"Área que administra el efectivo y asegura liquidez"},
+      {num:4, word:"NICSP", row:0, col:6, dir:'v', clue:"Normas contables del sector público (siglas)"},
+      {num:5, word:"BATNA", row:5, col:0, dir:'h', clue:"Mejor alternativa a un acuerdo negociado"},
+      {num:6, word:"MEIC", row:7, col:0, dir:'h', clue:"Ministerio rector en apoyo a las PYMES"}
     ]
   },
   caso: {
-    html: `<p><strong>Doña Marlene</strong>, de 68 años, vive en una comunidad rural de Guanacaste. Necesita solicitar una certificación de su pensión ante la CCSS, trámite que ahora se ofrece principalmente de forma digital a través del portal EDUS. Doña Marlene no tiene computadora en casa, su conexión a internet mediante datos móviles es muy limitada, y no se siente segura usando aplicaciones digitales. La oficina física más cercana de la CCSS está a más de una hora de su casa. Su nieto, que vive en San José, le ha ofrecido ayudarla a hacer el trámite en línea, pero eso implicaría compartir con él sus claves de acceso al sistema.</p>`,
-    pregunta: "Desde la perspectiva de los cuatro pilares del Gobierno Abierto y el principio de equidad digital, ¿qué alternativas debería ofrecer la institución pública para atender casos como el de doña Marlene, y qué recomendaciones de ciudadanía digital le daría usted respecto a compartir sus claves con su nieto?"
+    html: `<p>La Municipalidad de un cantón rural publica en <strong>SICOP</strong> un cartel para adquirir mobiliario escolar, con una <strong>reserva para PYMES</strong>. La empresa ganadora, una PYME local certificada ante el <strong>MEIC</strong>, firma el contrato y comienza la entrega. A mitad del proceso, la <strong>tesorería municipal</strong> enfrenta un atraso presupuestario y no logra pagar la primera factura en el plazo pactado. Al mismo tiempo, un regidor solicita públicamente el detalle de la contratación y del estado de pagos, invocando el principio de <strong>rendición de cuentas</strong> del Gobierno Abierto. La proveeduría debe registrar todo el movimiento conforme a las normas de la <strong>Contabilidad Nacional</strong> vigentes, y él encargado de tesorería debe decidir cómo comunicar el atraso a la PYME sin comprometer la relación comercial ni la transparencia del proceso.</p>`,
+    pregunta: "Integrando los seis temas del curso (SICOP, Gobierno Digital, Tesorería, Contabilidad Nacional, PYMES y Ética Pública), explique qué debería hacer la institución para manejar el atraso de pago de forma ética y transparente, y qué debería negociar la PYME conociendo su BATNA, sin renunciar a una relación de largo plazo con el Estado."
   },
   gameQuestions: []
 };
 CONFIG.gameQuestions = CONFIG.mc.concat([
-  {q:"El Sistema Nacional de Trámites busca:", opciones:["Centralizar información sobre trámites del Estado","Eliminar todos los trámites","Aumentar la burocracia","Privatizar servicios públicos"], correcta:0},
-  {q:"Una alternativa adecuada para personas con brecha digital es:", opciones:["Obligarlas a usar solo canales digitales","Mantener también canales presenciales o asistidos","Negarles el servicio","Cobrarles una tarifa adicional"], correcta:1},
-  {q:"Compartir claves personales de acceso a plataformas del Estado es:", opciones:["Una buena práctica siempre recomendable","Un riesgo de seguridad que debe evitarse","Obligatorio por ley","Irrelevante para la ciudadanía digital"], correcta:1},
-  {q:"El principio de rendición de cuentas exige que las instituciones:", opciones:["Oculten el uso de los recursos públicos","Justifiquen sus decisiones y el uso de recursos","Eviten toda fiscalización","Solo informen a otras instituciones"], correcta:1},
-  {q:"La participación ciudadana en políticas de Gobierno Digital puede darse mediante:", opciones:["Consultas públicas y espacios de retroalimentación ciudadana","La exclusión total de la ciudadanía","Decisiones tomadas sin ninguna consulta","La eliminación de la transparencia"], correcta:0}
+  {q:"¿Qué principio garantiza que todos los oferentes compitan bajo las mismas reglas en SICOP?", opciones:["Igualdad y libre competencia","Rendición de cuentas","Buena fe","Confidencialidad absoluta"], correcta:0},
+  {q:"El libro de caja es:", opciones:["Un registro cronológico de entradas y salidas de efectivo","El estado de resultados anual","Un tipo de contrato administrativo","Una norma NICSP"], correcta:0},
+  {q:"Las normas de Contabilidad Nacional aplican a:", opciones:["Solo empresas privadas que venden al Estado","Instituciones del sector público (Gobierno, autónomas, municipalidades, empresas públicas)","Únicamente bancos privados","Solo cooperativas"], correcta:1},
+  {q:"La reserva de carteles en SICOP para PYMES significa que:", opciones:["Ciertas contrataciones se reservan exclusivamente para PYMES","Se cancela el proceso de licitación","Solo empresas extranjeras pueden participar","El cartel se mantiene secreto"], correcta:0},
+  {q:"La transparencia, como pilar del Gobierno Abierto, exige que:", opciones:["La información pública esté disponible y sea accesible","La información se oculte por seguridad","Solo la prensa tenga acceso a los datos","Se publique la información una vez cada 5 años"], correcta:0}
 ]);
 
 </script>
