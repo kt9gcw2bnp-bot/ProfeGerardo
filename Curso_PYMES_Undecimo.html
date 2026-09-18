@@ -87,6 +87,7 @@ canvas{background:#fff;border:2px solid #cbd5e1;border-radius:10px;display:block
 const CONFIG = {
   moduleId: "curso_pymes_undecimo_v2",
   aventuraRica: true,
+  dinoRica: true,
   titulo: "Gestión Pública y las PYMES",
   subtitulo: "Curso interactivo — 11° nivel, especialidad de Contabilidad — CTP Mercedes Norte",
   steps: [
@@ -337,7 +338,8 @@ function showStep(key){
   const renderers = {
     antologia: renderAntologiaStep, mc: renderMcStep, asocie: renderAsocieStep,
     complete: renderCompleteStep, sopa: renderSopaStep, cruci: renderCruciStep,
-    caso: renderCasoStep, dino: renderDinoStep,
+    caso: renderCasoStep,
+    dino: (w)=> (CONFIG.dinoRica ? renderDinoStepRica(w) : renderDinoStep(w)),
     aventura: (w)=> (CONFIG.aventuraRica ? renderAventuraStepRica(w) : renderAventuraStep(w)),
     cert: renderCertStep
   };
@@ -782,6 +784,224 @@ function renderDinoStep(wrap){
     requestAnimationFrame(loop);
   }
   loop();
+}
+
+/* ---------- 8b. Juego del dinosaurio (versión rica: dificultad progresiva + meta 1000 pts) ---------- */
+function renderDinoStepRica(wrap){
+  const nStep = idxOf('dino')+1;
+  wrap.innerHTML = `
+  <style>
+  .dino2-hud{display:flex;justify-content:space-between;align-items:center;margin:10px 0 8px;}
+  .dino2-hud .dino2-score{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;color:#0E1B3D;}
+  .dino2-hud .dino2-best{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5B6470;}
+  .dino2-gamebox{position:relative;width:100%;max-width:700px;height:220px;background:linear-gradient(180deg,#dfe9f0 0%,#f3f5f4 70%);border:2px solid #0E1B3D;border-radius:10px;overflow:hidden;touch-action:none;cursor:pointer;-webkit-user-select:none;user-select:none;}
+  .dino2-ground{position:absolute;bottom:0;left:0;right:0;height:3px;background:#0E1B3D;}
+  .dino2-ground::after{content:"";position:absolute;bottom:-2px;left:0;right:0;height:1px;background:repeating-linear-gradient(90deg,#5B6470 0 12px, transparent 12px 24px);}
+  .dino2-player{position:absolute;bottom:3px;left:40px;font-size:34px;line-height:1;transform:scaleX(-1) translateY(0);transition:transform .08s linear;z-index:5;}
+  .dino2-player.jump{transition:transform .5s cubic-bezier(.22,.9,.4,1.1);}
+  .dino2-obstacle{position:absolute;bottom:3px;font-size:30px;line-height:1;z-index:4;}
+  .dino2-obstacle.dino2-colon{font-weight:800;color:#B8863C;-webkit-text-stroke:1px #0E1B3D;}
+  .dino2-startOverlay,.dino2-qOverlay,.dino2-overOverlay,.dino2-winOverlay{position:absolute;inset:0;background:rgba(14,27,61,.92);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;gap:10px;z-index:10;}
+  .dino2-winOverlay{background:rgba(184,134,60,.95);}
+  .dino2-startOverlay h2,.dino2-overOverlay h3,.dino2-winOverlay h2{margin:0;}
+  .dino2-startOverlay p,.dino2-overOverlay p,.dino2-winOverlay p{font-size:11.5px;color:rgba(255,255,255,.8);margin:0;max-width:380px;}
+  .dino2-bigbtn{padding:10px 22px;background:#B8863C;color:#0A1230;border:none;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;}
+  .dino2-bigbtn:hover{background:#F4DD7A;}
+  .dino2-qOverlay{gap:8px;padding:14px;}
+  .dino2-qtag{font-family:'IBM Plex Mono',monospace;font-size:10px;color:#F4DD7A;text-transform:uppercase;letter-spacing:.5px;}
+  .dino2-qtext{font-size:13px;font-weight:600;max-width:420px;}
+  .dino2-opts{display:flex;flex-direction:column;gap:6px;width:100%;max-width:420px;}
+  .dino2-opt{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.3);color:#fff;padding:8px 12px;border-radius:8px;font-size:12px;cursor:pointer;text-align:left;}
+  .dino2-opt:hover{background:rgba(255,255,255,.16);}
+  .dino2-opt.locked{cursor:default;}
+  .dino2-opt.chosen-correct{background:rgba(47,194,173,.35);border-color:#2FC2AD;}
+  .dino2-opt.chosen-incorrect{background:rgba(239,106,91,.35);border-color:#EF6A5B;}
+  .dino2-opt.reveal-correct{background:rgba(47,194,173,.35);border-color:#2FC2AD;}
+  .dino2-controls-hint{font-size:10.5px;color:#5B6470;text-align:center;margin-top:6px;font-family:'IBM Plex Mono',monospace;}
+  </style>
+  <h2>${nStep}. Juego: Corre y responde</h2>
+  <p>Toque la pantalla o presione ESPACIO para saltar los obstáculos. La velocidad aumenta con el puntaje. Si choca, deberá responder una pregunta correctamente para seguir — si falla, se reinicia el intento.</p>
+  <div class="dino2-hud">
+    <span class="dino2-score" id="dino2Score">Puntos: 0</span>
+    <span class="dino2-best" id="dino2Best">Mejor: 0</span>
+  </div>
+  <div class="dino2-gamebox" id="dino2Box">
+    <div class="dino2-ground"></div>
+    <div class="dino2-player" id="dino2Player">🦖</div>
+    <div class="dino2-startOverlay" id="dino2StartOverlay">
+      <h2>🏃 Corre y Responde</h2>
+      <p>Toque o presione ESPACIO para saltar los obstáculos. Si choca, responda bien para seguir — si falla, se reinicia el intento.</p>
+      <button class="dino2-bigbtn" id="dino2StartBtn">▶️ Comenzar</button>
+    </div>
+  </div>
+  <p class="dino2-controls-hint">Toque la pantalla / Espacio = saltar</p>
+  <p id="dinoResultado" class="resultado"></p>`;
+
+  const WIN_SCORE = 1000;
+  let running=false, paused=false, score=0, best=0, speed=4.2, spawnTimer=0, spawnInterval=90, jumping=false;
+  let obstacles=[], usedQuestions=[], animFrame=null;
+  let totalCorrect=0, totalAnswered=0;
+
+  const gameBox = wrap.querySelector('#dino2Box');
+  const player = wrap.querySelector('#dino2Player');
+  const scoreDisplay = wrap.querySelector('#dino2Score');
+  const bestDisplay = wrap.querySelector('#dino2Best');
+  const startOverlay = wrap.querySelector('#dino2StartOverlay');
+  const dinoResultado = wrap.querySelector('#dinoResultado');
+
+  function updateHUD(){
+    scoreDisplay.textContent = 'Puntos: ' + Math.floor(score);
+    bestDisplay.textContent = 'Mejor: ' + Math.floor(best);
+  }
+  function resetGameState(){
+    score=0; speed=4.2; spawnInterval=90; spawnTimer=0;
+    obstacles.forEach(o=>o.el.remove()); obstacles=[];
+    updateHUD();
+  }
+  wrap.querySelector('#dino2StartBtn').addEventListener('click', ()=>{
+    startOverlay.style.display='none';
+    resetGameState();
+    running=true; paused=false;
+    loop();
+  });
+  function doJump(){
+    if(!running||paused||jumping) return;
+    jumping=true;
+    player.classList.add('jump');
+    player.style.transform='scaleX(-1) translateY(-70px)';
+    setTimeout(()=>{
+      player.style.transform='scaleX(-1) translateY(0)';
+      setTimeout(()=>{ jumping=false; player.classList.remove('jump'); },480);
+    },260);
+  }
+  gameBox.addEventListener('mousedown', doJump);
+  gameBox.addEventListener('touchstart', e=>{ e.preventDefault(); doJump(); }, {passive:false});
+  const dino2Keydown = e=>{
+    if(e.code==='Space' && running && !paused){ e.preventDefault(); doJump(); }
+  };
+  document.addEventListener('keydown', dino2Keydown);
+
+  function spawnObstacle(){
+    const el=document.createElement('div');
+    const isColon = Math.random()<0.5;
+    el.className='dino2-obstacle'+(isColon?' dino2-colon':'');
+    el.textContent = isColon ? '₡' : '💲';
+    el.style.right='-30px';
+    gameBox.appendChild(el);
+    obstacles.push({el, x: gameBox.clientWidth+10});
+  }
+  function rectsOverlap(a,b){ return !(a.right<b.left || a.left>b.right || a.bottom<b.top || a.top>b.bottom); }
+
+  function loop(){
+    if(!running||paused) return;
+    score += 0.12;
+    if(score>=WIN_SCORE){ score=WIN_SCORE; showWin(); return; }
+    speed = Math.min(16, 4.2+score*0.012);
+    spawnTimer++;
+    if(spawnTimer>spawnInterval){
+      spawnTimer=0;
+      spawnInterval = Math.max(48, 90-score*0.3);
+      spawnObstacle();
+    }
+    const boxRect = gameBox.getBoundingClientRect();
+    const playerRect = player.getBoundingClientRect();
+    const playerBox = { left:playerRect.left-boxRect.left+6, right:playerRect.right-boxRect.left-6, top:playerRect.top-boxRect.top+4, bottom:playerRect.bottom-boxRect.top };
+    for(let i=obstacles.length-1;i>=0;i--){
+      const o=obstacles[i];
+      o.x -= speed;
+      o.el.style.right='auto';
+      o.el.style.left=o.x+'px';
+      if(o.x<-40){ o.el.remove(); obstacles.splice(i,1); continue; }
+      const oRect=o.el.getBoundingClientRect();
+      const oBox={ left:oRect.left-boxRect.left+4, right:oRect.right-boxRect.left-4, top:oRect.top-boxRect.top+4, bottom:oRect.bottom-boxRect.top };
+      if(!jumping && rectsOverlap(playerBox,oBox)){ handleCollision(); return; }
+    }
+    updateHUD();
+    animFrame = requestAnimationFrame(loop);
+  }
+  function handleCollision(){
+    paused=true;
+    if(animFrame) cancelAnimationFrame(animFrame);
+    best=Math.max(best,score);
+    updateHUD();
+    showQuestion();
+  }
+  function pickQuestion(){
+    const pool = CONFIG.gameQuestions;
+    const available = pool.filter((_,i)=>!usedQuestions.includes(i));
+    const list = available.length ? available : pool;
+    const chosen = list[Math.floor(Math.random()*list.length)];
+    const idx = pool.indexOf(chosen);
+    usedQuestions.push(idx);
+    if(usedQuestions.length>=pool.length) usedQuestions=[];
+    return chosen;
+  }
+  function showQuestion(){
+    const item = pickQuestion();
+    const overlay=document.createElement('div');
+    overlay.className='dino2-qOverlay';
+    overlay.innerHTML = `<span class="dino2-qtag">⚠️ Chocaste — respondé bien para revivir</span>
+      <div class="dino2-qtext">${item.q}</div><div class="dino2-opts"></div>`;
+    gameBox.appendChild(overlay);
+    const optsDiv = overlay.querySelector('.dino2-opts');
+    item.opciones.forEach((optText,oi)=>{
+      const opt=document.createElement('div');
+      opt.className='dino2-opt';
+      opt.textContent=optText;
+      opt.addEventListener('click', ()=>{
+        if(overlay.dataset.answered) return;
+        overlay.dataset.answered='1';
+        optsDiv.querySelectorAll('.dino2-opt').forEach(o=>o.classList.add('locked'));
+        const isCorrect = oi===item.correcta;
+        opt.classList.add(isCorrect?'chosen-correct':'chosen-incorrect');
+        if(!isCorrect) optsDiv.querySelectorAll('.dino2-opt')[item.correcta].classList.add('reveal-correct');
+        totalAnswered++; if(isCorrect) totalCorrect++;
+        setTimeout(()=>{
+          overlay.remove();
+          if(isCorrect){ resumeAfterCorrect(); } else { showGameOver(); }
+        },1300);
+      });
+      optsDiv.appendChild(opt);
+    });
+  }
+  function resumeAfterCorrect(){
+    obstacles.forEach(o=>o.el.remove()); obstacles=[];
+    spawnTimer=0; paused=false;
+    animFrame=requestAnimationFrame(loop);
+  }
+  function showWin(){
+    running=false; paused=false;
+    if(animFrame) cancelAnimationFrame(animFrame);
+    best=Math.max(best,score);
+    updateHUD();
+    const overlay=document.createElement('div');
+    overlay.className='dino2-winOverlay';
+    overlay.innerHTML=`<h2>🏆 ¡Meta alcanzada!</h2>
+      <p>Llegaste a ${WIN_SCORE} puntos. Preguntas respondidas: ${totalAnswered} · Correctas: ${totalCorrect}</p>`;
+    gameBox.appendChild(overlay);
+    dinoResultado.textContent = '¡Meta alcanzada! Actividad completada.';
+    markDone('dino');
+  }
+  function showGameOver(){
+    running=false; paused=false;
+    const overlay=document.createElement('div');
+    overlay.className='dino2-overOverlay';
+    overlay.innerHTML=`<h3>💥 Fin del intento</h3>
+      <p>Puntaje: <strong>${Math.floor(score)}</strong> · Mejor: <strong>${Math.floor(best)}</strong></p>
+      <button class="dino2-bigbtn" id="dino2RetryBtn">🔄 Reintentar</button>`;
+    gameBox.appendChild(overlay);
+    overlay.querySelector('#dino2RetryBtn').addEventListener('click', ()=>{
+      overlay.remove(); resetGameState(); running=true; paused=false; loop();
+    });
+  }
+
+  updateHUD();
+
+  // Test/debug hook (used by the automated test suite to reach the win condition without a full real-time playthrough)
+  window.__dinoRicaDebug = {
+    forceWin: ()=>{ score=WIN_SCORE; showWin(); },
+    getState: ()=>({score,best,running,paused}),
+  };
 }
 
 /* ---------- 9. Juego de aventura (plataformas) ---------- */
